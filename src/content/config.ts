@@ -6,6 +6,9 @@ const notes = defineCollection({
     title: z.string(),
     date: z.string(),
     category: z.string(),
+    description: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    draft: z.boolean().optional().default(false),
   }),
 });
 
