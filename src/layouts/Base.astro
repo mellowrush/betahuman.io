@@ -22,13 +22,27 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <ViewTransitions />
-    <!-- Prevent FOUC: apply theme before first paint, before any stylesheet -->
+    <!-- Theme: apply before first paint to prevent FOUC.
+         Also hooks astro:before-swap to carry the theme into every
+         incoming page document before the View Transition swap. -->
     <script is:inline>
-      (function () {
-        var saved = localStorage.getItem('bh-theme');
-        var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', saved || (sysDark ? 'dark' : 'light'));
-      })();
+      function _bhApplyTheme() {
+        const saved = localStorage.getItem('bh-theme');
+        const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute(
+          'data-theme',
+          saved || (sysDark ? 'dark' : 'light')
+        );
+      }
+
+      _bhApplyTheme();
+
+      // Copy the live theme to the incoming document before Astro swaps the DOM.
+      // Without this, the new page briefly renders without data-theme set.
+      document.addEventListener('astro:before-swap', function (ev) {
+        const theme = document.documentElement.getAttribute('data-theme');
+        if (theme) ev.newDocument.documentElement.setAttribute('data-theme', theme);
+      });
     </script>
   </head>
   <body>
