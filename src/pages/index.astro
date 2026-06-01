@@ -64,8 +64,8 @@ const notes = (await getCollection('notes')).sort((a, b) =>
       <!-- NOTES -->
       <section id="notes">
         <nav class="notes-list" aria-label="Field notes">
-          {notes.map((note) => (
-            <a class="note-entry" href={`/notes/${note.slug}`}>
+          {notes.map((note, i) => (
+            <a class="note-entry" href={`/notes/${note.slug}`} style={`--note-index: ${i}`}>
               <span class="note-date">{note.data.date}</span>
               <span class="note-title">{note.data.title}</span>
               <span class="note-tag">{note.data.category}</span>
@@ -420,6 +420,69 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     text-wrap: pretty;
   }
 
+  /* ── HERO ENTRANCE ──────────────────────────────────────────────────────── */
+
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-version   { animation: hero-rise 400ms var(--bh-ease)   0ms backwards; }
+  .hero-headline  { animation: hero-rise 500ms var(--bh-ease)  80ms backwards; }
+  .hero-lead      { animation: hero-rise 400ms var(--bh-ease) 180ms backwards; }
+  .hero-manifesto { animation: hero-rise 350ms var(--bh-ease) 260ms backwards; }
+
+  /* ── NOTE TITLE HOVER SLIDE ──────────────────────────────────────────────── */
+
+  .note-entry .note-title {
+    transition: transform 200ms var(--bh-ease);
+    display: inline-block;
+  }
+
+  .note-entry:hover .note-title {
+    transform: translateX(4px);
+  }
+
+  /* ── NOTES STAGGER (activated by IntersectionObserver) ─────────────────── */
+
+  /* will-animate: hidden, waiting for viewport entry */
+  .notes-list.will-animate .note-entry {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  /* did-animate: stagger each item in */
+  .notes-list.did-animate .note-entry {
+    animation: note-rise 380ms var(--bh-ease) backwards;
+    animation-delay: calc(var(--note-index, 0) * 55ms);
+  }
+
+  @keyframes note-rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── REDUCED MOTION ──────────────────────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-version, .hero-headline, .hero-lead, .hero-manifesto {
+      animation: none !important;
+    }
+
+    .notes-list.will-animate .note-entry {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    .notes-list.did-animate .note-entry {
+      animation: none !important;
+    }
+
+    .note-entry .note-title {
+      transition: none !important;
+    }
+  }
+
   /* RESPONSIVE */
   @media (max-width: 600px) {
     .about-grid  { grid-template-columns: 1fr; }
@@ -432,3 +495,33 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     .note-tag { display: none; }
   }
 </style>
+
+<script>
+  function setupAnimations() {
+    // Notes list: stagger items in when list enters viewport.
+    // Visibility-safe: content is rendered visible; JS opts into animation.
+    const notesList = document.querySelector('.notes-list') as HTMLElement | null;
+    if (notesList) {
+      notesList.classList.remove('will-animate', 'did-animate');
+      notesList.classList.add('will-animate');
+
+      const notesObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              (entry.target as HTMLElement).classList.remove('will-animate');
+              (entry.target as HTMLElement).classList.add('did-animate');
+              notesObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -20px 0px' }
+      );
+
+      notesObserver.observe(notesList);
+    }
+  }
+
+  // Re-run on every Astro View Transitions navigation
+  document.addEventListener('astro:page-load', setupAnimations);
+</script>

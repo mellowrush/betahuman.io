@@ -1,4 +1,6 @@
 ---
+import { ViewTransitions } from 'astro:transitions';
+
 interface Props {
   title?: string;
   description?: string;
@@ -19,6 +21,15 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <ViewTransitions />
+    <!-- Prevent FOUC: apply theme before first paint, before any stylesheet -->
+    <script is:inline>
+      (function () {
+        var saved = localStorage.getItem('bh-theme');
+        var sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', saved || (sysDark ? 'dark' : 'light'));
+      })();
+    </script>
   </head>
   <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -28,4 +39,43 @@ const {
 
 <style is:global>
   @import '../styles/global.css';
+
+  /* ── Page transition choreography ─────────────────────────────────────── */
+
+  /* Outgoing page: lifts up and fades */
+  ::view-transition-old(root) {
+    animation: vt-exit 180ms cubic-bezier(0.36, 0, 1, 1) both;
+  }
+
+  /* Incoming page: rises from slightly below */
+  ::view-transition-new(root) {
+    animation: vt-enter 360ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+
+  /* Wordmark: same position on every page — pin it so it doesn't animate */
+  ::view-transition-old(site-wordmark),
+  ::view-transition-new(site-wordmark) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  @keyframes vt-exit {
+    to { opacity: 0; transform: translateY(-10px); }
+  }
+
+  @keyframes vt-enter {
+    from { opacity: 0; transform: translateY(14px); }
+  }
+
+  /* Reduced motion: crossfade only, no movement */
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root) {
+      animation: vt-fade-out 100ms ease both;
+    }
+    ::view-transition-new(root) {
+      animation: vt-fade-in 100ms ease both;
+    }
+    @keyframes vt-fade-out { to   { opacity: 0; } }
+    @keyframes vt-fade-in  { from { opacity: 0; } }
+  }
 </style>

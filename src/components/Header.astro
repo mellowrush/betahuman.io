@@ -1,7 +1,7 @@
 ---
 ---
 <header class="site-header" id="site-header">
-  <a href="/" class="site-wordmark" aria-label="betahuman.io home">
+  <a href="/" class="site-wordmark" aria-label="betahuman.io home" transition:name="site-wordmark">
     beta<span class="accent">human</span><span class="tld">.io</span>
   </a>
 
@@ -15,8 +15,17 @@
 
   <div class="header-actions">
     <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
-      <span class="theme-toggle__icon theme-toggle__icon--light">☀</span>
-      <span class="theme-toggle__icon theme-toggle__icon--dark">☽</span>
+      <span class="theme-icon-wrap" aria-hidden="true">
+        <!-- Sun: shown in dark mode (click to go light) -->
+        <svg class="theme-icon theme-icon--sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+        <!-- Moon: shown in light mode (click to go dark) -->
+        <svg class="theme-icon theme-icon--moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </span>
     </button>
     <button
       class="nav-toggle"
@@ -32,53 +41,57 @@
 </header>
 
 <script>
-  const html = document.documentElement;
-  const header = document.getElementById('site-header') as HTMLElement;
-  const navToggle = document.getElementById('nav-toggle') as HTMLButtonElement;
-  const themeBtn = document.getElementById('theme-toggle') as HTMLButtonElement;
-
-  // ── Theme ──────────────────────────────────────────────────────────────────
   function applyTheme(theme: string) {
-    html.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('bh-theme', theme);
   }
 
-  const saved = localStorage.getItem('bh-theme');
-  const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(saved ?? (sysDark ? 'dark' : 'light'));
+  // AbortController cleans up listeners on every re-init (View Transitions re-fires
+  // astro:page-load on each navigation, which would otherwise stack listeners).
+  let controller = new AbortController();
 
-  themeBtn?.addEventListener('click', () => {
-    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
+  document.addEventListener('astro:page-load', () => {
+    controller.abort();
+    controller = new AbortController();
+    const { signal } = controller;
 
-  // ── Nav toggle ─────────────────────────────────────────────────────────────
-  function openNav() {
-    header.classList.add('is-open');
-    navToggle.setAttribute('aria-expanded', 'true');
-    navToggle.setAttribute('aria-label', 'Close navigation menu');
-  }
+    // ── Theme toggle ───────────────────────────────────────────────────────
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn?.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      applyTheme(isDark ? 'light' : 'dark');
+    }, { signal });
 
-  function closeNav() {
-    header.classList.remove('is-open');
-    navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-label', 'Open navigation menu');
-  }
+    // ── Mobile nav ─────────────────────────────────────────────────────────
+    const header  = document.getElementById('site-header') as HTMLElement | null;
+    const navBtn  = document.getElementById('nav-toggle')  as HTMLButtonElement | null;
 
-  navToggle?.addEventListener('click', () => {
-    header.classList.contains('is-open') ? closeNav() : openNav();
-  });
-
-  // Close when a nav link is tapped
-  document.querySelectorAll('#site-nav a').forEach((link) => {
-    link.addEventListener('click', closeNav);
-  });
-
-  // Close on Escape
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && header.classList.contains('is-open')) {
-      closeNav();
-      navToggle.focus();
+    function openNav() {
+      header?.classList.add('is-open');
+      navBtn?.setAttribute('aria-expanded', 'true');
+      navBtn?.setAttribute('aria-label', 'Close navigation menu');
     }
+
+    function closeNav() {
+      header?.classList.remove('is-open');
+      navBtn?.setAttribute('aria-expanded', 'false');
+      navBtn?.setAttribute('aria-label', 'Open navigation menu');
+    }
+
+    navBtn?.addEventListener('click', () => {
+      header?.classList.contains('is-open') ? closeNav() : openNav();
+    }, { signal });
+
+    document.querySelectorAll('#site-nav a').forEach((link) => {
+      link.addEventListener('click', closeNav, { signal });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && header?.classList.contains('is-open')) {
+        closeNav();
+        navBtn?.focus();
+      }
+    }, { signal });
   });
 </script>
 
@@ -111,7 +124,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* Nav pushes to the right, sits before the actions */
   .site-nav {
     margin-left: auto;
     margin-right: var(--bh-space-6);
@@ -144,19 +156,20 @@
     flex-shrink: 0;
   }
 
-  /* Theme toggle */
+  /* ── Theme toggle ──────────────────────────────────────────────────────── */
+
   .theme-toggle {
     background: none;
     border: 1px solid var(--bh-border-strong);
     border-radius: var(--bh-radius-sm);
-    padding: var(--bh-space-1) var(--bh-space-2);
+    padding: 5px;
     cursor: pointer;
-    color: var(--bh-text-faint);
-    font-size: 12px;
-    line-height: 1;
-    min-height: 28px;
+    color: var(--bh-text-muted);
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
+    justify-content: center;
     transition: border-color var(--bh-duration-base) var(--bh-ease),
                 color var(--bh-duration-base) var(--bh-ease);
   }
@@ -166,13 +179,33 @@
     color: var(--bh-rust);
   }
 
-  .theme-toggle__icon--light { display: none; }
-  .theme-toggle__icon--dark  { display: block; }
+  .theme-toggle:focus-visible {
+    outline: none;
+    box-shadow: var(--bh-shadow-focus);
+  }
 
-  :global([data-theme="dark"]) .theme-toggle__icon--light { display: block; }
-  :global([data-theme="dark"]) .theme-toggle__icon--dark  { display: none; }
+  /* Grid overlay: both icons share the same cell and crossfade */
+  .theme-icon-wrap {
+    display: grid;
+    place-items: center;
+    width: 15px;
+    height: 15px;
+  }
 
-  /* Hamburger toggle — hidden on desktop */
+  .theme-icon {
+    grid-area: 1 / 1;
+    transition: opacity 220ms var(--bh-ease), transform 220ms var(--bh-ease);
+  }
+
+  /* Light mode: moon visible, sun hidden */
+  .theme-icon--sun  { opacity: 0; transform: scale(0.6) rotate(-45deg); }
+  .theme-icon--moon { opacity: 1; transform: scale(1)   rotate(0deg);   }
+
+  /* Dark mode: sun visible, moon hidden */
+  :global([data-theme="dark"]) .theme-icon--sun  { opacity: 1; transform: scale(1)   rotate(0deg);  }
+  :global([data-theme="dark"]) .theme-icon--moon { opacity: 0; transform: scale(0.6) rotate(45deg); }
+
+  /* Nav toggle — hidden on desktop */
   .nav-toggle { display: none; }
 
   /* ── MOBILE (≤ 480px) ──────────────────────────────────────────────────── */
@@ -184,12 +217,8 @@
       margin-bottom: var(--bh-space-7);
     }
 
-    /* Push actions to the right on the first row */
-    .header-actions {
-      margin-left: auto;
-    }
+    .header-actions { margin-left: auto; }
 
-    /* Nav is full-width and sits below the header row */
     .site-nav {
       display: none;
       order: 10;
@@ -200,31 +229,18 @@
       border-top: 1px solid var(--bh-border);
     }
 
-    /* Reveal nav when open */
-    .site-header.is-open .site-nav {
-      display: block;
-    }
+    .site-header.is-open .site-nav { display: block; }
 
-    /* Slide-in animation */
     @media (prefers-reduced-motion: no-preference) {
       .site-header.is-open .site-nav {
         animation: nav-reveal var(--bh-duration-base) var(--bh-ease) both;
       }
     }
 
-    /* Vertical stack with editorial type */
-    .site-nav__list {
-      flex-direction: column;
-      gap: 0;
-    }
+    .site-nav__list { flex-direction: column; gap: 0; }
 
-    .site-nav__list li {
-      border-bottom: 1px solid var(--bh-border);
-    }
-
-    .site-nav__list li:last-child {
-      border-bottom: none;
-    }
+    .site-nav__list li { border-bottom: 1px solid var(--bh-border); }
+    .site-nav__list li:last-child { border-bottom: none; }
 
     .site-nav__list a {
       display: flex;
@@ -238,14 +254,12 @@
       color: var(--bh-text);
     }
 
-    .site-nav__list a:hover {
-      color: var(--bh-rust);
-    }
+    .site-nav__list a:hover { color: var(--bh-rust); }
 
-    /* Show hamburger on mobile */
     .nav-toggle {
       display: flex;
       align-items: center;
+      justify-content: center;
       background: none;
       border: 1px solid var(--bh-border-strong);
       border-radius: var(--bh-radius-sm);
@@ -256,41 +270,26 @@
       letter-spacing: var(--bh-tracking-mono);
       text-transform: uppercase;
       color: var(--bh-text-faint);
-      min-height: 28px;
+      min-height: 30px;
       min-width: 52px;
-      justify-content: center;
       transition: border-color var(--bh-duration-base) var(--bh-ease),
                   color var(--bh-duration-base) var(--bh-ease);
     }
 
-    .nav-toggle:hover {
-      border-color: var(--bh-rust);
-      color: var(--bh-rust);
-    }
+    .nav-toggle:hover { border-color: var(--bh-rust); color: var(--bh-rust); }
+    .nav-toggle:focus-visible { outline: none; box-shadow: var(--bh-shadow-focus); }
 
-    .nav-toggle:focus-visible {
-      outline: none;
-      box-shadow: var(--bh-shadow-focus);
-    }
-
-    /* Label swap: show "Menu" by default, "Close" when open */
     .nav-toggle__open  { display: block; }
-    .nav-toggle__close { display: none; }
+    .nav-toggle__close { display: none;  }
 
-    .site-header.is-open .nav-toggle__open  { display: none; }
+    .site-header.is-open .nav-toggle__open  { display: none;  }
     .site-header.is-open .nav-toggle__close { display: block; }
   }
 
-  /* ── ANIMATION ─────────────────────────────────────────────────────────── */
+  /* ── ANIMATIONS ────────────────────────────────────────────────────────── */
 
   @keyframes nav-reveal {
-    from {
-      opacity: 0;
-      transform: translateY(-4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 </style>

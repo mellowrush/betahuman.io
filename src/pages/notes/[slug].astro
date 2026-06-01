@@ -109,4 +109,25 @@ const { Content } = await note.render();
     padding-top: var(--bh-space-5);
     border-top: 1px solid var(--bh-border);
   }
+
+  /* ── Page entrance ──────────────────────────────────────────────────────── */
+
+  @keyframes article-enter {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .note-header {
+    animation: article-enter 350ms cubic-bezier(0.22, 0.61, 0.36, 1) 0ms backwards;
+  }
+
+  .note-article {
+    animation: article-enter 450ms cubic-bezier(0.22, 0.61, 0.36, 1) 80ms backwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note-header, .note-article {
+      animation: none !important;
+    }
+  }
 </style>
