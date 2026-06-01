@@ -18,7 +18,7 @@ const { Content } = await note.render();
   <div class="page">
 
     <header class="note-header">
-      <a href="/" class="back-link">← betahuman.io</a>
+      <a href="/#notes" class="back-link">← Notes</a>
       <div class="note-meta">
         <span class="note-meta__date">{note.data.date}</span>
         <span class="note-meta__sep">·</span>
@@ -26,6 +26,7 @@ const { Content } = await note.render();
       </div>
     </header>
 
+    <main id="main-content">
     <article class="note-article">
       <h1 class="note-title">{note.data.title}</h1>
       <div class="note-body">
@@ -36,6 +37,7 @@ const { Content } = await note.render();
     <footer class="note-footer">
       <a href="/#notes" class="back-link">← All notes</a>
     </footer>
+    </main>
 
   </div>
 </Base>

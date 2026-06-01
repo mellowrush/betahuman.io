@@ -172,5 +172,5 @@ The versioning is part of the brand. Changelog thinking applied to a life.
 
 ---
 
-*betahuman.io · Brussels · v0.1*
+*betahuman.io · Bucharest · v0.1*
 *"Not finished. Not final. Still becoming."*

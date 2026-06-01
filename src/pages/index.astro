@@ -13,152 +13,152 @@ const notes = (await getCollection('notes')).sort((a, b) =>
   <div class="page">
     <Header />
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-version">v0.1 · Brussels · 2025</div>
-      <h1 class="hero-headline">
-        Navigating technology,<br />
-        complexity, and <em>becoming.</em>
-      </h1>
-      <p class="hero-lead">
-        A senior frontend developer somewhere between who he ended up as
-        and who he's choosing to become. This is the map room.
-      </p>
-      <blockquote class="hero-manifesto">
-        Not finished. Not final. Still becoming.
-      </blockquote>
-    </section>
+    <main id="main-content">
 
-    <!-- DIVIDER -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-mark">What this is</span>
-      <div class="divider-line"></div>
-    </div>
+      <!-- HERO -->
+      <section class="hero">
+        <div class="hero-version">v0.1 · Brussels · 2026</div>
+        <h1 class="hero-headline">
+          Navigating technology,<br />
+          complexity, and <em>becoming.</em>
+        </h1>
+        <p class="hero-lead">
+          A senior frontend developer somewhere between who he ended up as
+          and who he's choosing to become. This is the map room.
+        </p>
+        <blockquote class="hero-manifesto">
+          Not finished. Not final. Still becoming.
+        </blockquote>
+      </section>
 
-    <!-- SIGNAL -->
-    <section>
-      <div class="section-label">Signal</div>
-      <p class="signal-intro">
-        This is not a portfolio. Not a thought-leadership platform.
-        It's a digital home for someone who investigates, questions,
-        and searches for better systems — and documents the process honestly.
-      </p>
-      <ul class="signal-list">
-        <li>Tools built at the intersection of genuine utility and craft</li>
-        <li>Field notes from navigating technology and modern work</li>
-        <li>First-principles thinking, shown not declared</li>
-        <li>Questions held open, not packaged as answers</li>
-        <li>The creative and the technical, treated as one thing</li>
-      </ul>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-mark">Field notes</span>
-      <div class="divider-line"></div>
-    </div>
-
-    <!-- NOTES -->
-    <section id="notes">
-      <div class="section-label">Latest</div>
-      <nav class="notes-list" aria-label="Field notes">
-        {notes.map((note) => (
-          <a class="note-entry" href={`/notes/${note.slug}`}>
-            <span class="note-date">{note.data.date}</span>
-            <span class="note-title">{note.data.title}</span>
-            <span class="note-tag">{note.data.category}</span>
-          </a>
-        ))}
-      </nav>
-    </section>
-
-    <!-- DIVIDER -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-mark">Builds</span>
-      <div class="divider-line"></div>
-    </div>
-
-    <!-- BUILDS -->
-    <section id="builds">
-      <div class="section-label">Tools in progress</div>
-      <div class="builds-grid">
-        <a class="build-card" href="#">
-          <div class="build-card-status">In progress</div>
-          <div class="build-card-title">QR Artifier</div>
-          <div class="build-card-desc">
-            Turn functional QR codes into deliberate visual artifacts.
-            Utility elevated by craft.
-          </div>
-        </a>
-        <a class="build-card" href="#">
-          <div class="build-card-status">Exploring</div>
-          <div class="build-card-title">Resume as SVG</div>
-          <div class="build-card-desc">
-            A résumé generator that produces art, not documents.
-            Client-side, no server needed.
-          </div>
-        </a>
-        <a class="build-card" href="#">
-          <div class="build-card-status">Concept</div>
-          <div class="build-card-title">Font Pairing Lab</div>
-          <div class="build-card-desc">
-            Live component previews for typographic combinations.
-            See it in context, not a specimen.
-          </div>
-        </a>
-        <a class="build-card" href="#">
-          <div class="build-card-status">Concept</div>
-          <div class="build-card-title">Palette Extractor</div>
-          <div class="build-card-desc">
-            Color palette extraction built for developers, not designers.
-            Copy-ready output.
-          </div>
-        </a>
+      <!-- DIVIDER -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-mark">What this is</span>
+        <div class="divider-line"></div>
       </div>
-    </section>
 
-    <!-- DIVIDER -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-mark">About</span>
-      <div class="divider-line"></div>
-    </div>
+      <!-- SIGNAL -->
+      <section>
+        <p class="signal-intro">
+          This is not a portfolio. Not a thought-leadership platform.
+          A digital home for someone who investigates, questions,
+          and searches for better systems — and documents the process honestly.
+        </p>
+        <ul class="signal-list">
+          <li>Tools built at the intersection of genuine utility and craft</li>
+          <li>Field notes from navigating technology and modern work</li>
+          <li>First-principles thinking, shown not declared</li>
+          <li>Questions held open, not packaged as answers</li>
+          <li>The creative and the technical, treated as one thing</li>
+        </ul>
+      </section>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <div class="section-label">The builder</div>
-      <p class="signal-intro">
-        Senior frontend developer. Self-taught. Background in creative and advertising work.
-        Based in Brussels. Currently rebuilding — not from wreckage, but from the quiet
-        realisation that the life you end up with isn't always the one you consciously chose.
-      </p>
-      <div class="about-grid">
-        <div class="about-block">
-          <h3>What I do</h3>
-          <p>Build interfaces with JavaScript and React. Care about the gap between
-          functional and beautiful. Treat low complexity as a feature, not a limitation.</p>
-        </div>
-        <div class="about-block">
-          <h3>How I think</h3>
-          <p>In frameworks and reference points. I anchor new ideas to exemplars,
-          reverse-engineer the principles, then generate variations. First principles
-          over trends, always.</p>
-        </div>
-        <div class="about-block">
-          <h3>What I reject</h3>
-          <p>Generic advice. Corporate nonsense. Empty authority. Performative expertise.
-          Trendy content that forgets to be useful.</p>
-        </div>
-        <div class="about-block">
-          <h3>What this version is</h3>
-          <p>v0.1. A working title. The beta is real, not ironic.
-          This site will change as I do. That's the point.</p>
-        </div>
+      <!-- DIVIDER -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-mark">Field notes</span>
+        <div class="divider-line"></div>
       </div>
-    </section>
+
+      <!-- NOTES -->
+      <section id="notes">
+        <nav class="notes-list" aria-label="Field notes">
+          {notes.map((note) => (
+            <a class="note-entry" href={`/notes/${note.slug}`}>
+              <span class="note-date">{note.data.date}</span>
+              <span class="note-title">{note.data.title}</span>
+              <span class="note-tag">{note.data.category}</span>
+            </a>
+          ))}
+        </nav>
+      </section>
+
+      <!-- DIVIDER -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-mark">Builds</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- BUILDS — articles, not links: projects not yet live -->
+      <section id="builds">
+        <div class="builds-grid">
+          <article class="build-card">
+            <div class="build-card-status">In progress</div>
+            <div class="build-card-title">QR Artifier</div>
+            <div class="build-card-desc">
+              Turn functional QR codes into deliberate visual artifacts.
+              Utility elevated by craft.
+            </div>
+          </article>
+          <article class="build-card">
+            <div class="build-card-status">Exploring</div>
+            <div class="build-card-title">Resume as SVG</div>
+            <div class="build-card-desc">
+              A résumé generator that produces art, not documents.
+              Client-side, no server needed.
+            </div>
+          </article>
+          <article class="build-card">
+            <div class="build-card-status">Concept</div>
+            <div class="build-card-title">Font Pairing Lab</div>
+            <div class="build-card-desc">
+              Live component previews for typographic combinations.
+              See it in context, not a specimen.
+            </div>
+          </article>
+          <article class="build-card">
+            <div class="build-card-status">Concept</div>
+            <div class="build-card-title">Palette Extractor</div>
+            <div class="build-card-desc">
+              Color palette extraction built for developers, not designers.
+              Copy-ready output.
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- DIVIDER -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-mark">About</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- ABOUT -->
+      <section id="about">
+        <p class="signal-intro">
+          Senior frontend developer. Self-taught. Background in creative and advertising work.
+          Based in Brussels. Currently rebuilding — not from wreckage, but from the quiet
+          realisation that the life you end up with isn't always the one you consciously chose.
+        </p>
+        <div class="about-grid">
+          <div class="about-block">
+            <h3>What I do</h3>
+            <p>Build interfaces with JavaScript and React. Care about the gap between
+            functional and beautiful. Treat low complexity as a feature, not a limitation.</p>
+          </div>
+          <div class="about-block">
+            <h3>How I think</h3>
+            <p>In frameworks and reference points. I anchor new ideas to exemplars,
+            reverse-engineer the principles, then generate variations. First principles
+            over trends, always.</p>
+          </div>
+          <div class="about-block">
+            <h3>What I reject</h3>
+            <p>Generic advice. Corporate nonsense. Empty authority. Performative expertise.
+            Trendy content that forgets to be useful.</p>
+          </div>
+          <div class="about-block">
+            <h3>What this version is</h3>
+            <p>v0.1. A working title. The beta is real, not ironic.
+            This site will change as I do. That's the point.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
 
     <Footer />
   </div>
@@ -201,6 +201,7 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     letter-spacing: var(--bh-tracking-tight);
     color: var(--bh-text);
     margin-bottom: var(--bh-space-5);
+    text-wrap: balance;
   }
 
   .hero-headline em {
@@ -214,16 +215,16 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     color: var(--bh-text-muted);
     max-width: 38ch;
     margin-bottom: var(--bh-space-6);
+    text-wrap: pretty;
   }
 
+  /* No side-stripe. Italic display type carries the distinction. */
   .hero-manifesto {
-    display: inline-block;
+    display: block;
     font-family: var(--bh-font-display);
     font-style: italic;
-    font-size: var(--bh-text-base);
+    font-size: var(--bh-text-md);
     color: var(--bh-text-muted);
-    border-left: 2px solid var(--bh-rust);
-    padding-left: var(--bh-space-4);
     line-height: var(--bh-leading-snug);
     margin: 0;
   }
@@ -250,22 +251,13 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     color: var(--bh-text-faint);
   }
 
-  /* SECTION LABEL */
-  .section-label {
-    font-family: var(--bh-font-mono);
-    font-size: var(--bh-text-xs);
-    letter-spacing: var(--bh-tracking-mono);
-    text-transform: uppercase;
-    color: var(--bh-rust);
-    margin-bottom: var(--bh-space-4);
-  }
-
   /* SIGNAL */
   .signal-intro {
     font-size: var(--bh-text-base);
     line-height: var(--bh-leading-normal);
     color: var(--bh-text-muted);
     margin-bottom: var(--bh-space-6);
+    text-wrap: pretty;
   }
 
   .signal-list {
@@ -300,7 +292,6 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     border: 1px solid var(--bh-border-strong);
     border-radius: var(--bh-radius-md);
     overflow: hidden;
-    margin-top: var(--bh-space-5);
   }
 
   .note-entry {
@@ -335,7 +326,9 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     line-height: var(--bh-leading-snug);
   }
 
-  .note-entry:hover .note-title { color: var(--bh-ink); }
+  .note-entry:hover .note-title,
+  .note-entry:hover .note-date,
+  .note-entry:hover .note-tag { color: var(--bh-ink); }
 
   .note-tag {
     font-family: var(--bh-font-mono);
@@ -346,23 +339,18 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     white-space: nowrap;
   }
 
-  /* BUILDS */
+  /* BUILDS — theme-aware: ink surface on light, paper surface on dark */
   .builds-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--bh-space-3);
-    margin-top: var(--bh-space-5);
   }
 
   .build-card {
-    background: var(--bh-ink);
+    background: var(--bh-bg-inverse);
     border-radius: var(--bh-radius-md);
     padding: var(--bh-space-5);
-    border-bottom: none;
-    transition: transform var(--bh-duration-base) var(--bh-ease);
   }
-
-  .build-card:hover { transform: translateY(-2px); }
 
   .build-card-status {
     font-family: var(--bh-font-mono);
@@ -377,16 +365,16 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     font-family: var(--bh-font-sans);
     font-size: var(--bh-text-base);
     font-weight: 700;
-    color: var(--bh-paper);
+    color: var(--bh-text-inverse);
     line-height: var(--bh-leading-snug);
     margin-bottom: var(--bh-space-2);
   }
 
   .build-card-desc {
     font-size: var(--bh-text-xs);
-    color: var(--bh-bone);
+    color: var(--bh-text-inverse);
     line-height: var(--bh-leading-normal);
-    opacity: 0.7;
+    opacity: 0.6;
   }
 
   /* ABOUT */
@@ -410,12 +398,13 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     font-size: var(--bh-text-sm);
     line-height: var(--bh-leading-normal);
     color: var(--bh-text-muted);
+    text-wrap: pretty;
   }
 
   /* RESPONSIVE */
   @media (max-width: 600px) {
-    .about-grid   { grid-template-columns: 1fr; }
-    .builds-grid  { grid-template-columns: 1fr; }
+    .about-grid  { grid-template-columns: 1fr; }
+    .builds-grid { grid-template-columns: 1fr; }
 
     .note-entry {
       grid-template-columns: 1fr;
