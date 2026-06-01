@@ -1,0 +1,100 @@
+@import '../../tokens.css';
+
+/* Force light mode when explicitly set — overrides prefers-color-scheme */
+[data-theme="light"] {
+  --bh-bg:           var(--bh-paper);
+  --bh-bg-elevated:  #ffffff;
+  --bh-bg-muted:     var(--bh-bone);
+  --bh-bg-inverse:   var(--bh-ink);
+  --bh-text:         var(--bh-ink);
+  --bh-text-muted:   #5a554c;
+  --bh-text-faint:   #8a8478;
+  --bh-text-inverse: var(--bh-paper);
+  --bh-border:       var(--bh-bone);
+  --bh-border-strong: var(--bh-bone-deep);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--bh-font-sans);
+  font-size: var(--bh-text-base);
+  line-height: var(--bh-leading-normal);
+  color: var(--bh-text);
+  background: var(--bh-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--bh-rust);
+  color: var(--bh-paper);
+}
+
+a {
+  color: var(--bh-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--bh-rust);
+  transition: color var(--bh-duration-base) var(--bh-ease);
+}
+
+a:hover { color: var(--bh-rust); }
+
+a:focus-visible {
+  outline: none;
+  box-shadow: var(--bh-shadow-focus);
+  border-radius: 2px;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Layout */
+
+.container {
+  max-width: var(--bh-container-base);
+  margin: 0 auto;
+  padding: 0 var(--bh-space-5);
+}
+
+.container--narrow { max-width: var(--bh-container-narrow); }
+.container--wide   { max-width: var(--bh-container-wide); }
+
+/* Section header pattern: mono index + serif title */
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--bh-space-5);
+  border-bottom: 1px solid var(--bh-border);
+  padding-bottom: var(--bh-space-4);
+  margin-bottom: var(--bh-space-7);
+}
+
+.section-index {
+  font-family: var(--bh-font-mono);
+  font-size: var(--bh-text-xs);
+  letter-spacing: var(--bh-tracking-mono);
+  text-transform: uppercase;
+  color: var(--bh-text-faint);
+  flex-shrink: 0;
+}
+
+.section-title {
+  font-family: var(--bh-font-display);
+  font-size: var(--bh-text-xl);
+  font-weight: 400;
+  letter-spacing: var(--bh-tracking-tight);
+  color: var(--bh-text);
+}

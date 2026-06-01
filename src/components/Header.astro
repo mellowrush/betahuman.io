@@ -1,0 +1,124 @@
+---
+---
+<header class="site-header">
+  <a href="/" class="site-wordmark" aria-label="betahuman.io home">
+    beta<span class="accent">human</span><span class="tld">.io</span>
+  </a>
+  <div class="header-right">
+    <nav aria-label="Main navigation">
+      <ul class="site-nav">
+        <li><a href="#notes">Notes</a></li>
+        <li><a href="#builds">Builds</a></li>
+        <li><a href="#about">About</a></li>
+      </ul>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme" title="Toggle light/dark">
+      <span class="theme-toggle__icon theme-toggle__icon--light">☀</span>
+      <span class="theme-toggle__icon theme-toggle__icon--dark">☽</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const html = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+
+  function applyTheme(theme: string) {
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('bh-theme', theme);
+  }
+
+  // Set explicit theme on load so [data-theme] always overrides the media query
+  const saved = localStorage.getItem('bh-theme');
+  const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(saved ?? (sysDark ? 'dark' : 'light'));
+
+  btn?.addEventListener('click', () => {
+    applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+</script>
+
+<style>
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--bh-space-9);
+  }
+
+  .site-wordmark {
+    font-family: var(--bh-font-display);
+    font-size: var(--bh-text-xl);
+    letter-spacing: var(--bh-tracking-tight);
+    color: var(--bh-text);
+    border-bottom: none;
+  }
+
+  .site-wordmark:hover { color: var(--bh-text); }
+
+  .accent { color: var(--bh-rust); }
+
+  .tld {
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    color: var(--bh-text-faint);
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--bh-space-6);
+  }
+
+  .site-nav {
+    display: flex;
+    gap: var(--bh-space-6);
+    list-style: none;
+  }
+
+  .site-nav a {
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    letter-spacing: var(--bh-tracking-mono);
+    text-transform: uppercase;
+    color: var(--bh-text-muted);
+    border-bottom: none;
+    transition: color var(--bh-duration-base) var(--bh-ease);
+  }
+
+  .site-nav a:hover { color: var(--bh-rust); }
+
+  /* Theme toggle */
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--bh-border-strong);
+    border-radius: var(--bh-radius-sm);
+    padding: var(--bh-space-1) var(--bh-space-2);
+    cursor: pointer;
+    color: var(--bh-text-faint);
+    font-size: 12px;
+    line-height: 1;
+    transition: border-color var(--bh-duration-base) var(--bh-ease),
+                color var(--bh-duration-base) var(--bh-ease);
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--bh-rust);
+    color: var(--bh-rust);
+  }
+
+  /* data-theme is always set, so track it directly */
+  .theme-toggle__icon--light { display: none; }
+  .theme-toggle__icon--dark  { display: block; }
+
+  :global([data-theme="dark"]) .theme-toggle__icon--light { display: block; }
+  :global([data-theme="dark"]) .theme-toggle__icon--dark  { display: none; }
+
+  @media (max-width: 480px) {
+    .site-nav { display: none; }
+  }
+</style>

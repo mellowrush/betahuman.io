@@ -1,0 +1,200 @@
+/* ==========================================================================
+   betahuman.io — Design Tokens
+   v0.1 · Working title. Not finished. Not final. Still becoming.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap');
+
+:root {
+  /* ----- Color: Core ----------------------------------------------------- */
+  --bh-ink:        #1a1814;
+  --bh-ink-soft:   #2a2620;
+  --bh-paper:      #f5f2eb;
+  --bh-bone:       #e8e3d8;
+  --bh-bone-deep:  #d8d2c4;
+
+  /* ----- Color: Accents -------------------------------------------------- */
+  --bh-rust:        #c4522a;
+  --bh-rust-light:  #f0ddd6;
+  --bh-rust-deep:   #8a3818;
+
+  --bh-slate:       #3d4a5c;
+  --bh-slate-light: #dde3eb;
+  --bh-slate-deep:  #2a3542;
+
+  --bh-gold:        #b8962e;
+  --bh-gold-light:  #f5edda;
+  --bh-gold-deep:   #7a6018;
+
+  /* ----- Semantic mappings (light mode default) -------------------------- */
+  --bh-bg:           var(--bh-paper);
+  --bh-bg-elevated:  #ffffff;
+  --bh-bg-muted:     var(--bh-bone);
+  --bh-bg-inverse:   var(--bh-ink);
+
+  --bh-text:           var(--bh-ink);
+  --bh-text-muted:     #5a554c;
+  --bh-text-faint:     #8a8478;
+  --bh-text-inverse:   var(--bh-paper);
+  --bh-text-accent:    var(--bh-rust);
+
+  --bh-border:         var(--bh-bone);
+  --bh-border-strong:  var(--bh-bone-deep);
+
+  /* ----- Typography ------------------------------------------------------ */
+  --bh-font-display: 'DM Serif Display', Georgia, serif;
+  --bh-font-sans:    'Syne', system-ui, sans-serif;
+  --bh-font-mono:    'DM Mono', 'JetBrains Mono', monospace;
+
+  --bh-text-xs:    11px;
+  --bh-text-sm:    13px;
+  --bh-text-base:  15px;
+  --bh-text-md:    17px;
+  --bh-text-lg:    21px;
+  --bh-text-xl:    28px;
+  --bh-text-2xl:   38px;
+  --bh-text-3xl:   54px;
+  --bh-text-4xl:   76px;
+
+  --bh-leading-tight:  1.15;
+  --bh-leading-snug:   1.35;
+  --bh-leading-normal: 1.6;
+  --bh-leading-loose:  1.8;
+
+  --bh-tracking-tight: -0.02em;
+  --bh-tracking-base:  0;
+  --bh-tracking-wide:  0.08em;
+  --bh-tracking-mono:  0.15em;
+
+  /* ----- Spacing (4px base) --------------------------------------------- */
+  --bh-space-1:  4px;
+  --bh-space-2:  8px;
+  --bh-space-3:  12px;
+  --bh-space-4:  16px;
+  --bh-space-5:  24px;
+  --bh-space-6:  32px;
+  --bh-space-7:  48px;
+  --bh-space-8:  64px;
+  --bh-space-9:  96px;
+  --bh-space-10: 128px;
+
+  /* ----- Layout --------------------------------------------------------- */
+  --bh-container-narrow: 640px;
+  --bh-container-base:   880px;
+  --bh-container-wide:   1180px;
+
+  --bh-radius-sm:   4px;
+  --bh-radius-md:   8px;
+  --bh-radius-lg:   12px;
+  --bh-radius-pill: 999px;
+
+  /* ----- Motion --------------------------------------------------------- */
+  --bh-ease:          cubic-bezier(0.22, 0.61, 0.36, 1);
+  --bh-ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --bh-duration-fast: 150ms;
+  --bh-duration-base: 250ms;
+  --bh-duration-slow: 450ms;
+
+  /* ----- Elevation ------------------------------------------------------ */
+  --bh-shadow-subtle: 0 1px 2px rgba(26, 24, 20, 0.04);
+  --bh-shadow-soft:   0 4px 16px rgba(26, 24, 20, 0.06);
+  --bh-shadow-focus:  0 0 0 3px rgba(196, 82, 42, 0.25);
+}
+
+/* ----- Dark mode -------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bh-bg:           var(--bh-ink);
+    --bh-bg-elevated:  var(--bh-ink-soft);
+    --bh-bg-muted:     #221f1a;
+    --bh-bg-inverse:   var(--bh-paper);
+    --bh-text:         var(--bh-paper);
+    --bh-text-muted:   #b8b2a4;
+    --bh-text-faint:   #6a6558;
+    --bh-text-inverse: var(--bh-ink);
+    --bh-border:        #2f2b25;
+    --bh-border-strong: #3d3830;
+  }
+}
+
+[data-theme="dark"] {
+  --bh-bg:           var(--bh-ink);
+  --bh-bg-elevated:  var(--bh-ink-soft);
+  --bh-bg-muted:     #221f1a;
+  --bh-bg-inverse:   var(--bh-paper);
+  --bh-text:         var(--bh-paper);
+  --bh-text-muted:   #b8b2a4;
+  --bh-text-faint:   #6a6558;
+  --bh-text-inverse: var(--bh-ink);
+  --bh-border:        #2f2b25;
+  --bh-border-strong: #3d3830;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+* { box-sizing: border-box; }
+
+html {
+  font-family: var(--bh-font-sans);
+  font-size: var(--bh-text-base);
+  line-height: var(--bh-leading-normal);
+  color: var(--bh-text);
+  background: var(--bh-bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body { margin: 0; }
+
+/* ----- Utilities -------------------------------------------------------- */
+.bh-display {
+  font-family: var(--bh-font-display);
+  font-weight: 400;
+  letter-spacing: var(--bh-tracking-tight);
+  line-height: var(--bh-leading-tight);
+}
+
+.bh-mono {
+  font-family: var(--bh-font-mono);
+  letter-spacing: var(--bh-tracking-mono);
+  text-transform: uppercase;
+  font-size: var(--bh-text-xs);
+  color: var(--bh-text-faint);
+}
+
+.bh-italic {
+  font-family: var(--bh-font-display);
+  font-style: italic;
+}
+
+.bh-container {
+  max-width: var(--bh-container-base);
+  margin: 0 auto;
+  padding: 0 var(--bh-space-5);
+}
+
+.bh-container--narrow { max-width: var(--bh-container-narrow); }
+.bh-container--wide   { max-width: var(--bh-container-wide); }
+
+.bh-rule {
+  width: 32px;
+  height: 2px;
+  background: var(--bh-rust);
+  border: none;
+  margin: var(--bh-space-5) 0;
+}
+
+a {
+  color: var(--bh-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--bh-rust);
+  transition: color var(--bh-duration-base) var(--bh-ease);
+}
+a:hover { color: var(--bh-rust); }
+
+::selection {
+  background: var(--bh-rust);
+  color: var(--bh-paper);
+}
