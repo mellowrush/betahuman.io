@@ -34,7 +34,7 @@
 
   --bh-text:           var(--bh-ink);
   --bh-text-muted:     #5a554c;
-  --bh-text-faint:     #8a8478;
+  --bh-text-faint:     #6a6560;
   --bh-text-inverse:   var(--bh-paper);
   --bh-text-accent:    var(--bh-rust);
 
@@ -110,7 +110,7 @@
     --bh-bg-inverse:   var(--bh-paper);
     --bh-text:         var(--bh-paper);
     --bh-text-muted:   #b8b2a4;
-    --bh-text-faint:   #6a6558;
+    --bh-text-faint:   #9a9488;
     --bh-text-inverse: var(--bh-ink);
     --bh-border:        #2f2b25;
     --bh-border-strong: #3d3830;
@@ -124,7 +124,7 @@
   --bh-bg-inverse:   var(--bh-paper);
   --bh-text:         var(--bh-paper);
   --bh-text-muted:   #b8b2a4;
-  --bh-text-faint:   #6a6558;
+  --bh-text-faint:   #9a9488;
   --bh-text-inverse: var(--bh-ink);
   --bh-border:        #2f2b25;
   --bh-border-strong: #3d3830;
