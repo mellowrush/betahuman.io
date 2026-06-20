@@ -64,13 +64,17 @@ const notes = (await getCollection('notes')).sort((a, b) =>
       <!-- NOTES -->
       <section id="notes">
         <nav class="notes-list" aria-label="Field notes">
-          {notes.map((note, i) => (
-            <a class="note-entry" href={`/notes/${note.slug}`} style={`--note-index: ${i}`}>
-              <span class="note-date">{note.data.date}</span>
-              <span class="note-title">{note.data.title}</span>
-              <span class="note-tag">{note.data.category}</span>
-            </a>
-          ))}
+          {notes.map((note, i) => {
+            const readTime = Math.max(1, Math.ceil(note.body.split(/\s+/).length / 200));
+            return (
+              <a class="note-entry" href={`/notes/${note.slug}`} style={`--note-index: ${i}`}>
+                <span class="note-date">{note.data.date}</span>
+                <span class="note-title">{note.data.title}</span>
+                <span class="note-tag">{note.data.category}</span>
+                <span class="note-read-time">{readTime} min</span>
+              </a>
+            );
+          })}
         </nav>
       </section>
 
@@ -309,7 +313,7 @@ const notes = (await getCollection('notes')).sort((a, b) =>
 
   .note-entry {
     display: grid;
-    grid-template-columns: 64px 1fr auto;
+    grid-template-columns: 64px 1fr auto auto;
     gap: var(--bh-space-4) var(--bh-space-5);
     align-items: baseline;
     padding: var(--bh-space-4) var(--bh-space-5);
@@ -390,6 +394,23 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     text-transform: uppercase;
     color: var(--bh-text-faint);
     white-space: nowrap;
+  }
+
+  .note-read-time {
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    letter-spacing: 0.08em;
+    color: var(--bh-text-faint);
+    white-space: nowrap;
+    opacity: 0.7;
+  }
+
+  .note-entry:hover .note-read-time,
+  .note-entry:focus-visible .note-read-time { color: var(--bh-ink); opacity: 1; }
+
+  :global([data-theme="dark"]) .note-entry:hover .note-read-time,
+  :global([data-theme="dark"]) .note-entry:focus-visible .note-read-time {
+    color: var(--bh-text);
   }
 
   /* BUILDS — theme-aware: ink surface on light, paper surface on dark */
@@ -557,7 +578,7 @@ const notes = (await getCollection('notes')).sort((a, b) =>
       grid-template-columns: 1fr;
       gap: var(--bh-space-1);
     }
-    .note-tag { display: none; }
+    .note-tag, .note-read-time { display: none; }
   }
 </style>
 
