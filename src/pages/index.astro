@@ -392,6 +392,16 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     background: var(--bh-bg-inverse);
     border-radius: var(--bh-radius-md);
     padding: var(--bh-space-5);
+    transition: transform 160ms var(--bh-ease), box-shadow 160ms var(--bh-ease);
+  }
+
+  .build-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26, 24, 20, 0.14);
+  }
+
+  :global([data-theme="dark"]) .build-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
   }
 
   /* Status: quiet by default; rust marks the one active build */
@@ -498,6 +508,10 @@ const notes = (await getCollection('notes')).sort((a, b) =>
   @media (prefers-reduced-motion: reduce) {
     .hero-version, .hero-headline, .hero-lead, .hero-manifesto {
       animation: none !important;
+    }
+
+    .build-card {
+      transition: none !important;
     }
 
     .notes-list.will-animate .note-entry {
