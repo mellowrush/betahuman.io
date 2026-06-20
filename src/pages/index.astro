@@ -241,6 +241,17 @@ const notes = (await getCollection('notes')).sort((a, b) =>
     flex: 1;
     height: 1px;
     background: var(--bh-border-strong);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 500ms var(--bh-ease-out);
+  }
+
+  .divider-line:last-child {
+    transform-origin: right;
+  }
+
+  .divider.did-animate .divider-line {
+    transform: scaleX(1);
   }
 
   .divider-mark {
@@ -514,6 +525,11 @@ const notes = (await getCollection('notes')).sort((a, b) =>
       transition: none !important;
     }
 
+    .divider-line {
+      transform: scaleX(1) !important;
+      transition: none !important;
+    }
+
     .notes-list.will-animate .note-entry {
       opacity: 1 !important;
       transform: none !important;
@@ -547,6 +563,23 @@ const notes = (await getCollection('notes')).sort((a, b) =>
 
 <script>
   function setupAnimations() {
+    // Dividers: draw lines outward from center when each divider enters viewport.
+    const dividers = document.querySelectorAll('.divider');
+    if (dividers.length) {
+      const dividerObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('did-animate');
+              dividerObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      dividers.forEach((d) => dividerObserver.observe(d));
+    }
+
     // Notes list: stagger items in when list enters viewport.
     // If the list is already visible on load (above fold), skip the animation
     // entirely — hiding then re-revealing would cause a flash.
