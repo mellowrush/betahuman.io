@@ -2,7 +2,7 @@
 title: "Anchor positioning: or how we stopped computing coordinates"
 date: "2024-06-06"
 category: CSS
-description: CSS Anchor Positioning shipped in Chrome 125. Float an element relative to any other element in the DOM — through scroll, resize, overflow — without a single line of JavaScript.
+description: "CSS Anchor Positioning shipped in Chrome 125. Float an element relative to any other element in the DOM — through scroll, resize, overflow — without a single line of JavaScript."
 tags:
   - css
   - layout

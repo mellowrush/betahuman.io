@@ -2,7 +2,7 @@
 title: "@starting-style: the DOM hack retirement party"
 date: "2023-10-05"
 category: CSS
-description: We've been setting opacity to 0, waiting a frame, then setting it to 1 for years. The browser finally handles this natively.
+description: "We've been setting opacity to 0, waiting a frame, then setting it to 1 for years. The browser finally handles this natively."
 tags:
   - css
   - animation

@@ -2,7 +2,7 @@
 title: Web components that don't need a client to wake up
 date: "2024-04-03"
 category: Browser APIs
-description: Declarative Shadow DOM streams shadow roots from the server. No JavaScript to hydrate. Here's what a zero-client-JS web component looks like in an Astro project.
+description: "Declarative Shadow DOM streams shadow roots from the server. No JavaScript to hydrate. Here's what a zero-client-JS web component looks like in an Astro project."
 tags:
   - web-components
   - astro

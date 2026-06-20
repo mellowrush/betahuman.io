@@ -2,7 +2,7 @@
 title: "@property: the one that makes custom properties actually animate"
 date: "2024-06-18"
 category: CSS
-description: CSS custom properties can't animate because the browser doesn't know their type. @property declares the type. After that, they animate, transition, and interpolate like native values.
+description: "CSS custom properties can't animate because the browser doesn't know their type. @property declares the type. After that, they animate, transition, and interpolate like native values."
 tags:
   - css
   - animation

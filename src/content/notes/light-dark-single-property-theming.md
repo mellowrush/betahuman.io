@@ -2,7 +2,7 @@
 title: "One property. Two modes. No JavaScript."
 date: "2024-08-08"
 category: CSS
-description: light-dark() became baseline in July 2024. One CSS function, one property, two values — the browser picks based on prefers-color-scheme. The JavaScript theme toggle becomes optional.
+description: "light-dark() became baseline in July 2024. One CSS function, one property, two values — the browser picks based on prefers-color-scheme. The JavaScript theme toggle becomes optional."
 tags:
   - css
   - dark-mode

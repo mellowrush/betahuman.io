@@ -2,7 +2,7 @@
 title: The screen is the color source
 date: "2024-11-07"
 category: Browser APIs
-description: The EyeDropper API lets you sample any pixel on the screen from a web page. Combined with CSS relative colors, you can build a palette tool that generates harmonies from anything the user can see.
+description: "The EyeDropper API lets you sample any pixel on the screen from a web page. Combined with CSS relative colors, you can build a palette tool that generates harmonies from anything the user can see."
 tags:
   - browser-api
   - color

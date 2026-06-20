@@ -2,7 +2,7 @@
 title: "content-visibility: the rendering budget you didn't know you had"
 date: "2024-07-03"
 category: Performance
-description: content-visibility: auto tells the browser to skip rendering offscreen content until it's needed. On long pages, this changes the numbers significantly. Here's what actually breaks when you use it.
+description: "content-visibility: auto tells the browser to skip rendering offscreen content until it's needed. On long pages, this changes the numbers significantly. Here's what actually breaks when you use it."
 tags:
   - performance
   - css

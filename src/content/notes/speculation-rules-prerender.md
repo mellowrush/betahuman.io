@@ -2,7 +2,7 @@
 title: The page that was already there
 date: "2024-05-22"
 category: Browser APIs
-description: The Speculation Rules API lets you declare which pages to prefetch or prerender. When the user clicks, the page is already rendered. It feels like a faster internet.
+description: "The Speculation Rules API lets you declare which pages to prefetch or prerender. When the user clicks, the page is already rendered. It feels like a faster internet."
 tags:
   - performance
   - browser-api

@@ -2,7 +2,7 @@
 title: "@scope: component CSS without the specificity bloodsport"
 date: "2023-12-12"
 category: CSS
-description: BEM existed because CSS had no way to limit a selector's reach. CSS @scope, shipping in Chrome 118, removes that excuse.
+description: "BEM existed because CSS had no way to limit a selector's reach. CSS @scope, shipping in Chrome 118, removes that excuse."
 tags:
   - css
   - architecture

@@ -2,7 +2,7 @@
 title: A resume that scales
 date: "2025-04-02"
 category: Weird
-description: A PDF resume is a snapshot. An SVG resume is an argument. Here's what building one taught me about text layout, SVG font metrics, and what a resume is actually trying to do.
+description: "A PDF resume is a snapshot. An SVG resume is an argument. Here's what building one taught me about text layout, SVG font metrics, and what a resume is actually trying to do."
 tags:
   - svg
   - typography

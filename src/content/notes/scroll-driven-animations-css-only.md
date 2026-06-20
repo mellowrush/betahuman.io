@@ -2,7 +2,7 @@
 title: The CSS-only version of what we've been doing wrong
 date: "2023-08-15"
 category: CSS
-description: Scroll-driven animations landed in Chrome 115. Most people still aren't using them. Here's what that says about us.
+description: "Scroll-driven animations landed in Chrome 115. Most people still aren't using them. Here's what that says about us."
 tags:
   - css
   - animation

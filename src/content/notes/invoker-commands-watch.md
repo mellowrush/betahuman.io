@@ -2,7 +2,7 @@
 title: "invoketarget: when HTML finally handles its own interactions"
 date: "2025-03-12"
 category: Browser APIs
-description: Invoker Commands are arriving in Chrome. invoketarget and invokeaction let a button target a popover or dialog without any JavaScript event listener. Here's what the pattern looks like and why it matters.
+description: "Invoker Commands are arriving in Chrome. invoketarget and invokeaction let a button target a popover or dialog without any JavaScript event listener. Here's what the pattern looks like and why it matters."
 tags:
   - html
   - browser-api

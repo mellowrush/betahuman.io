@@ -2,7 +2,7 @@
 title: "fetchpriority and the art of getting the important thing first"
 date: "2024-04-28"
 category: Performance
-description: fetchpriority="high" on your hero image sounds obvious. The interaction with lazy loading, preload scanner, and connection ramp-up is less so.
+description: "fetchpriority=\"high\" on your hero image sounds obvious. The interaction with lazy loading, preload scanner, and connection ramp-up is less so."
 tags:
   - performance
   - lcp

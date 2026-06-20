@@ -2,7 +2,7 @@
 title: "interpolate-size: the other way to animate to auto"
 date: "2025-06-05"
 category: CSS
-description: interpolate-size: allow-keywords makes CSS keyword values like auto, min-content, and fit-content interpolatable. It's simpler than calc-size() and riskier. Here's when to use which.
+description: "interpolate-size: allow-keywords makes CSS keyword values like auto, min-content, and fit-content interpolatable. It's simpler than calc-size() and riskier. Here's when to use which."
 tags:
   - css
   - animation

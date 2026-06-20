@@ -2,7 +2,7 @@
 title: "Abusing @keyframes as a state machine (it works)"
 date: "2024-03-21"
 category: CSS
-description: animation-play-state + animation-delay with a negative value lets you scrub to any frame of an animation. Which means you can use CSS animations as state machines.
+description: "animation-play-state + animation-delay with a negative value lets you scrub to any frame of an animation. Which means you can use CSS animations as state machines."
 tags:
   - css
   - animation

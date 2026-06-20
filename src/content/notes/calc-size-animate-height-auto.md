@@ -2,7 +2,7 @@
 title: "calc-size(): the fix for the hack we've been shipping for a decade"
 date: "2024-09-05"
 category: CSS
-description: Animating height to auto has been impossible since CSS animations were invented. Chrome 129 ships calc-size(), which makes it possible. Here's the two-line fix and the surrounding context.
+description: "Animating height to auto has been impossible since CSS animations were invented. Chrome 129 ships calc-size(), which makes it possible. Here's the two-line fix and the surrounding context."
 tags:
   - css
   - animation

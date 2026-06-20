@@ -2,7 +2,7 @@
 title: One seed. A whole system.
 date: "2024-01-18"
 category: CSS
-description: Relative color syntax in CSS means one design token can produce your entire palette. No preprocessor. No JS. No separate color library.
+description: "Relative color syntax in CSS means one design token can produce your entire palette. No preprocessor. No JS. No separate color library."
 tags:
   - css
   - design-tokens

@@ -2,7 +2,7 @@
 title: "Font pairing isn't a specimen problem"
 date: "2025-02-06"
 category: Weird
-description: Every font pairing tool shows you specimens in a vacuum. Typefaces read completely differently at UI scale, in dark mode, at 13px. Here's the pairing lab I've been building to fix that.
+description: "Every font pairing tool shows you specimens in a vacuum. Typefaces read completely differently at UI scale, in dark mode, at 13px. Here's the pairing lab I've been building to fix that."
 tags:
   - typography
   - css

@@ -2,7 +2,7 @@
 title: The Popover API walks in and the JS bundle gets smaller
 date: "2024-05-09"
 category: Browser APIs
-description: The Popover API became baseline in April 2024. Native tooltips, modals, dropdowns — with focus management, light-dismiss, and ::backdrop. No JavaScript required for the basic case.
+description: "The Popover API became baseline in April 2024. Native tooltips, modals, dropdowns — with focus management, light-dismiss, and ::backdrop. No JavaScript required for the basic case."
 tags:
   - html
   - browser-api

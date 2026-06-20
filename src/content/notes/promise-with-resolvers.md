@@ -2,7 +2,7 @@
 title: "Promise.withResolvers(): the deferred pattern, finally legible"
 date: "2024-07-30"
 category: JavaScript
-description: For ten years we've been storing Promise resolve/reject functions in outer-scope variables to call them later. Promise.withResolvers() is the native version of that pattern, and it's baseline now.
+description: "For ten years we've been storing Promise resolve/reject functions in outer-scope variables to call them later. Promise.withResolvers() is the native version of that pattern, and it's baseline now."
 tags:
   - javascript
   - async

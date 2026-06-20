@@ -2,7 +2,7 @@
 title: "Iterator helpers: processing without materializing"
 date: "2024-09-19"
 category: JavaScript
-description: Iterator helpers — .map(), .filter(), .take() on iterators — landed in Chrome 122 and Firefox 131. The difference from array methods: they don't build the result until you ask for it. Here's when that matters.
+description: "Iterator helpers — .map(), .filter(), .take() on iterators — landed in Chrome 122 and Firefox 131. The difference from array methods: they don't build the result until you ask for it. Here's when that matters."
 tags:
   - javascript
   - iterators

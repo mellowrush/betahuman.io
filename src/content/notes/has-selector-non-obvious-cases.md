@@ -2,7 +2,7 @@
 title: ":has() and the cases nobody's writing about"
 date: "2024-02-07"
 category: CSS
-description: Everyone covered :has() as "the CSS parent selector." That framing undersells it by about 80%.
+description: "Everyone covered :has() as \"the CSS parent selector.\" That framing undersells it by about 80%."
 tags:
   - css
   - selectors

@@ -2,7 +2,7 @@
 title: "Date was a mistake. Temporal is the correction."
 date: "2024-10-10"
 category: JavaScript
-description: The Temporal API is Stage 3. The polyfill works. Here's what Date got wrong, what Temporal does differently, and whether you should replace date-fns today.
+description: "The Temporal API is Stage 3. The polyfill works. Here's what Date got wrong, what Temporal does differently, and whether you should replace date-fns today."
 tags:
   - javascript
   - temporal

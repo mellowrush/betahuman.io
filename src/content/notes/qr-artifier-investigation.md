@@ -2,7 +2,7 @@
 title: "QR codes have 30% error correction. I intended to use it."
 date: "2025-01-15"
 category: Weird
-description: QR codes embed error correction that lets 30% of the code be corrupted and still scan. That's a canvas. Here's what I built and what I learned.
+description: "QR codes embed error correction that lets 30% of the code be corrupted and still scan. That's a canvas. Here's what I built and what I learned."
 tags:
   - canvas
   - qr-code

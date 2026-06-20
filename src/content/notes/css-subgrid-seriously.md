@@ -2,7 +2,7 @@
 title: Taking subgrid seriously
 date: "2024-02-22"
 category: CSS
-description: Subgrid became baseline in 2023. Everyone shows the card grid demo. Here's the form layout case that actually rewrites how you think about it.
+description: "Subgrid became baseline in 2023. Everyone shows the card grid demo. Here's the form layout case that actually rewrites how you think about it."
 tags:
   - css
   - grid

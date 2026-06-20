@@ -2,7 +2,7 @@
 title: "Scoped registries: web components without the naming war"
 date: "2025-05-08"
 category: Browser APIs
-description: Scoped custom element registries let you define custom elements scoped to a shadow root. Two components can both register x-button without conflict. This is what makes web component libraries actually composable.
+description: "Scoped custom element registries let you define custom elements scoped to a shadow root. Two components can both register x-button without conflict. This is what makes web component libraries actually composable."
 tags:
   - web-components
   - browser-api

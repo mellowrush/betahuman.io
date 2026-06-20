@@ -2,7 +2,7 @@
 title: "Set.prototype.intersection() and the six years we spent on lodash"
 date: "2024-08-29"
 category: JavaScript
-description: Native Set operations — intersection, union, difference, symmetricDifference — became baseline in 2024. Here's what you can delete from your dependencies.
+description: "Native Set operations — intersection, union, difference, symmetricDifference — became baseline in 2024. Here's what you can delete from your dependencies."
 tags:
   - javascript
   - sets

@@ -2,7 +2,7 @@
 title: "@function in CSS: what design tokens want to be"
 date: "2025-04-18"
 category: CSS
-description: The CSS @function proposal is Stage 1. If it ships, it rewrites how design systems use custom properties. Here's what the proposal looks like and why it matters even before it lands.
+description: "The CSS @function proposal is Stage 1. If it ships, it rewrites how design systems use custom properties. Here's what the proposal looks like and why it matters even before it lands."
 tags:
   - css
   - design-tokens

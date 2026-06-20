@@ -2,7 +2,7 @@
 title: The first letter matters. It always has.
 date: "2024-04-14"
 category: CSS
-description: initial-letter is now baseline. Native drop caps, properly baseline-aligned, no hacks. Two lines of CSS that took decades to arrive.
+description: "initial-letter is now baseline. Native drop caps, properly baseline-aligned, no hacks. Two lines of CSS that took decades to arrive."
 tags:
   - css
   - typography

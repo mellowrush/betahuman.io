@@ -2,7 +2,7 @@
 title: "scrollend: the event we've been debouncing around for years"
 date: "2024-03-08"
 category: Browser APIs
-description: The scroll event fires dozens of times per second. Detecting when it stops has required a debounce hack since the beginning. scrollend is the correction.
+description: "The scroll event fires dozens of times per second. Detecting when it stops has required a debounce hack since the beginning. scrollend is the correction."
 tags:
   - javascript
   - browser-api

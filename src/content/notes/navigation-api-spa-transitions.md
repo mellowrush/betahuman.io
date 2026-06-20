@@ -2,7 +2,7 @@
 title: The browser already has a router
 date: "2024-08-21"
 category: Browser APIs
-description: The Navigation API intercepts navigations at the browser level — clicks, form submissions, history.back() — and lets you handle them with custom transitions. No client-side router library required.
+description: "The Navigation API intercepts navigations at the browser level — clicks, form submissions, history.back() — and lets you handle them with custom transitions. No client-side router library required."
 tags:
   - javascript
   - browser-api

@@ -2,7 +2,7 @@
 title: "Container style queries: component theming without prop drilling"
 date: "2024-07-18"
 category: CSS
-description: Container style queries let you query a custom property value on a container and style descendants based on it. Component variants through CSS, with no class changes in the markup.
+description: "Container style queries let you query a custom property value on a container and style descendants based on it. Component variants through CSS, with no class changes in the markup."
 tags:
   - css
   - components
