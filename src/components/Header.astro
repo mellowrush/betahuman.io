@@ -55,6 +55,14 @@
     controller = new AbortController();
     const { signal } = controller;
 
+    // ── Sticky border on scroll ────────────────────────────────────────────
+    const headerEl = document.getElementById('site-header');
+    function onScroll() {
+      headerEl?.classList.toggle('is-scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true, signal });
+    onScroll();
+
     // ── Theme toggle ───────────────────────────────────────────────────────
     const themeBtn = document.getElementById('theme-toggle');
     themeBtn?.addEventListener('click', () => {
@@ -102,6 +110,24 @@
     display: flex;
     align-items: center;
     margin-bottom: var(--bh-space-9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bh-bg);
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--bh-duration-base) var(--bh-ease),
+                background var(--bh-duration-base) var(--bh-ease);
+    /* Padding compensates for the sticky border so content beneath doesn't jump */
+    padding-top: var(--bh-space-5);
+    padding-bottom: var(--bh-space-5);
+    margin-top: calc(-1 * var(--bh-space-5));
+  }
+
+  .site-header.is-scrolled {
+    border-bottom-color: var(--bh-border);
+    background: color-mix(in srgb, var(--bh-bg) 92%, transparent);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
   .site-wordmark {
@@ -144,10 +170,23 @@
     text-transform: uppercase;
     color: var(--bh-text-muted);
     border-bottom: none;
+    position: relative;
     transition: color var(--bh-duration-base) var(--bh-ease);
   }
 
+  .site-nav__list a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--bh-rust);
+    transition: width 220ms var(--bh-ease);
+  }
+
   .site-nav__list a:hover { color: var(--bh-rust); }
+  .site-nav__list a:hover::after { width: 100%; }
 
   .header-actions {
     display: flex;
@@ -254,6 +293,7 @@
       color: var(--bh-text);
     }
 
+    .site-nav__list a::after { display: none; }
     .site-nav__list a:hover { color: var(--bh-rust); }
 
     .nav-toggle {

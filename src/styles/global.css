@@ -43,11 +43,15 @@ body {
 a {
   color: var(--bh-text);
   text-decoration: none;
-  border-bottom: 1px solid var(--bh-rust);
-  transition: color var(--bh-duration-base) var(--bh-ease);
+  border-bottom: 1px solid color-mix(in srgb, var(--bh-rust) 38%, transparent);
+  transition: color var(--bh-duration-base) var(--bh-ease),
+              border-bottom-color var(--bh-duration-base) var(--bh-ease);
 }
 
-a:hover { color: var(--bh-rust); }
+a:hover {
+  color: var(--bh-rust);
+  border-bottom-color: var(--bh-rust);
+}
 
 .skip-link {
   position: absolute;
