@@ -144,10 +144,23 @@
     text-transform: uppercase;
     color: var(--bh-text-muted);
     border-bottom: none;
+    position: relative;
     transition: color var(--bh-duration-base) var(--bh-ease);
   }
 
+  .site-nav__list a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--bh-rust);
+    transition: width 220ms var(--bh-ease);
+  }
+
   .site-nav__list a:hover { color: var(--bh-rust); }
+  .site-nav__list a:hover::after { width: 100%; }
 
   .header-actions {
     display: flex;
@@ -254,6 +267,7 @@
       color: var(--bh-text);
     }
 
+    .site-nav__list a::after { display: none; }
     .site-nav__list a:hover { color: var(--bh-rust); }
 
     .nav-toggle {
