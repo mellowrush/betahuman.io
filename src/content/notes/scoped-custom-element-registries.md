@@ -19,6 +19,8 @@ This is the naming war. It's not theoretical. It's why every web component libra
 
 Scoped custom element registries, shipping in Chrome and in progress elsewhere, solve this at the spec level.
 
+> **Browser support:** Chrome 126+ (stable, June 2024). Firefox: in progress. Safari: no public position. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry) for current status. Use the [WICG polyfill](https://github.com/WICG/scoped-custom-element-registries) for broader coverage, but test carefully in production.
+
 ## The model
 
 Instead of registering to the global `customElements`, you register to a registry that's scoped to a shadow root:
@@ -81,19 +83,16 @@ class DataPanel extends HTMLElement {
 
 ## The current state (May 2025)
 
-Available in Chrome (behind a flag in earlier versions, shipping in stable as of Chromium 126). Firefox in progress. Safari position: not yet public.
-
-The polyfill from WICG is available but experimental. For production use: test carefully.
-
-The feature is also in the spec for Declarative Shadow DOM:
+The feature is also proposed for Declarative Shadow DOM:
 
 ```html
+<!-- Proposal — not yet stable in any browser as of mid-2025 -->
 <template shadowrootmode="open" shadowrootregistry="my-registry">
   <!-- Elements here resolve against my-registry -->
 </template>
 ```
 
-The declarative path makes server-rendered scoped registries possible — which is the combination that makes SSR web components with multiple libraries actually viable.
+The declarative path would make server-rendered scoped registries possible — the combination that makes SSR web components with multiple libraries actually viable.
 
 ## The honest scope
 
