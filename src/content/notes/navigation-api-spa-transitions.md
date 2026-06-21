@@ -12,13 +12,9 @@ tags:
 draft: false
 ---
 
-We made a mistake in the early 2010s, and we've been maintaining it ever since.
+In the early 2010s, the browser offered no interception point for navigation. `hashchange` existed; it was limited. `popstate` caught history events; it didn't catch link clicks. If you wanted smooth transitions, you had to own the navigation entirely. The router library was the only answer.
 
-The mistake was deciding that the browser's navigation model was fundamentally inadequate, and that the correct response was to replace it entirely with JavaScript. Full routing control: intercept every link click, push your own history entries, decide what renders and when. The framework model.
-
-The framework model was rational. The browser offered no interception point. `hashchange` existed; it was limited. `popstate` caught history events; it didn't catch link clicks. If you wanted smooth transitions, you had to own the navigation.
-
-The Navigation API, shipping in Chrome 102 and building support through 2023–2024, gives you the interception point. You can intercept navigations — any navigation: link clicks, form submissions, `history.back()`, JavaScript-triggered — and decide what to do with them.
+The Navigation API, shipping in Chrome 102, gives you the interception point the browser was missing. You can intercept any navigation — link clicks, form submissions, `history.back()`, JavaScript-triggered — and decide what to do with it.
 
 ```javascript
 window.navigation.addEventListener('navigate', (event) => {
@@ -45,11 +41,13 @@ window.navigation.addEventListener('navigate', (event) => {
 });
 ```
 
-Every internal navigation — every link click, every `history.pushState` call, every back/forward button press — routes through this handler. The browser still manages the URL bar, the history stack, scroll restoration, and the back button. You manage the render.
+Every internal navigation routes through this handler. The browser still manages the URL bar, history stack, scroll restoration, and back button. You manage the render.
+
+> **Browser support:** Chrome 102+. Safari: check [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API) for current status — not supported as of mid-2024, implementation in progress. For production use with Safari traffic, use the polyfill (see below) or fall back to the traditional `history.pushState` pattern.
 
 ## Paired with View Transitions
 
-The feature combination that changes what "web navigation" can feel like:
+The combination that changes what "web navigation" can feel like:
 
 ```javascript
 window.navigation.addEventListener('navigate', (event) => {
@@ -57,19 +55,18 @@ window.navigation.addEventListener('navigate', (event) => {
 
   event.intercept({
     async handler() {
-      // Fetch the new page
       const html = await fetch(event.destination.url).then(r => r.text());
       const doc = new DOMParser().parseFromString(html, 'text/html');
+      const newMain = doc.getElementById('main');
 
-      // Transition with View Transitions API
       if (!document.startViewTransition) {
-        // Fallback: no transition
-        document.getElementById('main').replaceWith(doc.getElementById('main'));
+        // Fallback: swap without transition
+        document.getElementById('main').replaceWith(newMain);
         return;
       }
 
       await document.startViewTransition(() => {
-        document.getElementById('main').replaceWith(doc.getElementById('main'));
+        document.getElementById('main').replaceWith(newMain);
       });
     }
   });
@@ -89,16 +86,15 @@ window.navigation.addEventListener('navigate', (event) => {
 @keyframes fade-in  { from { opacity: 0; } }
 ```
 
-Both APIs together: smooth animated transitions between pages, no router library, no framework. The browser handles history. The CSS handles animation. The JavaScript fetches content.
+Both APIs together: animated transitions between pages, no router library, no framework. The browser handles history. CSS handles animation. JavaScript fetches content.
 
 ## What the router library still provides
 
 Being honest about what you're giving up:
 
-- **Nested layouts**: Router libraries handle nested layout preservation efficiently. The Navigation API approach fetches full pages and swaps content. If you have a persistent sidebar with its own state, you need to be clever about what you replace.
-- **Client-side state management**: Router libraries integrate with state systems. Navigation API doesn't — you manage that yourself.
-- **Prefetching patterns**: Libraries like TanStack Router have sophisticated data-fetching strategies tied to navigation. You'd build that on top of the Navigation API.
-- **Safari support**: As of mid-2024, Safari doesn't support the Navigation API. `window.navigation` is undefined. Requires a polyfill or graceful fallback.
+- **Nested layouts.** Router libraries preserve nested layout state efficiently. The Navigation API approach fetches full pages. A persistent sidebar with its own state needs manual handling.
+- **Client-side state management.** Router libraries integrate with state systems. Navigation API doesn't.
+- **Prefetching patterns.** Libraries like TanStack Router have sophisticated data-fetching strategies tied to navigation. You'd build those on top.
 
 ## The polyfill situation
 
@@ -106,15 +102,15 @@ The WICG maintains an official Navigation API polyfill. For most use cases, it w
 
 ```html
 <script type="module">
-  import { navigation } from 'https://cdn.jsdelivr.net/npm/@virtualstate/navigation/+esm';
-  // Navigation API available cross-browser
+  // Pin to a specific version in production — don't use @latest
+  import { navigation } from 'https://cdn.jsdelivr.net/npm/@virtualstate/navigation@1.0.0-alpha.211/+esm';
 </script>
 ```
 
 ## The thing it changes about how you think
 
-React Router, Vue Router, Next.js, SvelteKit — all of them are built on the premise that the browser's navigation model is a problem to be solved. The Navigation API is the browser acknowledging that the premise was sometimes right, and shipping a native version of the solution.
+React Router, Vue Router, Next.js, SvelteKit — all built on the premise that the browser's navigation model is inadequate. The Navigation API is the browser acknowledging that this was sometimes right, and shipping a native version of the solution.
 
-The router library isn't obsolete. It's just no longer the only way to have navigation control. For sites that need full routing sophistication — nested layouts, data prefetching, code splitting — the library remains appropriate.
+The router library isn't obsolete. For sites that need full routing sophistication — nested layouts, data prefetching, code splitting — the library remains appropriate.
 
 For sites that want smooth transitions between server-rendered pages without adopting a full framework: the platform now has an answer. Whether you use it depends on how much of the router you actually needed.
