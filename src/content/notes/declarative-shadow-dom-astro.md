@@ -11,11 +11,9 @@ tags:
 draft: false
 ---
 
-Here's the thing about web components that nobody in the React community wanted to hear, and that the web components community often couldn't explain clearly enough: they've always been a runtime concern. You define a custom element, register it, and the browser upgrades it when the JavaScript runs. Which means: no JavaScript, no component.
+Web components have always been a runtime concern. Define the element, register it, wait for JavaScript to run. No JavaScript, no component. That's not a design philosophy — that's a limitation masquerading as one.
 
-That's not a design philosophy. That's a limitation masquerading as one.
-
-Declarative Shadow DOM, which shipped in Chrome 111 and Firefox 123, changes the fundamental contract. You can now define a shadow root in HTML — without any JavaScript — and the browser will attach it during parsing, not during JS execution.
+Declarative Shadow DOM, shipped in Chrome 111, Firefox 123, and Safari 16.4, changes the fundamental contract. You can define a shadow root in HTML — no JavaScript — and the browser attaches it during parsing, before any script runs.
 
 ```html
 <my-card>
@@ -43,13 +41,13 @@ Declarative Shadow DOM, which shipped in Chrome 111 and Firefox 123, changes the
 </my-card>
 ```
 
-This HTML, served from the server, renders a styled, encapsulated component with zero JavaScript. The shadow root is attached during parsing. Style encapsulation works. Slot projection works. No custom element registry required for the initial render.
+This HTML, served from the server, renders a styled, encapsulated component with zero JavaScript. Shadow root attached during parsing. Style encapsulation works. Slot projection works. No custom element registry required for initial render.
+
+> **Browser support:** Chrome 111+, Firefox 123+, Safari 16.4+. Baseline 2024. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_shadow_DOM#declarative_shadow_dom) for the full table.
 
 ## In an Astro component
 
-Astro's island architecture is built around the idea that most components should render on the server with zero client JavaScript, and only hydrate where interactivity is needed. Declarative Shadow DOM fits this exactly.
-
-An Astro component:
+Astro's island architecture is built around a simple premise: most components should render on the server with zero client JavaScript, and only hydrate where interactivity is actually needed. Declarative Shadow DOM fits this exactly.
 
 ```astro
 ---
@@ -108,11 +106,11 @@ const { title, category } = Astro.props;
 </bh-card>
 ```
 
-No `client:load`. No `client:idle`. Zero JavaScript shipped to the browser for this component. The styles are encapsulated inside the shadow root. The slot content is provided by the Astro parent.
+No `client:load`. No `client:idle`. Zero JavaScript shipped for this component. Astro processes `{title}` and `{category}` at build time, so the `<template>` contains fully-rendered HTML by the time it hits the browser. Styles are encapsulated inside the shadow root.
 
 ## The enhancement path
 
-The component above does zero JavaScript now. If you need interactivity later — say, the card needs to toggle an expanded state — you add a custom element definition progressively:
+The component above does zero JavaScript now. If you need interactivity later — say, the card should toggle an expanded state — you add a custom element definition progressively:
 
 ```javascript
 // card.js — loaded with client:idle or client:load
@@ -120,7 +118,6 @@ customElements.define('bh-card', class extends HTMLElement {
   constructor() {
     super();
     // Shadow root already exists from DSD. Don't create another.
-    // Access it:
     const shadow = this.shadowRoot;
     shadow.querySelector('.header').addEventListener('click', () => {
       this.toggleAttribute('expanded');
@@ -129,14 +126,12 @@ customElements.define('bh-card', class extends HTMLElement {
 });
 ```
 
-The `shadowRoot` is already attached (from DSD). The custom element definition enhances it without replacing it. No flash of unstyled content. No hydration gap.
+The `shadowRoot` is already attached. The custom element definition enhances it without replacing it. No flash of unstyled content. No hydration gap.
 
 ## What this makes possible
 
-The honest account: Declarative Shadow DOM doesn't solve everything about web components. Custom element registration, observed attributes, and property reflection still require JavaScript. If you need a complex interactive widget, the JavaScript is still required.
+DSD doesn't solve everything about web components. Custom element registration, observed attributes, and property reflection still require JavaScript. Complex interactive widgets still need a script.
 
-But for structural, style-encapsulated layout components — cards, banners, section wrappers, media objects — you can now ship them as SSR'd HTML with style isolation, zero runtime cost, and a clear path to enhancement if interactivity becomes necessary.
+But for structural, style-encapsulated layout components — cards, banners, section wrappers, media objects — you can now ship them as SSR'd HTML with style isolation, zero runtime cost, and a clear path to enhancement if interactivity becomes necessary later.
 
-That's not a minor thing. The criticism that web components require JavaScript was one of the fundamental objections to using them in content sites. DSD removes that objection for a significant slice of use cases.
-
-The web components community has been arguing for years that the platform model is right and the framework model is a workaround. They weren't wrong. They were just early.
+The criticism that web components require JavaScript was one of the fundamental objections to using them on content sites. DSD removes that objection for a meaningful slice of use cases. Not all of them. Enough of them.
