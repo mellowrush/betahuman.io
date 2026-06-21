@@ -11,13 +11,15 @@ tags:
 draft: false
 ---
 
-Here's what everyone wrote when `:has()` became baseline in December 2023: *"CSS finally gets a parent selector."*
+When `:has()` became baseline in December 2023, every article led with: *"CSS finally gets a parent selector."*
 
-Which is true, and also the least interesting thing about it.
+Which is true and the least interesting thing about it.
 
-Yes, you can now style a parent based on its children. That's useful. But `:has()` is a relational selector — it queries the DOM relationship in any direction, not just upward. The "parent selector" framing is the equivalent of introducing the iPhone as "a phone that also plays music."
+Yes, you can style a parent based on its children. That's useful. But `:has()` is a relational selector — it queries DOM relationships in any direction, not just upward. The "parent selector" framing is the equivalent of introducing the iPhone as "a phone that also plays music."
 
-Let me show you the cases that actually change how I write interfaces.
+Here are the cases that actually change how I write interfaces.
+
+> **Browser support:** Baseline December 2023. Chrome 105+, Firefox 121+, Safari 15.4+. Ship it.
 
 ## Style a form that contains an invalid input
 
@@ -33,7 +35,7 @@ form:has(input:invalid) .error-banner {
 }
 ```
 
-No JavaScript. No onChange handlers. No validity checking on submit. The browser already tracks validity state — `:has()` just lets you query it from a parent element.
+No JavaScript. No onChange handlers. No validity checking on submit. The browser already tracks validity state — `:has()` lets you query it from a parent.
 
 ## Cards that know what they contain
 
@@ -55,11 +57,11 @@ No JavaScript. No onChange handlers. No validity checking on submit. The browser
 }
 ```
 
-This is context-aware component styling that previously required conditional class application from JavaScript. The markup drives the style based on what it actually contains, not what a parent component decides to tell it via props.
+Context-aware component styling that previously required conditional class application from JavaScript. The markup drives the style based on what it actually contains.
 
-## A tab system. Zero JavaScript.
+## A tab system — with caveats
 
-This one's the flex. Pure HTML and CSS tabs, working, accessible:
+Pure HTML and CSS tabs:
 
 ```html
 <div class="tabs">
@@ -96,9 +98,9 @@ This one's the flex. Pure HTML and CSS tabs, working, accessible:
 }
 ```
 
-The `<input type="radio">` elements are hidden. Their checked state drives which panel is visible and which label is active, via `:has()`. State lives in the DOM, not in JavaScript.
+The `<input type="radio">` elements are hidden. Their checked state drives which panel is visible and which label is active. State lives in the DOM, not in JavaScript.
 
-*Accessibility caveat*: this pattern works for basic use. For keyboard navigation between tabs per ARIA tab pattern, you'll still need a JS event listener for arrow key handling. The DOM state management is genuinely CSS-native. The keyboard interaction is not yet.
+> **Accessibility warning:** This pattern looks like tabs but isn't semantically tabs. Screen readers encounter hidden radio inputs — not `role="tab"` and `role="tabpanel"`. For a production tab component with proper ARIA semantics and arrow key navigation, you still need JavaScript. Use this for visual prototyping, not for user-facing UI where keyboard and screen reader support matter.
 
 ## Quantity queries
 
@@ -115,16 +117,14 @@ The `<input type="radio">` elements are hidden. Their checked state drives which
 }
 ```
 
-For years, quantity queries required JavaScript to count children and apply a class. `:has()` combined with `:nth-child()` gives you a purely declarative version.
+For years, quantity queries required JavaScript to count children and apply a class. `:has()` combined with `:nth-child()` is purely declarative.
 
 ## The honest reckoning
 
-I want to be clear about the limits, because I have a type: I use these patterns, get excited, write about them, and the caveats end up in footnotes.
+I use these patterns, get excited, write about them and the caveats end up in footnotes. Putting them here instead:
 
-- **Performance:** `:has()` can be expensive in large DOMs if used carelessly. A `:has()` selector that triggers a paint invalidation on a parent element — on every keystroke inside a child — will hurt. Use it for structural styling decisions, not real-time interactive effects.
-- **No `:has()` inside `:has()`** — you can't nest them.
-- **Specificity is the same as the argument.** `:has(.foo)` has the specificity of `.foo`. That's usually fine, but know it.
+- **Performance.** `:has()` can be expensive in large DOMs. A selector that triggers paint invalidation on a parent on every keystroke inside a child will hurt. Use it for structural styling decisions, not real-time interactive effects.
+- **No `:has()` inside `:has()`.** You can't nest them — `:has(:has(.foo))` is invalid per the spec.
+- **Specificity matches the argument.** `:has(.foo)` has the specificity of `.foo`. Usually fine, but worth knowing.
 
-`:has()` changes the basic terms of how CSS and JavaScript divide the work of state-driven UI. Most of us are still writing JavaScript for things CSS now handles.
-
-That's not a moral failing. It's just a lag. The tooling catches up last.
+`:has()` changes the basic terms of how CSS and JavaScript divide the work of state-driven UI. Most of us are still writing JavaScript for things CSS now handles. That's not a moral failing. It's just a lag. The tooling catches up last.

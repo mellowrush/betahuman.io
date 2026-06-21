@@ -12,13 +12,13 @@ tags:
 draft: false
 ---
 
-There is a certain kind of problem that people normalize so thoroughly they forget it was ever a problem. They just accept it as part of the cost of doing business.
-
-We've been computing tooltip positions with JavaScript for twenty-five years. Reading `getBoundingClientRect()`. Accounting for scroll offset. Clamping to viewport edges. Recalculating on resize. Reaching for Popper.js, Floating UI, Tippy, or whichever library promised to solve it this year. Maintaining those dependencies. Updating them when browsers changed their scrolling behavior.
+We've been computing tooltip positions with JavaScript for twenty-five years. `getBoundingClientRect()`. Scroll offsets. Viewport clamping. Resize listeners. Popper.js, Floating UI, Tippy — whichever library the team agreed to maintain this year.
 
 None of this was necessary. It was just the only option available.
 
-CSS Anchor Positioning shipped in Chrome 125. It allows any element to be positioned relative to any other element in the DOM — through scroll, through overflow: hidden, through resize — using pure CSS.
+CSS Anchor Positioning shipped in Chrome 125. Any element, positioned relative to any other element in the DOM — through scroll, through `overflow: hidden`, through resize — in pure CSS.
+
+> **Browser support:** Chrome 125+. Firefox and Safari: check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/anchor-name) — implementation status moves faster than this article. Use `@supports` in the meantime.
 
 ## The minimum example
 
@@ -43,13 +43,15 @@ CSS Anchor Positioning shipped in Chrome 125. It allows any element to be positi
 }
 ```
 
-`anchor-name` registers an element as a named anchor. `position-anchor` connects a positioned element to that anchor. The `anchor()` function then resolves to the anchor's geometric edges — `top`, `bottom`, `left`, `right`, `center` — at the moment the tooltip needs to paint.
+`anchor-name` registers the anchor. `position-anchor` connects to it. The `anchor()` function resolves to the anchor's geometric edges — `top`, `bottom`, `left`, `right`, `center` — at paint time.
 
 No scroll offset calculation. No `getBoundingClientRect`. No resize listener. The browser tracks the geometry.
 
+> **To test:** Paste this into a local HTML file and open in Chrome 125+. The tooltip positions relative to the button with no JS at all.
+
 ## Automatic position fallback
 
-The feature that makes this genuinely useful beyond the demo:
+The part that actually ships to production:
 
 ```css
 .tooltip {
@@ -81,7 +83,7 @@ The feature that makes this genuinely useful beyond the demo:
 }
 ```
 
-The browser tries each `@position-try` block in order. If applying that block would cause the positioned element to overflow the viewport, it moves to the next option. Automatic reflow to stay in view — the single most annoying thing to implement in JavaScript — is now a CSS declaration.
+The browser tries each `@position-try` block in order. Overflows the viewport? Next option. Automatic viewport-aware reflow. The most annoyingly difficult thing to implement in JavaScript. Now a CSS declaration.
 
 ## Working with the Popover API
 
@@ -114,7 +116,7 @@ The natural pairing:
 }
 ```
 
-The popover handles: show/hide, light-dismiss, focus management, top-layer rendering. Anchor positioning handles: "next to the button, not somewhere arbitrary." Together they cover the full tooltip use case with no JavaScript at all.
+The popover handles show/hide, light-dismiss, focus management, top-layer rendering. Anchor positioning handles where. Together: a full tooltip pattern, zero JavaScript.
 
 ## The library inventory
 
@@ -122,9 +124,9 @@ Popper.js: 19KB gzipped. Floating UI: 12KB gzipped. Tippy.js (built on Popper): 
 
 The CSS-native version: approximately 20 lines.
 
-The library wasn't solving a conceptual problem that CSS couldn't. It was solving the gap between what CSS offered and what the positioning requirements actually were. That gap is now, for the large majority of use cases, gone.
+The library wasn't solving a conceptual problem. It was covering the gap between what CSS offered and what the requirements were. That gap is gone.
 
-Chrome 125+. Firefox is implementing. Progressive enhancement with `@supports` until cross-browser:
+Use `@supports` until Firefox and Safari land it:
 
 ```css
 @supports (anchor-name: --test) {

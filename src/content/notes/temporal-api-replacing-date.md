@@ -2,7 +2,7 @@
 title: "Date was a mistake. Temporal is the correction."
 date: "2024-10-10"
 category: JavaScript
-description: "The Temporal API is Stage 3. The polyfill works. Here's what Date got wrong, what Temporal does differently, and whether you should replace date-fns today."
+description: "The Temporal API is Stage 3. The polyfill works. Here's what Date got wrong, what Temporal does differently and whether you should replace date-fns today."
 tags:
   - javascript
   - temporal
@@ -11,11 +11,13 @@ tags:
 draft: false
 ---
 
-`Date` was ported from Java in 1995 by a developer who, by his own account, had ten days to do it. The resulting API is month-zero-indexed (January is `0`, which nobody expected in 1995 and nobody accepts gracefully now), uses local time by default while internally storing UTC (producing timezone bugs that are technically correct and experientially inexplicable), and cannot represent a date without a time or a time without a date.
+`Date` was ported from Java in 1995 by a developer who, by his own account, had ten days to do it. The resulting API is month-zero-indexed (January is `0`, which nobody expected in 1995 and nobody accepts gracefully now), uses local time by default while internally storing UTC (producing timezone bugs that are technically correct and experientially inexplicable) and cannot represent a date without a time or a time without a date.
 
 For thirty years, we shipped this.
 
 The Temporal proposal is Stage 3. The polyfill from `@js-temporal/polyfill` works in production. Here's what's different.
+
+> **Status:** Stage 3 as of this writing (October 2024). No browser has shipped native Temporal yet, though Firefox Nightly has experimental support behind a flag. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) and the [TC39 proposal](https://github.com/tc39/proposal-temporal) for current status. The polyfill is production-ready.
 
 ## Concepts that Date didn't have
 
@@ -76,7 +78,7 @@ const flightDuration = departure.until(arrival);
 console.log(flightDuration.hours, flightDuration.minutes); // 15, 30
 ```
 
-With `Date`, this calculation requires converting both to UTC milliseconds, subtracting, and parsing the result. Correct, tedious, easy to get wrong.
+With `Date`, this calculation requires converting both to UTC milliseconds, subtracting and parsing the result. Correct, tedious, easy to get wrong.
 
 ## Replacing date-fns
 

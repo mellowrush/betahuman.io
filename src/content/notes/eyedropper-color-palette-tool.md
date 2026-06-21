@@ -12,9 +12,7 @@ tags:
 draft: false
 ---
 
-Every great image has a palette embedded in it. The problem has never been finding the colors — a designer can look at a photograph and identify its dominant tones in seconds. The problem has been extracting them into a system without losing something in translation.
-
-The EyeDropper API, available in Chrome 95+, puts an OS-level color picker inside a web application. It samples any pixel on the screen — not just within the browser, but anywhere the cursor can reach. The user clicks, the screen briefly enters a sampling mode, the cursor becomes a magnifier, and the selected color is returned as a hex value.
+The EyeDropper API, available in Chrome 95+, puts an OS-level color picker inside a web application. It samples any pixel on the screen — not just within the browser, but anywhere the cursor can reach. The user clicks, the screen briefly enters sampling mode, the cursor becomes a magnifier and the selected color comes back as a hex value.
 
 ```javascript
 async function pickColor() {
@@ -35,11 +33,13 @@ async function pickColor() {
 }
 ```
 
-`eyeDropper.open()` returns a promise that resolves when the user clicks or rejects when they cancel with Escape. The selected color is a hex string.
+`eyeDropper.open()` returns a promise that resolves when the user clicks, or rejects when they cancel with Escape. The selected color is a hex string.
+
+> **Browser support:** Chrome 95+. Firefox: implementation in progress. Safari: not committed. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/API/EyeDropper). Include a `<input type="color">` fallback for non-Chrome browsers — see the fallback section below.
 
 ## Building a harmony generator
 
-The interesting combination: EyeDropper for sampling, CSS relative colors for generating a full palette from the seed.
+The useful combination: EyeDropper for sampling, CSS relative colors for generating a full palette from the seed color.
 
 ```javascript
 async function generatePalette() {
@@ -49,37 +49,37 @@ async function generatePalette() {
   // Convert hex to oklch for perceptually uniform manipulation
   const seed = hexToOklch(hex);
 
-  // Define the palette as CSS custom properties
+  // Set as a CSS custom property — CSS relative colors handle the rest
   document.documentElement.style.setProperty('--seed', oklchToCss(seed));
-
-  // CSS relative colors handle the rest — no JS color math needed
 }
 
 function hexToOklch(hex) {
-  // Parse hex → sRGB → linear sRGB → XYZ D65 → OKLab → OKLCh
-  // (This is ~30 lines of standard color math)
+  // hex → linearized sRGB → LMS cone space → OKLab → OKLCh
   const r = parseInt(hex.slice(1, 3), 16) / 255;
   const g = parseInt(hex.slice(3, 5), 16) / 255;
   const b = parseInt(hex.slice(5, 7), 16) / 255;
 
-  // Linearize
+  // Linearize (gamma correction)
   const rl = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
   const gl = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
   const bl = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
 
-  // sRGB → XYZ → OKLab (simplified)
+  // sRGB → LMS (M1 matrix from OKLab spec)
   const l  = 0.4122214708 * rl + 0.5363325363 * gl + 0.0514459929 * bl;
   const m  = 0.2119034982 * rl + 0.6806995451 * gl + 0.1073969566 * bl;
   const s  = 0.0883024619 * rl + 0.2817188376 * gl + 0.6299787005 * bl;
 
+  // Cube root
   const l_ = Math.cbrt(l);
   const m_ = Math.cbrt(m);
   const s_ = Math.cbrt(s);
 
+  // LMS^(1/3) → OKLab (M2 matrix)
   const Lab_l = 0.2104542553 * l_ + 0.7936177850 * m_ - 0.0040720468 * s_;
   const Lab_a = 1.9779984951 * l_ - 2.4285922050 * m_ + 0.4505937099 * s_;
   const Lab_b = 0.0259040371 * l_ + 0.7827717662 * m_ - 0.8086757660 * s_;
 
+  // OKLab → OKLCh (polar form)
   const C = Math.sqrt(Lab_a ** 2 + Lab_b ** 2);
   const H = Math.atan2(Lab_b, Lab_a) * 180 / Math.PI;
 
@@ -114,25 +114,25 @@ Once the seed is set as a CSS custom property, the palette expands through CSS:
   /* Complement — 180° rotation */
   --palette-complement: oklch(from var(--seed) l c calc(h + 180));
 
-  /* Analogous — adjacent */
+  /* Analogous — adjacent hues */
   --palette-warm:  oklch(from var(--seed) l c calc(h - 30));
   --palette-cool:  oklch(from var(--seed) l c calc(h + 30));
 }
 ```
 
-When the user picks a new color, one `setProperty` call updates `--seed`, and every derived color updates through CSS's own cascade. No re-running a color library. No generating and setting twenty properties. One source, everything else derived.
+When the user picks a new color, one `setProperty` call updates `--seed` and every derived color updates through CSS's own cascade. No re-running a color library. No generating twenty properties. One source, everything derived.
 
-## What the `<input type="color">` doesn't do
+## What `<input type="color">` doesn't do
 
-`<input type="color">` is useful. It's native, accessible, and has supported a `list` attribute for preset swatches since Chrome 99. But it's limited to the browser window. EyeDropper reaches the whole screen.
+`<input type="color">` is native, accessible and useful. But it's limited to the browser window. EyeDropper reaches the whole screen.
 
-The design workflow: open a reference image in one window, open the tool in another, sample directly from the reference. No color picker, no Figma, no separate application. The screen is the palette.
+The design workflow this enables: open a reference image in one window, open the tool in another, sample directly from the reference. No Figma, no separate color picker, no translation step. The screen is the palette.
 
 ## The gap: Firefox and Safari
 
-EyeDropper is Chrome-only as of this writing (November 2024). Mozilla has positioned, the Firefox implementation status is in progress. Safari hasn't committed.
+EyeDropper is Chrome-only as of this writing (November 2024). Firefox implementation is in progress. Safari hasn't committed.
 
-For a tool that presents itself as a power feature for designers and developers — a category that skews Chrome — this is manageable. Include a graceful fallback: `<input type="color">` as the alternative, `EyeDropper` as the enhancement.
+For tools targeting designers and developers — a category that skews Chrome — this is manageable. Include the graceful fallback:
 
 ```javascript
 async function pickColorWithFallback() {
@@ -151,7 +151,5 @@ async function pickColorWithFallback() {
   });
 }
 ```
-
-The screen has always been the color source. A good eye has always been enough to identify what's there. What was missing was the extraction step — the moment of translation from pixel to value to system.
 
 EyeDropper gives you the pixel. Relative colors give you the system. What you build with it is the interesting part.

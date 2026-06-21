@@ -8,10 +8,10 @@
 **betahuman.io** is a personal brand built around a single honest premise: an identity in progress. The name encodes the core tension — *beta* (iterative, unfinished, deliberate) + *human* (not a product, not a persona) + *.io* (builder's domain, technical credibility without the corporate weight).
 
 This is not a portfolio. Not a resume. Not a thought leadership platform.
-It is a digital home for someone navigating technology, complexity, and becoming.
+It is a digital home for someone navigating technology, complexity and becoming.
 
 **The single positioning line:**
-> Exploring systems, tools, and the search for meaningful work.
+> Exploring systems, tools and the search for meaningful work.
 
 **The manifesto fragment:**
 > Not finished. Not final. Still becoming.
@@ -24,7 +24,7 @@ It is a digital home for someone navigating technology, complexity, and becoming
 
 **Secondary:** Fellow frontend developers and creative technologists who care about craft and reject superficiality.
 
-**Tone calibration:** Speak to someone who reads long-form, distrusts personal branding theater, and would immediately notice if you were performing instead of thinking.
+**Tone calibration:** Speak to someone who reads long-form, distrusts personal branding theater and would immediately notice if you were performing instead of thinking.
 
 ---
 
@@ -113,7 +113,7 @@ betahuman.io
 ### Register:
 - Written. Considered. Slightly editorial.
 - Not: casual, bro-ish, productivity-guru, thought-leader, startup-hype
-- Closest references: Robin Sloan's writing, Andy Matuschak's notes, dense technical essays with moments of reflection
+- Closest references: Robin Sloan's writing andy Matuschak's notes, dense technical essays with moments of reflection
 
 ### Voice fragments (usable as copy):
 - *"Notes from the journey toward a more deliberate life."*

@@ -15,6 +15,8 @@ BEM was a treaty. Not an elegant one — nobody looks at `card__header--modifier
 
 `@scope` arrived in Chrome 118. It gives selectors an actual boundary.
 
+> **Browser support:** Chrome 118+ (October 2023), Safari 17.4+ (March 2024), Firefox 128+ (July 2024). [MDN reference](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope). Baseline 2024.
+
 ```css
 @scope (.card) {
   :scope {
@@ -55,7 +57,7 @@ This is genuinely new. Previously, the only way to exclude a subtree from a sele
 
 ## Against BEM as religion
 
-BEM is fine. I'm not here to be rude about it. But it's worth being honest that BEM's complexity scales with the number of developers who need to agree on naming conventions, and those agreements are enforced by culture rather than tooling. Someone will eventually name something `.card-body` instead of `.card__body` and everything downstream will quietly misbehave.
+BEM is fine. I'm not here to be rude about it. But it's worth being honest that BEM's complexity scales with the number of developers who need to agree on naming conventions and those agreements are enforced by culture rather than tooling. Someone will eventually name something `.card-body` instead of `.card__body` and everything downstream will quietly misbehave.
 
 `@scope` enforces boundaries with syntax instead of convention. The difference between a team rule and a compiler error.
 
@@ -104,7 +106,6 @@ Nested `@scope` creates predictably narrow selectors. Deeply nested component tr
 The honest ones:
 
 - **Proximity wins over specificity.** Inside nested `@scope` blocks, the closest scope root wins. This is intentional but initially counterintuitive if you're used to specificity as the only cascade tie-breaker.
-- **No Firefox yet** (as of this writing, December 2023). It's in progress and behind a flag.
 - **Shadow DOM still has advantages** for third-party components where you genuinely don't want any outside styles to leak in. `@scope` limits your own selectors; it doesn't block external ones.
 
 `@scope` doesn't kill BEM. It just makes BEM optional. That's enough.

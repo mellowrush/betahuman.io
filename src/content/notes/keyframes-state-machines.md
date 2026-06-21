@@ -11,9 +11,9 @@ tags:
 draft: false
 ---
 
-Let me show you something technically inadvisable that works perfectly in production.
+Something technically inadvisable that works perfectly in production.
 
-The technique: CSS `animation-play-state: paused` + a negative `animation-delay` lets you "scrub" to any keyframe of an animation. The browser renders the frame at that offset but doesn't advance. You move between states by updating the delay value — which you can do via a custom property, a checkbox, or a `data-` attribute.
+CSS `animation-play-state: paused` + a negative `animation-delay` lets you scrub to any keyframe of an animation. The browser renders the frame at that offset and doesn't advance. Move between states by updating the delay value — via a custom property, a checkbox, or a `data-` attribute.
 
 This is a state machine. With CSS.
 
@@ -27,7 +27,7 @@ This is a state machine. With CSS.
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  animation: toggle-switch 200ms var(--ease) both;
+  animation: toggle-switch 200ms ease both;
   animation-play-state: paused;
   animation-delay: calc(var(--state, 0) * -200ms);
 }
@@ -38,13 +38,15 @@ input:checked ~ .toggle .toggle-thumb {
 }
 ```
 
-When `--state` is `0`, `animation-delay` is `0ms` — the animation is at its start frame. When `--state` is `1`, `animation-delay` is `-200ms` — the animation is "200ms into" a 200ms animation, which is the end frame. The browser renders the final state. Nothing plays. You're statically positioned at a keyframe.
+When `--state` is `0`, delay is `0ms` — the animation is at its start frame. When `--state` is `1`, delay is `-200ms` — the animation is "200ms into" a 200ms animation, which is the end frame. Nothing plays. You're statically positioned at a keyframe.
 
 Change `--state` to `0.5` and you're at the exact midpoint. The browser interpolates.
 
+> **Browser compatibility:** This technique uses only longstanding CSS features — no new APIs. Tested in Chrome 100+, Firefox 100+, Safari 15.4+. The `transition: animation-delay` approach (see below) works in Chrome and Firefox; Safari may not transition `animation-delay` as a standalone property. The custom property approach with `@property` registration is more reliable cross-browser.
+
 ## A working toggle with transition between states
 
-The beautiful part is that the state *change* can still be animated — just not by playing the animation forward. You change the delay with a transition:
+The state *change* can still be animated — not by playing the animation forward, but by animating the delay value:
 
 ```css
 .toggle-thumb {
@@ -55,9 +57,115 @@ The beautiful part is that the state *change* can still be animated — just not
 }
 ```
 
-When `--state` switches from `0` to `1`, the `animation-delay` value transitions from `0` to `-200ms`. Because the delay changes are animated, the browser interpolates through the keyframes on the way. The toggle slides.
+When `--state` switches from `0` to `1`, the delay transitions from `0` to `-200ms`. Because the delay change is animated, the browser scrubs through the keyframes on the way. The toggle slides.
+
+For more reliable cross-browser behavior, register the custom property and transition it directly:
+
+```css
+@property --state {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+.toggle-thumb {
+  animation: toggle-switch 200ms ease both;
+  animation-play-state: paused;
+  animation-delay: calc(var(--state) * -200ms);
+  transition: --state 200ms ease;
+}
+```
 
 This is the kind of thing that makes you suspicious the CSS spec authors knew exactly what they were doing.
+
+<div class="ksm-demo" role="region" aria-label="Live demo: keyframe state machine toggle">
+  <style>
+    .ksm-demo {
+      border: 1px solid var(--bh-border-strong, #d4c8c0);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+      background: var(--bh-bg, #faf7f4);
+    }
+    .ksm-demo-label {
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bh-text-faint, #9a8f87);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .ksm-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+    }
+    .ksm-checkbox {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .ksm-toggle {
+      width: 48px;
+      height: 28px;
+      border-radius: 14px;
+      background: #d1cac5;
+      position: relative;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    @keyframes ksm-thumb-slide {
+      0%   { transform: translateX(2px);  background: #fff; }
+      100% { transform: translateX(22px); background: #fff; }
+    }
+    @keyframes ksm-track-color {
+      0%   { background: #c9c2bc; }
+      100% { background: #c4522a; }
+    }
+    .ksm-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      animation: ksm-thumb-slide 200ms ease both;
+      animation-play-state: paused;
+      animation-delay: calc(var(--ksm-state, 0) * -200ms);
+      transition: animation-delay 200ms ease;
+    }
+    .ksm-toggle {
+      animation: ksm-track-color 200ms ease both;
+      animation-play-state: paused;
+      animation-delay: calc(var(--ksm-state, 0) * -200ms);
+      transition: animation-delay 200ms ease;
+    }
+    .ksm-checkbox:checked ~ .ksm-toggle-wrap .ksm-toggle,
+    .ksm-checkbox:checked ~ .ksm-toggle-wrap .ksm-thumb {
+      --ksm-state: 1;
+    }
+    .ksm-label-text {
+      font-size: 0.875rem;
+      color: var(--bh-text, #2a1f1b);
+      cursor: pointer;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ksm-thumb, .ksm-toggle { transition: none; }
+    }
+  </style>
+  <span class="ksm-demo-label">↓ Click the toggle — pure CSS state machine</span>
+  <input type="checkbox" class="ksm-checkbox" id="ksm-cb">
+  <div class="ksm-toggle-wrap">
+    <label class="ksm-toggle" for="ksm-cb">
+      <div class="ksm-thumb"></div>
+    </label>
+    <label class="ksm-label-text" for="ksm-cb">
+      <code>--ksm-state: 0 → 1</code>
+    </label>
+  </div>
+</div>
 
 ## A stepper component (three states)
 
@@ -80,26 +188,25 @@ This is the kind of thing that makes you suspicious the CSS spec authors knew ex
 ```html
 <div class="stepper" style="--step: 0">
   <div class="step-bar"></div>
-  <!-- content -->
 </div>
 ```
 
-Increment `--step` with JavaScript (a single `style.setProperty` call) and the progress bar smoothly advances to the corresponding keyframe. Three states. One animation. No per-state class switching.
+Increment `--step` with a single `style.setProperty` call and the progress bar smoothly advances to the corresponding keyframe. Three states. One animation. No per-state class switching.
 
 ## When to actually use this
 
-The honest answer: not everywhere. This technique shines for:
+This technique shines for:
 
-- **Binary toggles** that need smooth transitions (checkboxes, switches, expand/collapse)
+- **Binary toggles** that need smooth transitions (switches, expand/collapse)
 - **Progress indicators** with fixed step counts
-- **Icon morphs** where the start and end states are defined but intermediate is decorative
+- **Icon morphs** where start and end states are defined but intermediate is decorative
 
 It's a bad fit for:
 
-- **Many states** (more than ~5 keyframe jumps gets hard to reason about)
-- **Conditional transitions** (different animation between state A→B vs B→A — you'd need two animation definitions)
-- **Anything that needs accurate progress reporting** (you're scrubbing CSS, not reading a clock)
+- **Many states** — more than ~5 keyframe jumps gets hard to reason about
+- **Conditional transitions** — different animation between state A→B vs B→A requires two animation definitions
+- **Anything that needs accurate progress reporting** — you're scrubbing CSS, not reading a clock
 
-The real reason to know this technique isn't to use it everywhere. It's to understand that the animation system you think of as "play something over time" is actually a "map time to state" system, and time is just one of several possible inputs.
+The real reason to know this technique isn't to use it everywhere. It's to understand that the animation system you think of as "play something over time" is actually a "map time to state" system — and time is just one of several possible inputs.
 
 Negative delays are a scrubber. That's always been true. We just rarely needed to exploit it.

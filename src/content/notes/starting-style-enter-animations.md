@@ -28,7 +28,9 @@ requestAnimationFrame(() => {
 
 Two nested `requestAnimationFrame` calls. The outer one hands off to the next paint. The inner one hands off to the one after that. We've been doing this dance because CSS transitions can't animate from "doesn't exist yet" to "exists." There's no start state.
 
-`@starting-style`, which shipped in Chrome 117 and Firefox 129, fixes this at the source.
+`@starting-style`, which shipped in Chrome 117, Firefox 129 and Safari 17.5, fixes this at the source.
+
+> **Browser support:** Chrome 117+ (September 2023), Firefox 129+ (August 2024), Safari 17.5+ (June 2024). [MDN reference](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style). `transition-behavior: allow-discrete` (needed for display transitions) requires Chrome 116+ and Firefox 129+.
 
 ```css
 .toast {
@@ -78,7 +80,7 @@ When `hidden` is removed, the dialog transitions in. When `hidden` is added, it 
 
 ## What this means for headless component libraries
 
-The bundle size argument for headless animation libraries (Framer Motion, @headlessui's Dialog, etc.) just got weaker. Not dead — they still handle complex choreography, spring physics, and layout animations — but "enter/exit animations for a modal" is now approximately five lines of CSS.
+The bundle size argument for headless animation libraries (Framer Motion, @headlessui's Dialog, etc.) just got weaker. Not dead — they still handle complex choreography, spring physics and layout animations — but "enter/exit animations for a modal" is now approximately five lines of CSS.
 
 I ran the comparison on a small project last month. The animation behavior for a toast notification stack went from 180 lines of JavaScript with a dependency to:
 
@@ -107,6 +109,6 @@ I ran the comparison on a small project last month. The animation behavior for a
 
 The JS becomes: add class `is-dismissing` → wait 180ms → remove from DOM. Three lines.
 
-I'm not claiming CSS is always the better tool for animation. I'm claiming we handed JavaScript a problem it didn't need to own, and we've been maintaining that mistake ever since.
+I'm not claiming CSS is always the better tool for animation. I'm claiming we handed JavaScript a problem it didn't need to own and we've been maintaining that mistake ever since.
 
 `@starting-style` is the receipt.

@@ -11,11 +11,9 @@ tags:
 draft: false
 ---
 
-Every design system eventually arrives at the same problem. Custom properties store values. But values aren't relationships. And relationships are what design systems are actually selling.
+`--space-4: 16px` is a value. "Four steps up the spacing scale" is a relationship. Values are brittle — they break when the base unit changes. Relationships recalculate correctly regardless of what the base unit becomes.
 
-`--space-4: 16px` is a value. "Four steps up the spacing scale" is a relationship. The value is brittle — it breaks if the base unit changes. The relationship is robust — it recalculates correctly regardless of what the base unit becomes.
-
-Sass has `@mixin` and `@function` for this reason. They let you define relationships, not just values. The CSS `@function` proposal, currently Stage 1 in the CSS Working Group, brings this capability to native CSS.
+Sass has `@function` for exactly this reason. The CSS `@function` proposal, Stage 1 in the CSS Working Group, brings this to native CSS — with one meaningful difference: it runs at runtime, not build time.
 
 The proposed syntax:
 
@@ -31,21 +29,23 @@ The proposed syntax:
 }
 ```
 
-`--space(4)` is not a variable lookup. It's a function call that executes the calculation. Change the base unit (the `0.25rem` multiplier), and every call site updates automatically.
+`--space(4)` is not a variable lookup. It's a function call. Change `0.25rem` to `0.3rem` and every call site updates.
+
+> **Status (April 2025):** Stage 1. No browser implementation. Syntax is based on the current draft and may change. Check the [CSS Working Group issue](https://github.com/w3c/csswg-drafts/issues/9350) and [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@function) for current status.
 
 ## What this enables that custom properties can't
 
-Custom properties let you define values and reference them. But you can't parameterize a custom property:
+Custom properties store values and let you reference them. They can't be parameterized:
 
 ```css
-/* This is valid — but the value is fixed */
+/* Valid — but the value is fixed */
 :root { --space-4: 1rem; }
 
-/* This is what you want but can't have today */
+/* What you want but can't have today */
 /* --space(4) */  ← not valid CSS property syntax
 ```
 
-`@function` makes parameterized values native. Examples from the proposal:
+`@function` makes parameterized values native. From the proposal:
 
 ```css
 @function --color-tint(--base, --amount) {
@@ -58,7 +58,7 @@ Custom properties let you define values and reference them. But you can't parame
 }
 ```
 
-One function definition. Any call site can pass different arguments. The relationship (tint by N%) is defined once and reused everywhere.
+One definition. Any call site passes different arguments. The tint relationship is defined once and reused everywhere without duplication.
 
 ```css
 @function --clamp-type(--min, --max) {
@@ -70,7 +70,7 @@ h2 { font-size: --clamp-type(1.4rem, 2.2rem); }
 h3 { font-size: --clamp-type(1.1rem, 1.6rem); }
 ```
 
-A fluid type scale defined once, applied with different min/max values per heading level.
+A fluid type scale, defined once, with different bounds per level.
 
 ## The Sass comparison
 
@@ -84,26 +84,24 @@ Sass functions do this today:
 
 The difference: Sass runs at build time. The output is static CSS. If you need the function to respond to runtime values — user settings, `@media` queries, custom property overrides — Sass can't do it. It's already compiled.
 
-CSS `@function` runs in the browser. It can reference other custom properties, respond to cascade changes, and recalculate when the underlying values change.
+CSS `@function` runs in the browser. It can reference other custom properties, respond to cascade changes and recalculate when underlying values change.
 
 ```css
-/* This is the build-time version (Sass) */
+/* Build-time (Sass) */
 /* padding: space(4); → padding: 1rem; → static */
 
-/* This is the runtime version (CSS @function) */
+/* Runtime (CSS @function) */
 /* padding: --space(4); → calc(4 * var(--base-unit)); → recalculates when --base-unit changes */
 ```
 
-If a user increases their browser font size, `--base-unit` (if defined in terms of `rem`) responds. The function recalculates. The spacing adjusts. The Sass version doesn't.
+If a user increases their browser font size, `--base-unit` (defined in `rem`) responds. The function recalculates. The spacing adjusts. The Sass version doesn't.
 
-## The current state (April 2025)
+## The current state
 
-Stage 1. No browser implementation. The proposal is being actively discussed in the CSSWG. The syntax above is based on the current draft and may change significantly before any implementation ships.
+Stage 1. No browser implementation as of this writing. The proposal is actively discussed in the CSSWG; the syntax above may change before anything ships.
 
-The reason to pay attention now: Stage 1 proposals in CSS often move faster than you'd expect once the Working Group reaches rough consensus. `@property` went from proposal to Chrome implementation in under a year. Anchor Positioning went from concept to Chrome 125 with a fairly compressed timeline relative to its complexity.
+The reason to watch it now: Stage 1 proposals in CSS move faster once the Working Group reaches rough consensus. `@property` went from proposal to Chrome implementation in under a year. Anchor Positioning had a compressed timeline relative to its complexity.
 
-The design system implications are significant enough that it's worth watching the proposal closely and experimenting with polyfills as they become available.
-
-The problem it solves is real. The Sass function exists because CSS couldn't. If CSS can — if parameterized, runtime-evaluated, cascade-aware functions become native — the compile step disappears and the relationship between design intent and rendered output gets one level shorter.
+The problem this solves is real. The Sass function exists because CSS couldn't. If CSS can — parameterized, runtime-evaluated, cascade-aware functions in native CSS — the compile step disappears and the path from design intent to rendered output gets one step shorter.
 
 Shorter paths from intent to output. That's the whole project, really.

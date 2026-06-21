@@ -6,11 +6,11 @@ brand
 
 ## Users
 
-Self-taught builders, creative technologists, and career transitioners who feel they ended up somewhere they didn't fully choose and are rebuilding deliberately. Secondary: fellow frontend developers who care about craft and reject superficiality. Context: reading long-form, distrusting personal branding theater, noticing immediately when someone is performing instead of thinking.
+Self-taught builders, creative technologists and career transitioners who feel they ended up somewhere they didn't fully choose and are rebuilding deliberately. Secondary: fellow frontend developers who care about craft and reject superficiality. Context: reading long-form, distrusting personal branding theater, noticing immediately when someone is performing instead of thinking.
 
 ## Product Purpose
 
-betahuman.io is a personal brand site, not a portfolio. It is a digital home for deliberate identity-building: documenting systems, tools, and the search for meaningful work. Success is a site that reads as honest, considered, and authored — not optimised for recruiters or thought-leadership. The beta version number is real, not ironic.
+betahuman.io is a personal brand site, not a portfolio. It is a digital home for deliberate identity-building: documenting systems, tools and the search for meaningful work. Success is a site that reads as honest, considered and authored — not optimised for recruiters or thought-leadership. The beta version number is real, not ironic.
 
 ## Brand Personality
 
@@ -33,7 +33,7 @@ Emotional goals: credibility without authority, warmth without familiarity, inco
 1. **The beta is the argument.** Incompleteness is not a placeholder state; it is the stated position. Design must make that legible, not apologise for it.
 2. **Warmth through type and spacing, not color.** Rust marks; it does not decorate. The warmth lives in the typographic system, not in a tinted background.
 3. **Specificity over elegance.** Copy should name the actual thing. Design should carry information, not mood.
-4. **Craft as signal.** The site's quality is the proof. Spacing, type, and rhythm are the argument for the builder's taste — not the content about taste.
+4. **Craft as signal.** The site's quality is the proof. Spacing, type and rhythm are the argument for the builder's taste — not the content about taste.
 5. **Restraint that earns attention.** One accent color. No decoration. Every element present because it serves something.
 
 ## Accessibility & Inclusion
