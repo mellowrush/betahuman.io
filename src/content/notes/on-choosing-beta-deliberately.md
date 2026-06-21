@@ -1,6 +1,6 @@
 ---
 title: On choosing "beta" deliberately
-description: Why this site will probably never be finished.
+description: "Why this site will probably never be finished."
 date: "2026-06-01"
 category: Frame
 tags:
