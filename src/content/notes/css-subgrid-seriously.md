@@ -11,11 +11,13 @@ tags:
 draft: false
 ---
 
-The card grid demo has been done. Beautifully aligned card titles across unrelated containers, subgrid threading columns down through nested elements. You've seen it. I've seen it. We've all admired it in a CodePen and moved on.
+The card grid demo has been done. Beautifully aligned card titles across unrelated containers, subgrid threading columns down through nested elements. You've seen it. We've all admired it in a CodePen and moved on.
 
-What's less documented is the form layout case, which is subtler and significantly more useful in daily work.
+What's less documented is the form layout case, which is subtler and more immediately useful.
 
-The problem: you have a form where labels and inputs should align across components that don't share a parent. Previously this required JavaScript measurement — read label widths, apply as a uniform left offset. Or you made every label a fixed width, which worked until the content changed.
+The problem: labels and inputs should align across field components that don't share a parent. Previously this required JavaScript measurement — read label widths, apply as a uniform left offset — or you made every label a fixed width and hoped the content never changed.
+
+> **Browser support:** Baseline November 2023. Chrome 117+, Firefox 71+, Safari 16+. Ship it.
 
 ```css
 /* The form itself defines the track structure */
@@ -44,7 +46,7 @@ The problem: you have a form where labels and inputs should align across compone
 }
 ```
 
-The `display: contents` approach works, but it removes the field container from layout, which means you can't put a border or background on the `.field` element itself without breaking the grid flow.
+The `display: contents` approach works, but it removes the field container from layout — you can't put a border or background on `.field` without breaking the grid flow.
 
 Subgrid solves this cleanly:
 
@@ -57,7 +59,7 @@ Subgrid solves this cleanly:
 
 .field {
   display: grid;
-  grid-column: 1 / -1;         /* span full width */
+  grid-column: 1 / -1;          /* span full width */
   grid-template-columns: subgrid; /* inherit parent column tracks */
   align-items: center;
 }
@@ -66,11 +68,11 @@ Subgrid solves this cleanly:
 .field input  { grid-column: 2; }
 ```
 
-Now `.field` is a real grid item — you can style it, border it, animate it — and its children *inherit* the parent's column tracks. The label in every `.field` lives on the same track. The input in every `.field` lives on the same track. The widths are computed once and shared.
+Now `.field` is a real grid item — you can style it, border it, animate it — and its children inherit the parent's column tracks. Every label lands on the same track. Every input lands on the same track. The browser computes the widths once and shares them.
 
 ## What rows look like (spoiler: different)
 
-Rows in subgrid have constraints worth knowing. `grid-template-rows: subgrid` requires that the parent explicitly define row tracks too — you can't inherit auto rows. That limits the row inheritance story:
+Row inheritance has constraints worth knowing. `grid-template-rows: subgrid` requires that the parent explicitly define row tracks — you can't inherit auto rows:
 
 ```css
 /* This doesn't work the way you'd hope */
@@ -96,12 +98,10 @@ The "aligned card titles across a row" demo works because the parent explicitly 
 
 ## The deeper thing subgrid changes
 
-CSS Grid forced a mental model shift in 2017: layout happens on the parent, not the child. Grid items *participate* in the parent's coordinate system.
+CSS Grid forced a mental model shift in 2017: layout happens on the parent, not the child. Grid items participate in the parent's coordinate system.
 
 Subgrid extends that shift one level deeper. Grandchildren can now participate in the grandparent's coordinate system. The grid becomes a shared spatial language across the DOM hierarchy, not just a local layout tool.
 
 That sounds like marketing copy. It's actually the most useful thing that shipped to CSS in the last two years.
 
 The JavaScript measurement pattern for aligned labels isn't dead because subgrid isn't powerful enough. It's dead because there's no longer a reason to do math the browser already does.
-
-Baseline November 2023. Not a reason to wait.
