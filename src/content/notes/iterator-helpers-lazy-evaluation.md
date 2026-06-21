@@ -11,9 +11,7 @@ tags:
 draft: false
 ---
 
-The reason a good campaign never shows the whole product at once isn't mystery for its own sake. It's economics. You reveal what the audience needs to make the next decision. Not more. Not the entire catalog.
-
-Iterator helpers work on a similar principle: they don't build the full result. They process one element at a time, on demand, and stop when you have enough.
+Iterator helpers process one element at a time, on demand, and stop when you have enough. They don't build the full result in advance.
 
 The difference from array methods:
 
@@ -36,7 +34,9 @@ const result = hugeArray.values()
 
 For small arrays, the difference is invisible. For large data sets or infinite sequences, it's meaningful.
 
-Chrome 122 (February 2024), Firefox 131 (October 2024). The methods:
+> **Browser support:** Chrome 122 (February 2024), Firefox 131 (October 2024). Check [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator) for Safari status. Try any of these in the browser console right now — Chrome and Firefox both have full support.
+
+The methods:
 
 ```javascript
 iterator
@@ -55,30 +55,6 @@ iterator
 
 Terminal methods consume the iterator. Lazy methods chain without consuming.
 
-## Processing a ReadableStream
-
-The most compelling real-world case: data that arrives as a stream and shouldn't be fully buffered.
-
-```javascript
-async function processStreamLines(response) {
-  const decoder = new TextDecoder();
-
-  // Create an iterator from the response body
-  const lines = response.body
-    .values()
-    .map(chunk => decoder.decode(chunk))
-    .flatMap(text => text.split('\n').values())
-    .filter(line => line.trim().length > 0);
-
-  // Process first 100 non-empty lines without reading the rest of the stream
-  const first100 = await lines.take(100).toArray();
-
-  return first100.map(line => JSON.parse(line));
-}
-```
-
-The stream never fully buffers. After 100 valid lines, the iterator stops consuming. If the stream has 10,000 lines, 9,900 of them are never decoded, never split, never filtered.
-
 ## An infinite sequence
 
 ```javascript
@@ -87,7 +63,6 @@ function* naturals() {
   while (true) yield n++;
 }
 
-// Find the first 5 prime numbers without building an intermediate array
 function isPrime(n) {
   if (n < 2) return false;
   for (let i = 2; i <= Math.sqrt(n); i++) {
@@ -104,7 +79,21 @@ const firstFivePrimes = naturals()
 // → [2, 3, 5, 7, 11]
 ```
 
-You can't do this with array methods because you can't have an infinite array. The lazy evaluation model makes infinite sequences viable.
+You can't do this with array methods because you can't have an infinite array. Lazy evaluation makes infinite sequences viable. Paste this into a Chrome or Firefox console — it runs.
+
+## Processing a ReadableStream
+
+> **Note on async iterators:** The iterator helpers in this spec (`Iterator.prototype.*`) work on **sync** iterators. `ReadableStream` is async iterable. Async iterator helpers are a separate, later TC39 proposal and don't yet have browser support. The pattern below works for sync iterators over buffered data — not for streaming responses in real time.
+
+```javascript
+// Works for sync iterables (arrays, sets, generators)
+const lines = largeTextContent.split('\n').values()
+  .filter(line => line.trim().length > 0)
+  .map(line => JSON.parse(line))
+  .take(100)
+  .toArray();
+// Stops processing after 100 valid JSON lines
+```
 
 ## Comparing to array methods honestly
 
@@ -116,19 +105,19 @@ Iterator helpers are not replacements for array methods. They're additive:
 | Large arrays, need all results | Same performance. | No advantage. |
 | Large arrays, need first N | Build-then-slice (wasteful). | Take N (efficient). |
 | Infinite sequences | Impossible. | Native use case. |
-| Streaming data | Must buffer first. | Process as it arrives. |
+| Streaming data (sync) | Must buffer first. | Process on demand. |
 
-The sweet spots are real: large data sets with early termination, streaming responses, and infinite generators. Outside those, array methods remain the readable choice.
+The sweet spots are real: large data sets with early termination, infinite generators, and chaining across Sets and Maps without intermediate arrays. Outside those, array methods remain the readable choice.
 
 ## The protocol underneath
 
-Everything in JavaScript that is iterable — arrays, sets, maps, strings, generator functions, ReadableStreams — implements the iterator protocol. Iterator helpers work on any of them. You're not limited to arrays.
+Everything in JavaScript that is iterable — arrays, sets, maps, strings, generator functions — implements the iterator protocol. Iterator helpers work on any of them:
 
 ```javascript
 const activeUsers = new Set(['alice', 'bob', 'carol']);
 
-// Sets don't have .filter() on them directly.
-// Values() returns an iterator, which does.
+// Sets don't have .filter() directly.
+// .values() returns an iterator, which does.
 const shortNames = activeUsers.values()
   .filter(name => name.length <= 4)
   .toArray();
