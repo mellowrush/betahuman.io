@@ -11,7 +11,7 @@ tags:
 draft: false
 ---
 
-I covered `calc-size()` in September. If you read that and thought "that's clever but the extra wrapper function is annoying" — this is the one you were waiting for.
+I covered `calc-size()` [in September](/notes/calc-size-animate-height-auto). If you read that and thought "that's clever but the extra wrapper function is annoying" — this is the one you were waiting for.
 
 `interpolate-size: allow-keywords` is an opt-in property that makes CSS keyword values like `auto`, `min-content`, `max-content`, and `fit-content` directly interpolatable in transitions and animations. No wrapper function. Set it, and `height: auto` becomes animatable everywhere in scope.
 
@@ -31,7 +31,73 @@ I covered `calc-size()` in September. If you read that and thought "that's cleve
 }
 ```
 
-That's it. `height: auto` transitions. Chrome 129+, shipping now.
+`height: auto` transitions. That's the whole feature.
+
+> **Browser support:** Chrome 129+ (August 2024). Firefox and Safari: not yet. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/interpolate-size) for current status. Use `@supports (interpolate-size: allow-keywords)` for progressive enhancement, with `calc-size()` or the float hack as fallback.
+
+<div class="is-demo" role="region" aria-label="Live demo: interpolate-size accordion">
+  <style>
+    .is-demo {
+      border: 1px solid var(--bh-border-strong, #d4c8c0);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.75rem 0;
+      background: var(--bh-bg, #faf7f4);
+    }
+    .is-demo-label {
+      font-family: monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--bh-text-faint, #9a8f87);
+      margin-bottom: 0.875rem;
+      display: block;
+    }
+    .is-accordion {
+      interpolate-size: allow-keywords;
+    }
+    .is-trigger {
+      background: var(--bh-bg-muted, #f0ebe6);
+      border: 1px solid var(--bh-border, #e0d9d4);
+      border-radius: 4px;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      color: var(--bh-text, #2a1f1b);
+    }
+    .is-panel {
+      height: 0;
+      overflow: hidden;
+      transition: height 300ms ease;
+    }
+    .is-panel.open {
+      height: auto;
+    }
+    .is-panel-inner {
+      padding: 0.75rem 0.875rem;
+      font-size: 0.875rem;
+      color: var(--bh-text-muted, #6b5e57);
+      line-height: 1.6;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .is-panel { transition: none; }
+    }
+  </style>
+  <span class="is-demo-label">↓ Click to expand — Chrome 129+ only</span>
+  <div class="is-accordion">
+    <button class="is-trigger" onclick="this.nextElementSibling.classList.toggle('open')">
+      Toggle panel ↕
+    </button>
+    <div class="is-panel">
+      <div class="is-panel-inner">
+        <code>height: auto</code> transitions with <code>interpolate-size: allow-keywords</code> set on the container. No <code>calc-size()</code> wrapper, no <code>scrollHeight</code> measurement, no <code>requestAnimationFrame</code>. The browser resolves the keyword to a number and interpolates between them directly.
+      </div>
+    </div>
+  </div>
+</div>
 
 ## The difference from `calc-size()`
 
@@ -45,7 +111,7 @@ The broader scope is the convenience. It's also the risk.
 
 ## The risk
 
-Some CSS properties that accept keyword values are currently *not supposed to* animate between keywords. The spec for `display` is one: transitioning to/from `display: none` requires `transition-behavior: allow-discrete` because discrete property animation is explicitly opt-in. `interpolate-size` doesn't override that — `display` still needs `allow-discrete`.
+Some CSS properties that accept keyword values are currently *not supposed to* animate between keywords. `display` is one: transitioning to/from `display: none` requires `transition-behavior: allow-discrete` because discrete property animation is explicitly opt-in. `interpolate-size` doesn't override that.
 
 But there may be other properties where implicit keyword interpolation produces unexpected behavior. Until browser implementations mature and edge cases are documented, `interpolate-size: allow-keywords` on `:root` is a broad promise. Prefer scoping it:
 
@@ -61,8 +127,6 @@ But there may be other properties where implicit keyword interpolation produces 
 }
 ```
 
-The scoped version gives you the feature where you want it without the implicit effects elsewhere.
-
 ## Side-by-side: which approach to use
 
 ```css
@@ -71,7 +135,7 @@ The scoped version gives you the feature where you want it without the implicit 
   height: calc-size(auto, size);
 }
 /* Pros: explicit, surgical, no implicit scope effects */
-/* Cons: verbose, requires calc-size() wrapper on every property */
+/* Cons: verbose, requires wrapper on every property */
 
 /* Option B: interpolate-size */
 .panel-container {
@@ -80,18 +144,18 @@ The scoped version gives you the feature where you want it without the implicit 
 .panel.is-open {
   height: auto; /* inherits interpolation from container */
 }
-/* Pros: cleaner syntax, auto and other keywords just work */
-/* Cons: implicit scope, potential unexpected effects on other properties */
+/* Pros: cleaner syntax, keywords just work */
+/* Cons: implicit scope, potential unexpected effects */
 ```
 
-My current preference: `calc-size()` for components in a design system (the explicitness avoids surprises when the component is dropped into an unknown context). `interpolate-size` for page-level layouts where you own the full scope and aren't shipping to a consumer.
+My current preference: `calc-size()` for components in a design system — the explicitness avoids surprises when the component is dropped into an unknown context. `interpolate-size` for page-level layouts where you own the full scope and aren't shipping to a consumer.
 
 ## The larger pattern
 
-Both `calc-size()` and `interpolate-size` exist because CSS keyword sizing — `auto`, `min-content`, `fit-content` — was never part of the original animation model. Keyword values don't have numeric representations the browser can interpolate between. Adding animation support to them required either:
+Both approaches exist because CSS keyword sizing — `auto`, `min-content`, `fit-content` — was never part of the original animation model. Keyword values don't have numeric representations the browser can interpolate between. Adding animation support required either:
 
-a) A wrapper function that resolves the keyword to a number first (calc-size), or  
-b) An opt-in signal that tells the browser "yes, try to resolve and interpolate these" (interpolate-size)
+a) A wrapper function that resolves the keyword to a number first (`calc-size`), or  
+b) An opt-in signal that tells the browser to try to resolve and interpolate these (`interpolate-size`)
 
 The CSS Working Group shipped both. They serve slightly different authoring contexts. That's either thoughtful or indecisive, depending on how you feel about options.
 
