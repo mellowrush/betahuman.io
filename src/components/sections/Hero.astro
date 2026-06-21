@@ -2,50 +2,32 @@
 ---
 
 <section class="hero">
-  <div class="hero-version">v0.1 · Bucharest · 2026</div>
   <h1 class="hero-headline">
     Frontend developer.<br />
     The becoming part is <em>ongoing.</em>
   </h1>
+  <div class="hero-rule" aria-hidden="true"></div>
   <p class="hero-lead">
     Spent years building things for other people.
     This one is mine.
   </p>
-  <blockquote class="hero-manifesto">
-    v0.1. It gets better from here.
-  </blockquote>
+  <p class="hero-stamp">v0.1 · Bucharest · 2026</p>
 </section>
 
 <style>
-  .hero { margin-bottom: var(--bh-space-8); }
-
-  .hero-version {
-    font-family: var(--bh-font-mono);
-    font-size: var(--bh-text-xs);
-    letter-spacing: var(--bh-tracking-mono);
-    text-transform: uppercase;
-    color: var(--bh-text-faint);
-    margin-bottom: var(--bh-space-5);
-    display: flex;
-    align-items: center;
-    gap: var(--bh-space-3);
-  }
-
-  .hero-version::before {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: var(--bh-text-faint);
+  .hero {
+    padding-top: var(--bh-space-8);
+    padding-bottom: var(--bh-space-8);
+    border-top: 1px solid var(--bh-border);
   }
 
   .hero-headline {
     font-family: var(--bh-font-display);
-    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-size: clamp(2.4rem, 7vw, 4rem);
     line-height: var(--bh-leading-tight);
     letter-spacing: var(--bh-tracking-tight);
     color: var(--bh-text);
-    margin-bottom: var(--bh-space-5);
+    margin-bottom: var(--bh-space-6);
     text-wrap: balance;
   }
 
@@ -54,38 +36,54 @@
     font-style: italic;
   }
 
+  .hero-rule {
+    width: 32px;
+    height: 2px;
+    background: var(--bh-rust);
+    margin-bottom: var(--bh-space-6);
+  }
+
   .hero-lead {
     font-size: var(--bh-text-md);
     line-height: var(--bh-leading-normal);
     color: var(--bh-text-muted);
     max-width: 38ch;
-    margin-bottom: var(--bh-space-6);
+    margin-bottom: var(--bh-space-7);
     text-wrap: pretty;
   }
 
-  /* No side-stripe. Italic display type carries the distinction. */
-  .hero-manifesto {
-    display: block;
-    font-family: var(--bh-font-display);
-    font-style: italic;
-    font-size: var(--bh-text-md);
-    color: var(--bh-text-muted);
-    line-height: var(--bh-leading-snug);
-    margin: 0;
+  .hero-stamp {
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    letter-spacing: var(--bh-tracking-mono);
+    text-transform: uppercase;
+    color: var(--bh-text-faint);
   }
 
+  /* ── Entrance animations ─────────────────────────────────────────────── */
+
   @keyframes hero-rise {
-    from { opacity: 0; transform: translateY(8px); }
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .hero-version   { animation: hero-rise 400ms var(--bh-ease)   0ms backwards; }
-  .hero-headline  { animation: hero-rise 500ms var(--bh-ease)  80ms backwards; }
-  .hero-lead      { animation: hero-rise 400ms var(--bh-ease) 180ms backwards; }
-  .hero-manifesto { animation: hero-rise 350ms var(--bh-ease) 260ms backwards; }
+  @keyframes hero-rule-expand {
+    from { width: 0; opacity: 0; }
+    to   { width: 32px; opacity: 1; }
+  }
+
+  @keyframes hero-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .hero-headline { animation: hero-rise   500ms var(--bh-ease)      0ms backwards; }
+  .hero-rule     { animation: hero-rule-expand 400ms var(--bh-ease) 180ms backwards; }
+  .hero-lead     { animation: hero-fade   400ms var(--bh-ease)      320ms backwards; }
+  .hero-stamp    { animation: hero-fade   300ms var(--bh-ease)      500ms backwards; }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-version, .hero-headline, .hero-lead, .hero-manifesto {
+    .hero-headline, .hero-rule, .hero-lead, .hero-stamp {
       animation: none !important;
     }
   }
