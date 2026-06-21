@@ -20,106 +20,106 @@ Branch: `feat/article-review-and-polish`
 ---
 
 ## anchor-positioning-without-js.md
-- [ ] Read and section
+- [x] Done
 
 ## calc-size-animate-height-auto.md
-- [ ] Read and section
+- [x] Done
 
 ## constraint-as-creative-fuel.md
-- [ ] Read and section
+- [x] Done
 
 ## container-style-queries-theming.md
-- [ ] Read and section
+- [x] Done
 
 ## content-visibility-performance.md
-- [ ] Read and section
+- [x] Done
 
 ## css-function-proposal.md
-- [ ] Read and section
+- [x] Done
 
 ## css-subgrid-seriously.md
-- [ ] Read and section
+- [x] Done
 
 ## declarative-shadow-dom-astro.md
-- [ ] Read and section
+- [x] Done
 
 ## eyedropper-color-palette-tool.md
-- [ ] Read and section
+- [x] Done
 
 ## fetchpriority-what-it-does-to-lcp.md
-- [ ] Read and section
+- [x] Done
 
 ## five-things-on-the-bench.md
-- [ ] Read and section
+- [x] Done
 
 ## font-pairing-in-context.md
-- [ ] Read and section
+- [x] Done
 
 ## has-selector-non-obvious-cases.md
-- [ ] Read and section
+- [x] Done
 
 ## initial-letter-drop-caps.md
-- [ ] Read and section
+- [x] Done
 
 ## interpolate-size-keyword-animation.md
-- [ ] Read and section
+- [x] Done
 
 ## invoker-commands-watch.md
-- [ ] Read and section
+- [x] Done
 
 ## iterator-helpers-lazy-evaluation.md
-- [ ] Read and section
+- [x] Done
 
 ## keyframes-state-machines.md
-- [ ] Read and section
+- [x] Done
 
 ## light-dark-single-property-theming.md
-- [ ] Read and section
+- [x] Done
 
 ## navigation-api-spa-transitions.md
-- [ ] Read and section
+- [x] Done
 
 ## on-choosing-beta-deliberately.md
-- [ ] Read and section
+- [x] Done
 
 ## popover-api-zero-js.md
-- [ ] Read and section
+- [x] Done
 
 ## promise-with-resolvers.md
-- [ ] Read and section
+- [x] Done
 
 ## property-animatable-custom-properties.md
-- [ ] Read and section
+- [x] Done
 
 ## qr-artifier-investigation.md
-- [ ] Read and section
+- [x] Done
 
 ## relative-color-syntax-design-system.md
-- [ ] Read and section
+- [x] Done
 
 ## resume-as-svg.md
-- [ ] Read and section
+- [x] Done
 
 ## scope-component-styles-without-bem.md
-- [ ] Read and section
+- [x] Done
 
 ## scoped-custom-element-registries.md
-- [ ] Read and section
+- [x] Done
 
 ## scrollend-reliable-scroll-detection.md
-- [ ] Read and section
+- [x] Done
 
 ## set-operations-native-js.md
-- [ ] Read and section
+- [x] Done
 
 ## speculation-rules-prerender.md
-- [ ] Read and section
+- [x] Done
 
 ## starting-style-enter-animations.md
-- [ ] Read and section
+- [x] Done
 
 ## temporal-api-replacing-date.md
-- [ ] Read and section
+- [x] Done
 
 ## the-life-i-ended-up-with.md
-- [ ] Read and section
+- [x] Done
