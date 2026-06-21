@@ -17,6 +17,8 @@ For thirty years, we shipped this.
 
 The Temporal proposal is Stage 3. The polyfill from `@js-temporal/polyfill` works in production. Here's what's different.
 
+> **Status:** Stage 3 as of this writing (October 2024). No browser has shipped native Temporal yet, though Firefox Nightly has experimental support behind a flag. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal) and the [TC39 proposal](https://github.com/tc39/proposal-temporal) for current status. The polyfill is production-ready.
+
 ## Concepts that Date didn't have
 
 `Date` has one concept: a millisecond offset from the Unix epoch, disguised as a date-time object. Temporal has six:
