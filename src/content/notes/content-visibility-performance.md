@@ -11,11 +11,9 @@ tags:
 draft: false
 ---
 
-There's a version of this article I could write that opens with a benchmark showing 4× faster initial paint on a list of 500 items. That version would be true, slightly misleading, and would end with you applying `content-visibility: auto` to everything and discovering that several things broke in ways nobody warned you about.
+Apply `content-visibility: auto` to a list of 500 items and the initial paint benchmark looks like someone cleared the debt. That's a real number. The caveat is that the browser has opinions about what it skips, and those opinions conflict with JavaScript that assumes all DOM elements have real dimensions.
 
-Let's skip to the honest version.
-
-`content-visibility: auto` tells the browser: "if this element is far outside the viewport, skip layout, paint, and compositing for it. Don't skip it entirely — keep it in the DOM, keep it accessible, keep it in the find-in-page index — but don't pay the rendering cost until it might actually be visible."
+`content-visibility: auto` tells the browser: if this element is far outside the viewport, skip layout, paint, and compositing for it. Keep it in the DOM. Keep it accessible. Keep it in the find-in-page index. Just don't pay the rendering cost until it might actually be visible.
 
 ```css
 .article-section {
@@ -24,50 +22,50 @@ Let's skip to the honest version.
 }
 ```
 
-The `contain-intrinsic-size` is load-bearing. Without it, the browser renders every skipped element as if it has zero height, which means the scrollbar thumb is the wrong size and the page jumps when you scroll near a skipped section (the browser suddenly has to calculate real height). `auto 300px` tells the browser: "before you've rendered this, estimate its height at 300px." After first render, `auto` updates the estimate from the actual measured value.
+The `contain-intrinsic-size` is load-bearing. Without it, the browser renders every skipped element as zero height — the scrollbar thumb is wrong and the page jumps when you scroll near a skipped section. `auto 300px` tells the browser to estimate 300px before first render. After the element renders once, `auto` updates the estimate from the actual measured value.
+
+> **Browser support:** Chrome 85+, Edge 85+, Firefox 125+ (April 2024). Safari: not yet. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility) before shipping to production. The feature degrades gracefully — browsers without support just render everything normally.
 
 ## Where it actually helps
 
-The benefit is proportional to how many offscreen elements exist and how expensive each one is to paint. The sweet spot:
+The benefit scales with how many offscreen elements exist and how expensive each one is to paint:
 
 - Long article-style pages with many sections
-- Infinite scroll lists with complex list items (images, multiple text nodes, interactive elements)
-- Dashboard pages with many cards that are below the fold on load
+- Infinite scroll lists with complex items (images, multiple text nodes, interactive elements)
+- Dashboard pages with many cards below the fold on load
 
-For short pages or pages where most content is visible on load: measurable but unimportant.
+For short pages where most content is visible on load: measurable, but not worth the gotchas.
 
 ## What breaks
 
-This is the section that wasn't in the Chrome announcement:
+**`getBoundingClientRect()` on skipped elements returns zeros.**
 
-**1. `getBoundingClientRect()` on skipped elements returns zeros.**
-
-If any code reads the position or size of a `content-visibility: auto` element that's currently skipped, it gets garbage values. Any carousel that measures item widths, any sticky positioning that reads offsets, any chart library that sizes itself from container width — these will fail silently.
+Any code that reads the position or size of a `content-visibility: auto` element that's currently skipped gets garbage values. Carousels that measure item widths, sticky positioning that reads offsets, chart libraries that size from container width — these fail silently.
 
 ```javascript
 // Returns {width: 0, height: 0, top: 0, ...} if element is skipped
 const rect = section.getBoundingClientRect();
 ```
 
-The fix: force layout before reading, using `element.offsetHeight` (which forces the browser to paint it) or by wrapping in an IntersectionObserver that waits for visibility.
+The fix: force layout before reading with `element.offsetHeight` (which triggers paint), or wrap in an IntersectionObserver that waits for visibility before measuring.
 
-**2. `IntersectionObserver` still works, but differently.**
+**`IntersectionObserver` still works, but differently.**
 
-Skipped elements aren't invisible to IntersectionObserver — they're in the DOM. But their "visibility" for IO purposes considers the containing-block clipping. Test your scroll-triggered animations on pages that use `content-visibility`.
+Skipped elements aren't invisible to IntersectionObserver — they're in the DOM. Their "visibility" for IO purposes respects containing-block clipping. Test your scroll-triggered animations on pages that use `content-visibility`.
 
-**3. Find-in-page (Ctrl+F) works, but slowly.**
+**Find-in-page (Ctrl+F) works, but can be jarring.**
 
-The browser keeps text in the accessibility tree even when skipped, so Ctrl+F finds the text. But when it jumps to a match in a skipped section, the browser has to suddenly render that section, which can be visually jarring on pages with many large sections.
+The browser keeps text in the accessibility tree even when skipped, so Ctrl+F finds the text. When it jumps to a match in a skipped section, the browser has to render that section on demand — visually noticeable on pages with many large sections.
 
-**4. Anchor link navigation can jump wrong.**
+**Anchor link navigation can land wrong.**
 
-`<a href="#section-5">` navigates by computing the target's position. If that section is currently skipped and its `contain-intrinsic-size` estimate is wrong, the scroll position lands in the wrong place. The browser then corrects, which creates a visible jump.
+`<a href="#section-5">` navigates by computing the target's position. If that section is currently skipped and its `contain-intrinsic-size` estimate is off, the scroll position lands in the wrong place. The browser corrects, which creates a visible jump.
 
 ## The honest recommendation
 
-Apply `content-visibility: auto` to sections you're confident won't be measured by JavaScript — typically sections that are independently self-contained and don't need their dimensions read by sibling or ancestor code.
+Apply `content-visibility: auto` to sections that won't be measured by JavaScript — sections that are independently self-contained and don't need their dimensions read by sibling or ancestor code.
 
-For most content pages (articles, documentation, blog posts): safe, effective, worthwhile. For application dashboards with JavaScript-driven layout: test carefully.
+For content pages (articles, documentation, blog posts): safe, effective, worthwhile. For application dashboards with JavaScript-driven layout: test carefully before shipping.
 
 ```css
 /* Safe for article-style content */
@@ -82,6 +80,4 @@ For most content pages (articles, documentation, blog posts): safe, effective, w
 }
 ```
 
-The performance gain is real. The four-times-faster headline can be true for the right page. The question is whether your page has JavaScript that assumes all DOM elements have real dimensions at all times — and most application-style pages do.
-
-The rendering budget exists whether you use it or not. Using it well is just a matter of knowing which elements you can afford to defer.
+The rendering budget exists whether you use it or not. Using it well is knowing which elements you can afford to defer, and which ones have JavaScript waiting on the other side.
