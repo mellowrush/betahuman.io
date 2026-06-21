@@ -77,6 +77,17 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 
 Using an off-screen `<canvas>` context to measure text width — `ctx.measureText()` — is the only reliable way to calculate where lines break with an arbitrary font. Font metrics vary. `measureText` uses the actual rendered font.
 
+```javascript
+// The escapeXml helper — SVG text content can't contain raw < > & characters
+function escapeXml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+```
+
 ## The selectable text requirement
 
 SVG `<text>` elements are selectable and copy-pastable, which is the critical constraint. A resume that produces unsearchable or uncopable text fails the ATS scanner and the clipboard use case. The SVG approach satisfies both — the text is real XML text, not rasterized glyphs.
