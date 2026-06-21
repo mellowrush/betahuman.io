@@ -57,7 +57,7 @@ This is genuinely new. Previously, the only way to exclude a subtree from a sele
 
 ## Against BEM as religion
 
-BEM is fine. I'm not here to be rude about it. But it's worth being honest that BEM's complexity scales with the number of developers who need to agree on naming conventions, and those agreements are enforced by culture rather than tooling. Someone will eventually name something `.card-body` instead of `.card__body` and everything downstream will quietly misbehave.
+BEM is fine. I'm not here to be rude about it. But it's worth being honest that BEM's complexity scales with the number of developers who need to agree on naming conventions and those agreements are enforced by culture rather than tooling. Someone will eventually name something `.card-body` instead of `.card__body` and everything downstream will quietly misbehave.
 
 `@scope` enforces boundaries with syntax instead of convention. The difference between a team rule and a compiler error.
 

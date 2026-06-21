@@ -20,9 +20,9 @@ Typefaces have moods at different sizes. A serif that reads beautifully at 48px 
 
 The pairing lab I've been building shows combinations in context. Not "Heading / Body" in a specimen. Actual components:
 
-- A card with a title, metadata, and body text
+- A card with a title, metadata and body text
 - A navigation bar with primary and secondary links
-- A form with labels, inputs, and helper text
+- A form with labels, inputs and helper text
 - A data table with column headers and cell content
 - A code block (mono pairing matters here)
 

@@ -11,7 +11,7 @@ tags:
 draft: false
 ---
 
-It's 2016. You're building an accordion. Product wants "smooth expand and collapse." You write `transition: height 300ms ease`, set `height: auto` on the expanded state, and the universe informs you that CSS cannot interpolate between a number and a keyword.
+It's 2016. You're building an accordion. Product wants "smooth expand and collapse." You write `transition: height 300ms ease`, set `height: auto` on the expanded state and the universe informs you that CSS cannot interpolate between a number and a keyword.
 
 So you do what we all did. The measurement dance:
 
@@ -141,7 +141,7 @@ Chrome 129 also shipped `interpolate-size: allow-keywords`:
 }
 ```
 
-With `interpolate-size: allow-keywords` on an ancestor, `auto`, `min-content`, and `fit-content` become interpolatable directly. No `calc-size()` wrapper.
+With `interpolate-size: allow-keywords` on an ancestor, `auto`, `min-content` and `fit-content` become interpolatable directly. No `calc-size()` wrapper.
 
 `calc-size()` is explicit: you opt in per property. `interpolate-size` is implicit: it enables keyword interpolation for everything in scope. Both work. `calc-size()` is surgical; `interpolate-size` is convenient.
 
@@ -151,8 +151,8 @@ With `interpolate-size: allow-keywords` on an ancestor, `auto`, `min-content`, a
 
 The accordion problem is legitimate. It affects nearly every developer who has ever built a UI component. The `scrollHeight` hack is correct and reliable. It's not broken. It just shouldn't have existed.
 
-The platform had the natural height, the transition mechanism, and the intent. `calc-size()` is the bridge that finally connects them — and it's worth understanding why it works, because the `size` keyword is more flexible than the accordion demo suggests.
+The platform had the natural height, the transition mechanism and the intent. `calc-size()` is the bridge that finally connects them — and it's worth understanding why it works, because the `size` keyword is more flexible than the accordion demo suggests.
 
 Play with the arithmetic forms. `calc-size(auto, size * 0.8)` for partial reveals. `calc-size(auto, size + 2rem)` for breathing room. The keyword is a variable, not a fixed value.
 
-Now delete the measurement code.
+Now delete the measurement code. You've earned it.

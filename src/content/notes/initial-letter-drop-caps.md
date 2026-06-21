@@ -147,7 +147,7 @@ The spec and browser implementations disagree on several things that matter:
 
 ## The question behind the question
 
-The reason I spent two hours on `initial-letter` when I have longer pieces in the queue is this: the web has been text-first since Berners-Lee typed the first `<h1>`, and our tooling for handling text seriously has lagged behind what print typography has known for five hundred years.
+The reason I spent two hours on `initial-letter` when I have longer pieces in the queue is this: the web has been text-first since Berners-Lee typed the first `<h1>` and our tooling for handling text seriously has lagged behind what print typography has known for five hundred years.
 
 Drop caps are not decoration. They are a *signal* — to the reader, that what follows was composed with care; to the editor, that the writing is worth the treatment. The hack-based approximations we've been using since the early 2000s have never quite conveyed that signal cleanly.
 

@@ -159,11 +159,11 @@ Any custom element can become an invokable target, with buttons anywhere in the 
 
 The boring argument: less JavaScript. Fewer event listeners. Smaller bundles.
 
-The more interesting argument: HTML declarative relationships are serializable, inspectable, and accessible by default. When a button's relationship to its target is expressed in HTML attributes, assistive technologies can understand that relationship structurally — "this button opens the dialog" — from the markup, rather than inferring it from runtime behavior.
+The more interesting argument: HTML declarative relationships are serializable, inspectable and accessible by default. When a button's relationship to its target is expressed in HTML attributes, assistive technologies can understand that relationship structurally — "this button opens the dialog" — from the markup, rather than inferring it from runtime behavior.
 
-JavaScript wiring makes the relationship implicit: buried in event listeners, closures, and runtime state. Invoker Commands make it explicit and structural.
+JavaScript wiring makes the relationship implicit: buried in event listeners, closures and runtime state. Invoker Commands make it explicit and structural.
 
-This is the same argument that justified `<details>/<summary>`, `<dialog>`, `[popover]`, and every native HTML interactive element: when the browser understands the interaction model, it can expose it to accessibility APIs, implement keyboard handling correctly, and maintain state without JavaScript tracking it.
+This is the same argument that justified `<details>/<summary>`, `<dialog>`, `[popover]` and every native HTML interactive element: when the browser understands the interaction model, it can expose it to accessibility APIs, implement keyboard handling correctly and maintain state without JavaScript tracking it.
 
 ## Progressive enhancement
 

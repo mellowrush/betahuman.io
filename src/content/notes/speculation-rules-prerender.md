@@ -60,11 +60,11 @@ These are meaningfully different:
 </script>
 ```
 
-**Prefetch**: downloads the document and subresources. Parsing, rendering, and JavaScript execution still happen on navigation. Faster, but not instant.
+**Prefetch**: downloads the document and subresources. Parsing, rendering and JavaScript execution still happen on navigation. Faster, but not instant.
 
 **Prerender**: renders the page completely in a background browsing context. On navigation, Chrome swaps the prerendered context into the tab. Sub-100ms perceived navigation time on a cold server.
 
-The tradeoff: prerender is expensive. A prerendered page executes all its JavaScript, fires analytics events (Chrome has safeguards against double-counting these), and uses real memory. Don't prerender every page on a large site.
+The tradeoff: prerender is expensive. A prerendered page executes all its JavaScript, fires analytics events (Chrome has safeguards against double-counting these) and uses real memory. Don't prerender every page on a large site.
 
 ## Checking if your page was prerendered
 

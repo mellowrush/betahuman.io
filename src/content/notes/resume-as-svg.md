@@ -2,7 +2,7 @@
 title: A resume that scales
 date: "2025-04-02"
 category: Weird
-description: "A PDF resume is a snapshot. An SVG resume is an argument. Here's what building one taught me about text layout, SVG font metrics, and what a resume is actually trying to do."
+description: "A PDF resume is a snapshot. An SVG resume is an argument. Here's what building one taught me about text layout, SVG font metrics and what a resume is actually trying to do."
 tags:
   - svg
   - typography
@@ -11,20 +11,20 @@ tags:
 draft: false
 ---
 
-A resume is an advertisement. It is the only form of advertising you will ever produce in which the product and the producer are the same person, and the buyer is sitting directly across a table from you when they read it.
+A resume is an advertisement. It is the only form of advertising you will ever produce in which the product and the producer are the same person and the buyer is sitting directly across a table from you when they read it.
 
 The format, then, is part of the message.
 
-Most resumes produce PDFs. The PDF is correct for most uses: print-ready, universally readable, font-embedded. But it is also static, pixel-bound, and tells the viewer exactly one thing about the person inside it: they know how to use a template or can afford a designer.
+Most resumes produce PDFs. The PDF is correct for most uses: print-ready, universally readable, font-embedded. But it is also static, pixel-bound and tells the viewer exactly one thing about the person inside it: they know how to use a template or can afford a designer.
 
-I've been building an SVG resume. Not because SVG is better in every dimension — it isn't. Because the constraints of building in SVG force decisions that a word processor hides, and those forced decisions are interesting.
+I've been building an SVG resume. Not because SVG is better in every dimension — it isn't. Because the constraints of building in SVG force decisions that a word processor hides and those forced decisions are interesting.
 
 ## What SVG gives you that PDF doesn't
 
 - **Infinite scalability**: the document renders correctly at business card size and at poster size from the same source.
 - **Inspectability**: open the file in any text editor. The content is human-readable XML.
 - **Animatability**: SVG can contain CSS animations. A resume that subtly animates certain elements on hover — when viewed in a browser — is a different artifact than a resume that doesn't.
-- **Embeddability**: drop it in an HTML `<img>` tag. It renders correctly, scales correctly, and costs nothing in additional markup.
+- **Embeddability**: drop it in an HTML `<img>` tag. It renders correctly, scales correctly and costs nothing in additional markup.
 
 ## The first constraint: text layout
 
@@ -93,7 +93,7 @@ function escapeXml(str) {
 SVG `<text>` elements are selectable and copy-pastable, which is the critical constraint. A resume that produces unsearchable or uncopable text fails the ATS scanner and the clipboard use case. The SVG approach satisfies both — the text is real XML text, not rasterized glyphs.
 
 ```xml
-<!-- This is searchable, selectable, and accessible -->
+<!-- This is searchable, selectable and accessible -->
 <text class="job-title" x="40" y="145">
   Senior Frontend Developer
 </text>
@@ -141,7 +141,7 @@ The honest inventory of what remains hard:
 
 **Font embedding**: For offline or PDF-export reliability, fonts need to be embedded (base64) in the SVG. Embedded fonts significantly increase file size.
 
-The SVG resume isn't finished. It works, it's mine, and it scales. The decision to build it as an argument rather than a template is the point — a resume that is indistinguishable from ten thousand others argues that the person inside it is also indistinguishable from ten thousand others.
+The SVG resume isn't finished. It works, it's mine and it scales. The decision to build it as an argument rather than a template is the point — a resume that is indistinguishable from ten thousand others argues that the person inside it is also indistinguishable from ten thousand others.
 
 Whether the SVG approach is the right answer to that argument is a separate question. The constraint of building it taught me things about text layout and typographic precision that building a PDF never would have.
 

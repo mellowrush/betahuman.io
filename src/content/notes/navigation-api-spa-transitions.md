@@ -41,7 +41,7 @@ window.navigation.addEventListener('navigate', (event) => {
 });
 ```
 
-Every internal navigation routes through this handler. The browser still manages the URL bar, history stack, scroll restoration, and back button. You manage the render.
+Every internal navigation routes through this handler. The browser still manages the URL bar, history stack, scroll restoration and back button. You manage the render.
 
 > **Browser support:** Chrome 102+. Safari: check [MDN](https://developer.mozilla.org/en-US/docs/Web/API/Navigation_API) for current status — not supported as of mid-2024, implementation in progress. For production use with Safari traffic, use the polyfill (see below) or fall back to the traditional `history.pushState` pattern.
 
@@ -109,7 +109,7 @@ The WICG maintains an official Navigation API polyfill. For most use cases, it w
 
 ## The thing it changes about how you think
 
-React Router, Vue Router, Next.js, SvelteKit — all built on the premise that the browser's navigation model is inadequate. The Navigation API is the browser acknowledging that this was sometimes right, and shipping a native version of the solution.
+React Router, Vue Router, Next.js, SvelteKit — all built on the premise that the browser's navigation model is inadequate. The Navigation API is the browser acknowledging that this was sometimes right and shipping a native version of the solution.
 
 The router library isn't obsolete. For sites that need full routing sophistication — nested layouts, data prefetching, code splitting — the library remains appropriate.
 

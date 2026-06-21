@@ -11,7 +11,7 @@ tags:
 draft: false
 ---
 
-Iterator helpers process one element at a time, on demand, and stop when you have enough. They don't build the full result in advance.
+Iterator helpers process one element at a time, on demand and stop when you have enough. They don't build the full result in advance.
 
 The difference from array methods:
 
@@ -107,7 +107,7 @@ Iterator helpers are not replacements for array methods. They're additive:
 | Infinite sequences | Impossible. | Native use case. |
 | Streaming data (sync) | Must buffer first. | Process on demand. |
 
-The sweet spots are real: large data sets with early termination, infinite generators, and chaining across Sets and Maps without intermediate arrays. Outside those, array methods remain the readable choice.
+The sweet spots are real: large data sets with early termination, infinite generators and chaining across Sets and Maps without intermediate arrays. Outside those, array methods remain the readable choice.
 
 ## The protocol underneath
 

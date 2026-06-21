@@ -13,7 +13,7 @@ draft: false
 
 Web components have always been a runtime concern. Define the element, register it, wait for JavaScript to run. No JavaScript, no component. That's not a design philosophy — that's a limitation masquerading as one.
 
-Declarative Shadow DOM, shipped in Chrome 111, Firefox 123, and Safari 16.4, changes the fundamental contract. You can define a shadow root in HTML — no JavaScript — and the browser attaches it during parsing, before any script runs.
+Declarative Shadow DOM, shipped in Chrome 111, Firefox 123 and Safari 16.4, changes the fundamental contract. You can define a shadow root in HTML — no JavaScript — and the browser attaches it during parsing, before any script runs.
 
 ```html
 <my-card>
@@ -47,7 +47,7 @@ This HTML, served from the server, renders a styled, encapsulated component with
 
 ## In an Astro component
 
-Astro's island architecture is built around a simple premise: most components should render on the server with zero client JavaScript, and only hydrate where interactivity is actually needed. Declarative Shadow DOM fits this exactly.
+Astro's island architecture is built around a simple premise: most components should render on the server with zero client JavaScript and only hydrate where interactivity is actually needed. Declarative Shadow DOM fits this exactly.
 
 ```astro
 ---
@@ -130,8 +130,8 @@ The `shadowRoot` is already attached. The custom element definition enhances it 
 
 ## What this makes possible
 
-DSD doesn't solve everything about web components. Custom element registration, observed attributes, and property reflection still require JavaScript. Complex interactive widgets still need a script.
+DSD doesn't solve everything about web components. Custom element registration, observed attributes and property reflection still require JavaScript. Complex interactive widgets still need a script.
 
-But for structural, style-encapsulated layout components — cards, banners, section wrappers, media objects — you can now ship them as SSR'd HTML with style isolation, zero runtime cost, and a clear path to enhancement if interactivity becomes necessary later.
+But for structural, style-encapsulated layout components — cards, banners, section wrappers, media objects — you can now ship them as SSR'd HTML with style isolation, zero runtime cost and a clear path to enhancement if interactivity becomes necessary later.
 
 The criticism that web components require JavaScript was one of the fundamental objections to using them on content sites. DSD removes that objection for a meaningful slice of use cases. Not all of them. Enough of them.

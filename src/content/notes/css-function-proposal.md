@@ -29,7 +29,7 @@ The proposed syntax:
 }
 ```
 
-`--space(4)` is not a variable lookup. It's a function call. Change `0.25rem` to `0.3rem`, and every call site updates.
+`--space(4)` is not a variable lookup. It's a function call. Change `0.25rem` to `0.3rem` and every call site updates.
 
 > **Status (April 2025):** Stage 1. No browser implementation. Syntax is based on the current draft and may change. Check the [CSS Working Group issue](https://github.com/w3c/csswg-drafts/issues/9350) and [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@function) for current status.
 
@@ -84,7 +84,7 @@ Sass functions do this today:
 
 The difference: Sass runs at build time. The output is static CSS. If you need the function to respond to runtime values — user settings, `@media` queries, custom property overrides — Sass can't do it. It's already compiled.
 
-CSS `@function` runs in the browser. It can reference other custom properties, respond to cascade changes, and recalculate when underlying values change.
+CSS `@function` runs in the browser. It can reference other custom properties, respond to cascade changes and recalculate when underlying values change.
 
 ```css
 /* Build-time (Sass) */

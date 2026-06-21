@@ -2,7 +2,7 @@
 title: "interpolate-size: the other way to animate to auto"
 date: "2025-06-05"
 category: CSS
-description: "interpolate-size: allow-keywords makes CSS keyword values like auto, min-content, and fit-content interpolatable. It's simpler than calc-size() and riskier. Here's when to use which."
+description: "interpolate-size: allow-keywords makes CSS keyword values like auto, min-content and fit-content interpolatable. It's simpler than calc-size() and riskier. Here's when to use which."
 tags:
   - css
   - animation
@@ -13,7 +13,7 @@ draft: false
 
 I covered `calc-size()` [in September](/notes/calc-size-animate-height-auto). If you read that and thought "that's clever but the extra wrapper function is annoying" — this is the one you were waiting for.
 
-`interpolate-size: allow-keywords` is an opt-in property that makes CSS keyword values like `auto`, `min-content`, `max-content`, and `fit-content` directly interpolatable in transitions and animations. No wrapper function. Set it, and `height: auto` becomes animatable everywhere in scope.
+`interpolate-size: allow-keywords` is an opt-in property that makes CSS keyword values like `auto`, `min-content`, `max-content` and `fit-content` directly interpolatable in transitions and animations. No wrapper function. Set it and `height: auto` becomes animatable everywhere in scope.
 
 ```css
 :root {

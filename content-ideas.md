@@ -1,8 +1,8 @@
 # Content Ideas
-Experiments, POCs, and notes worth writing — biased toward browser capabilities
+Experiments, POCs and notes worth writing — biased toward browser capabilities
 that have landed (or are landing) since June 2024 but haven't made it into
 the mainstream tutorial circuit yet. The question is never "what is this" but
-"what can you actually do with it that you couldn't before, and is it interesting?"
+"what can you actually do with it that you couldn't before and is it interesting?"
 
 ---
 
@@ -19,7 +19,7 @@ the mainstream tutorial circuit yet. The question is never "what is this" but
 - [ ] **Scroll-driven animations: the CSS-only version of what we've been doing wrong**
   `animation-timeline: scroll()` and `animation-timeline: view()` land in Chrome 115
   but most people still reach for Intersection Observer + JS. Build a reading progress
-  bar, a parallax header, and a sticky section reveal — all in CSS, no JS.
+  bar, a parallax header and a sticky section reveal — all in CSS, no JS.
   Then measure: what breaks, what doesn't, what the spec can't do yet.
   _Category: experiment · Estimated: 2h_
 
@@ -31,7 +31,7 @@ the mainstream tutorial circuit yet. The question is never "what is this" but
   _Category: experiment · Estimated: 2h_
 
 - [ ] **Relative color syntax: one seed color, a whole system**
-  `oklch(from var(--rust) calc(l * 0.8) c h)` — derive tints, shades, and
+  `oklch(from var(--rust) calc(l * 0.8) c h)` — derive tints, shades and
   complementaries from a single design token. Build a live palette generator
   that produces a full design system from a single hex input. No preprocessor,
   no JS color library. Just CSS.
@@ -84,9 +84,9 @@ the mainstream tutorial circuit yet. The question is never "what is this" but
 
 - [ ] **Popover API: rebuild a component library feature with zero JS**
   `[popover]` + `popovertarget` — native floating elements with focus management,
-  light-dismiss, and `::backdrop`. POC: a tooltip, a modal, a dropdown menu —
+  light-dismiss and `::backdrop`. POC: a tooltip, a modal, a dropdown menu —
   each using only HTML attributes. Then the honest verdict: where does it actually
-  cover the use case, and where does it break down (nested popovers, animation)?
+  cover the use case and where does it break down (nested popovers, animation)?
   _Category: experiment · Estimated: 4h_
 
 - [ ] **Speculation Rules API: prerender the next page before the click**
@@ -173,7 +173,7 @@ the mainstream tutorial circuit yet. The question is never "what is this" but
 - [ ] **Resume as SVG: typographically correct, client-side, zero server**
   Most resume generators produce either a pixel-perfect PDF (from HTML) or a
   generic Word doc. An SVG resume is: scalable, portable, editable in any vector
-  tool, and can embed animation. The interesting constraint: all text must remain
+  tool and can embed animation. The interesting constraint: all text must remain
   selectable and copy-pastable. Dig into `<text>` + `<textPath>` + SVG font metrics.
   _Category: build / research · Estimated: 8–12h_
 
@@ -193,7 +193,7 @@ the mainstream tutorial circuit yet. The question is never "what is this" but
 
 - [ ] **`fetchpriority` and what it actually does to LCP**
   `<img fetchpriority="high">` on the hero image. Sounds obvious but the
-  interaction with lazy loading, connection ramp-up, and preload scanner is
+  interaction with lazy loading, connection ramp-up and preload scanner is
   non-trivial. Measure with and without on a real page, WebPageTest waterfall
   included. The honest verdict on whether it matters below a certain image size.
   _Category: performance experiment · Estimated: 2h_

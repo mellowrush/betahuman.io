@@ -11,9 +11,9 @@ tags:
 draft: false
 ---
 
-Apply `content-visibility: auto` to a list of 500 items and the initial paint benchmark looks like someone cleared the debt. That's a real number. The caveat is that the browser has opinions about what it skips, and those opinions conflict with JavaScript that assumes all DOM elements have real dimensions.
+Apply `content-visibility: auto` to a list of 500 items and the initial paint benchmark looks like someone cleared the debt. That's a real number. The caveat is that the browser has opinions about what it skips and those opinions conflict with JavaScript that assumes all DOM elements have real dimensions.
 
-`content-visibility: auto` tells the browser: if this element is far outside the viewport, skip layout, paint, and compositing for it. Keep it in the DOM. Keep it accessible. Keep it in the find-in-page index. Just don't pay the rendering cost until it might actually be visible.
+`content-visibility: auto` tells the browser: if this element is far outside the viewport, skip layout, paint and compositing for it. Keep it in the DOM. Keep it accessible. Keep it in the find-in-page index. Just don't pay the rendering cost until it might actually be visible.
 
 ```css
 .article-section {
@@ -80,4 +80,4 @@ For content pages (articles, documentation, blog posts): safe, effective, worthw
 }
 ```
 
-The rendering budget exists whether you use it or not. Using it well is knowing which elements you can afford to defer, and which ones have JavaScript waiting on the other side.
+The rendering budget exists whether you use it or not. Using it well is knowing which elements you can afford to defer and which ones have JavaScript waiting on the other side.

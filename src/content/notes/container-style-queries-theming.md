@@ -11,7 +11,7 @@ tags:
 draft: false
 ---
 
-At some point, every design system component API starts to look like a form. `variant`, `intent`, `tone`, `appearance`, `emphasis`, `size`, `density`, `level`. Pick your taxonomy. The component ships six times its useful surface area in prop surface area, and every consumer reads the docs just to recreate what they saw in the Figma file.
+At some point, every design system component API starts to look like a form. `variant`, `intent`, `tone`, `appearance`, `emphasis`, `size`, `density`, `level`. Pick your taxonomy. The component ships six times its useful surface area in prop surface area and every consumer reads the docs just to recreate what they saw in the Figma file.
 
 CSS Container Style Queries are a way out of one specific slice of that problem. Set a custom property on an ancestor. Descendants query it and respond. The JavaScript layer doesn't need to be involved.
 

@@ -12,7 +12,7 @@ tags:
 draft: false
 ---
 
-The EyeDropper API, available in Chrome 95+, puts an OS-level color picker inside a web application. It samples any pixel on the screen — not just within the browser, but anywhere the cursor can reach. The user clicks, the screen briefly enters sampling mode, the cursor becomes a magnifier, and the selected color comes back as a hex value.
+The EyeDropper API, available in Chrome 95+, puts an OS-level color picker inside a web application. It samples any pixel on the screen — not just within the browser, but anywhere the cursor can reach. The user clicks, the screen briefly enters sampling mode, the cursor becomes a magnifier and the selected color comes back as a hex value.
 
 ```javascript
 async function pickColor() {
@@ -120,11 +120,11 @@ Once the seed is set as a CSS custom property, the palette expands through CSS:
 }
 ```
 
-When the user picks a new color, one `setProperty` call updates `--seed`, and every derived color updates through CSS's own cascade. No re-running a color library. No generating twenty properties. One source, everything derived.
+When the user picks a new color, one `setProperty` call updates `--seed` and every derived color updates through CSS's own cascade. No re-running a color library. No generating twenty properties. One source, everything derived.
 
 ## What `<input type="color">` doesn't do
 
-`<input type="color">` is native, accessible, and useful. But it's limited to the browser window. EyeDropper reaches the whole screen.
+`<input type="color">` is native, accessible and useful. But it's limited to the browser window. EyeDropper reaches the whole screen.
 
 The design workflow this enables: open a reference image in one window, open the tool in another, sample directly from the reference. No Figma, no separate color picker, no translation step. The screen is the palette.
 

@@ -113,7 +113,7 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No arithmeti
 
 ## The surgical version: `view()`
 
-`scroll()` tracks the page. `view()` tracks an element. Specifically: whether it's inside the viewport, and by exactly how much.
+`scroll()` tracks the page. `view()` tracks an element. Specifically: whether it's inside the viewport and by exactly how much.
 
 ```css
 @keyframes fade-in-up {

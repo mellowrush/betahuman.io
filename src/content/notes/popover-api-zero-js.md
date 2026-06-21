@@ -2,7 +2,7 @@
 title: The Popover API walks in and the JS bundle gets smaller
 date: "2024-05-09"
 category: Browser APIs
-description: "The Popover API became baseline in April 2024. Native tooltips, modals, dropdowns — with focus management, light-dismiss, and ::backdrop. No JavaScript required for the basic case."
+description: "The Popover API became baseline in April 2024. Native tooltips, modals, dropdowns — with focus management, light-dismiss and ::backdrop. No JavaScript required for the basic case."
 tags:
   - html
   - browser-api
@@ -12,7 +12,7 @@ tags:
 draft: false
 ---
 
-The Popover API became Baseline in April 2024. The `[popover]` attribute gives you a floating layer with light-dismiss (click outside to close), top-layer rendering (above everything, including fixed elements and `z-index` stacks), and a `::backdrop` pseudo-element. The browser handles the plumbing.
+The Popover API became Baseline in April 2024. The `[popover]` attribute gives you a floating layer with light-dismiss (click outside to close), top-layer rendering (above everything, including fixed elements and `z-index` stacks) and a `::backdrop` pseudo-element. The browser handles the plumbing.
 
 > **Browser support:** Baseline April 2024. Chrome 114+, Firefox 125+, Safari 17+. [MDN reference](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API).
 
@@ -93,7 +93,7 @@ Click the button. The popover appears. Click outside. It disappears. No `documen
 
 `popover="manual"` disables light-dismiss — the modal only closes when explicitly dismissed.
 
-> **Accessibility note:** `[popover]` does NOT trap focus the way `<dialog>` does. For a true modal that prevents keyboard escape, use `<dialog>` with `.showModal()`. For non-modal popovers (tooltips, dropdowns, menus), the popover API is appropriate. Always add `role="dialog"` + `aria-modal="true"` for popover-based dialogs, and ensure keyboard focus is managed manually if you need full trapping.
+> **Accessibility note:** `[popover]` does NOT trap focus the way `<dialog>` does. For a true modal that prevents keyboard escape, use `<dialog>` with `.showModal()`. For non-modal popovers (tooltips, dropdowns, menus), the popover API is appropriate. Always add `role="dialog"` + `aria-modal="true"` for popover-based dialogs and ensure keyboard focus is managed manually if you need full trapping.
 
 ```css
 [popover] {
@@ -157,6 +157,6 @@ document.getElementById('confirm-delete').addEventListener('click', async () => 
 
 The plumbing is handled. What's left is the actual business logic — which is what the JavaScript should have been doing instead of managing focus traps.
 
-The component library version of a modal is roughly 200–400 lines: focus trap, click-outside handler, scroll lock, keyboard handling, z-index management, portal rendering, animation state. The HTML-native version is three lines of markup, two CSS blocks, and one line of JavaScript when you need to respond to the user's actual decision.
+The component library version of a modal is roughly 200–400 lines: focus trap, click-outside handler, scroll lock, keyboard handling, z-index management, portal rendering, animation state. The HTML-native version is three lines of markup, two CSS blocks and one line of JavaScript when you need to respond to the user's actual decision.
 
 That ratio has changed.

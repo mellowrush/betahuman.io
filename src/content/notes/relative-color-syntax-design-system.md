@@ -29,7 +29,7 @@ CSS relative color syntax lets you derive new colors mathematically from existin
 }
 ```
 
-The syntax: `oklch(from var(--brand) l c h)` takes a source color and exposes its lightness, chroma, and hue as named variables you can modify arithmetically.
+The syntax: `oklch(from var(--brand) l c h)` takes a source color and exposes its lightness, chroma and hue as named variables you can modify arithmetically.
 
 `oklch` is the important choice here. Unlike `hsl`, oklch is *perceptually uniform* — a 10% lightness step looks the same visual distance regardless of where you are in the color range. Yellow at 50% lightness in `hsl` looks much brighter than blue at 50% lightness. oklch corrects for that.
 

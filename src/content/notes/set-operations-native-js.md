@@ -25,7 +25,7 @@ const commonPerms      = intersection([...userPermissions], [...requiredPerms]);
 // → ['read', 'write']
 ```
 
-Note the spread operators. lodash works on arrays. You had to convert, operate, and decide whether to convert back. Not complicated — just a ceremony that existed because there was no native alternative.
+Note the spread operators. lodash works on arrays. You had to convert, operate and decide whether to convert back. Not complicated — just a ceremony that existed because there was no native alternative.
 
 ```javascript
 // Now
@@ -91,7 +91,7 @@ This is the "what changed" pattern. Previously: convert both to arrays, filter w
 
 ## The lodash eulogist
 
-lodash is not deprecated by this. lodash has `_.chunk`, `_.debounce`, `_.throttle`, `_.cloneDeep`, `_.get`, and approximately four hundred other utilities that remain useful. It's a good library. It's been a good library for a decade.
+lodash is not deprecated by this. lodash has `_.chunk`, `_.debounce`, `_.throttle`, `_.cloneDeep`, `_.get` and approximately four hundred other utilities that remain useful. It's a good library. It's been a good library for a decade.
 
 What's changed is that the category of lodash utilities that exist because JavaScript doesn't have native equivalents keeps shrinking. Array methods ate a significant chunk in ES6. `Object.entries`, `Object.fromEntries`, optional chaining, nullish coalescing ate more. Now Set operations.
 

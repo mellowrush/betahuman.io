@@ -145,6 +145,6 @@ Setting `color-scheme` on an element also tells browser-rendered UI inside it (s
 
 If you convert the entire token system to `light-dark()` and remove `[data-theme]` selectors, specificity needs auditing. `[data-theme="dark"]` has specificity `[0, 1, 0]` — one attribute selector — which beats `:root`'s `[0, 0, 1]`. If your JS toggle overwrites at the `:root` level via custom property re-declaration, the specificity model needs adjustment.
 
-The simpler path: keep the JS toggle, add `light-dark()` as the default values in your token declarations, and let the JS override only where needed. Graceful degradation (the site works without JS, with correct OS-matched colors) plus user override capability (the toggle works as before).
+The simpler path: keep the JS toggle, add `light-dark()` as the default values in your token declarations and let the JS override only where needed. Graceful degradation (the site works without JS, with correct OS-matched colors) plus user override capability (the toggle works as before).
 
 One property. Two modes. The rest is preference.

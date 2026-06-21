@@ -146,7 +146,7 @@ The SVG version scales infinitely. The output is a single string — trivial to 
 
 I built a working prototype. What I didn't build was the thing worth shipping: a clean UI that lets someone provide a URL and a logo and generates a verified-scannable artistic QR code with a "test scan before you download" step.
 
-That step is the important part. Without it, someone will generate a code, print it on a thousand business cards, and discover at the coffee shop that their logo was 31% coverage and it doesn't scan.
+That step is the important part. Without it, someone will generate a code, print it on a thousand business cards and discover at the coffee shop that their logo was 31% coverage and it doesn't scan.
 
 That part is still in the todo list. It requires integrating a client-side QR scanner (`zxing-js` works) that scans the generated canvas before letting you export. Simple in theory. I got distracted by the SVG approach and haven't circled back.
 

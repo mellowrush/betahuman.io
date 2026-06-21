@@ -13,7 +13,7 @@ draft: false
 
 The funny thing about expertise is that people start treating it like furniture.
 
-Six years in the same industry and everyone assumes the shape is permanent. You become the *React guy*, the *frontend guy*, the *safe pair of hands*. Before long, your career starts resembling a luxury hotel lobby: expensive, familiar, and designed to discourage movement.
+Six years in the same industry and everyone assumes the shape is permanent. You become the *React guy*, the *frontend guy*, the *safe pair of hands*. Before long, your career starts resembling a luxury hotel lobby: expensive, familiar and designed to discourage movement.
 
 Then one day you notice you've become very efficient at solving problems you no longer find interesting.
 

@@ -13,7 +13,7 @@ draft: false
 
 When `:has()` became baseline in December 2023, every article led with: *"CSS finally gets a parent selector."*
 
-Which is true, and the least interesting thing about it.
+Which is true and the least interesting thing about it.
 
 Yes, you can style a parent based on its children. That's useful. But `:has()` is a relational selector — it queries DOM relationships in any direction, not just upward. The "parent selector" framing is the equivalent of introducing the iPhone as "a phone that also plays music."
 
@@ -121,7 +121,7 @@ For years, quantity queries required JavaScript to count children and apply a cl
 
 ## The honest reckoning
 
-I use these patterns, get excited, write about them, and the caveats end up in footnotes. Putting them here instead:
+I use these patterns, get excited, write about them and the caveats end up in footnotes. Putting them here instead:
 
 - **Performance.** `:has()` can be expensive in large DOMs. A selector that triggers paint invalidation on a parent on every keystroke inside a child will hurt. Use it for structural styling decisions, not real-time interactive effects.
 - **No `:has()` inside `:has()`.** You can't nest them — `:has(:has(.foo))` is invalid per the spec.
