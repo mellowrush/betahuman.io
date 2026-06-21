@@ -11,11 +11,9 @@ tags:
 draft: false
 ---
 
-In most design systems, there's a moment where you look at your component API and realize it has sixteen props, twelve of which are just different ways to say "make it look like the other version." 
+At some point, every design system component API starts to look like a form. `variant`, `intent`, `tone`, `appearance`, `emphasis`, `size`, `density`, `level`. Pick your taxonomy. The component ships six times its useful surface area in prop surface area, and every consumer reads the docs just to recreate what they saw in the Figma file.
 
-`variant`, `intent`, `tone`, `appearance`, `emphasis`, `size`, `density`, `level`. Pick your taxonomy. The component still ships six times its useful surface area in prop surface area, and every consumer has to read the docs to know which combination of props produces the thing they saw in the Figma file.
-
-CSS Container Style Queries ship in Chrome 111+, with style query support (distinct from size queries) becoming available in Chrome 117. They let you do this:
+CSS Container Style Queries are a way out of one specific slice of that problem. Set a custom property on an ancestor. Descendants query it and respond. The JavaScript layer doesn't need to be involved.
 
 ```html
 <!-- Set a context variable on the container -->
@@ -52,7 +50,9 @@ CSS Container Style Queries ship in Chrome 111+, with style query support (disti
 }
 ```
 
-When the card is inside a container where `--card-variant: featured` is set, it renders differently. When it's in a normal context, it renders normally. The card component has zero knowledge of where it lives — the context provides the information through CSS custom properties.
+When the card is inside a container where `--card-variant: featured` is set, it renders differently. When it's in a normal context, it renders normally. The card has zero knowledge of where it lives — the context provides the information through CSS custom properties.
+
+> **Browser support:** Chrome 117+, Firefox 128+, Safari 18+. Style queries (querying custom property values specifically) landed in all three by late 2024. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/@container#container_style_queries) for the current table.
 
 ## The prop drilling problem in practice
 
@@ -73,9 +73,9 @@ return (
 );
 ```
 
-Or, if you're not using Context, you're passing `variant` as a prop through every intermediate component in the tree. The technical term for this is "prop drilling." The accurate term is "paperwork."
+Or, without Context, you're passing `variant` as a prop through every intermediate component in the tree. The technical term for this is "prop drilling." The accurate term is "paperwork."
 
-CSS Container Style Queries remove the JavaScript layer from this pattern:
+CSS Container Style Queries remove the JavaScript layer from this pattern entirely:
 
 ```css
 /* No React Context. No prop. Just a custom property on an ancestor. */
@@ -84,9 +84,11 @@ CSS Container Style Queries remove the JavaScript layer from this pattern:
 }
 ```
 
-The `container-type: style` declaration on `.card` makes it a style query container, which means any child can query its custom properties. The card responds to context without being told directly.
+The `container-type: style` declaration on `.card` makes it a style query container — any child can query its custom properties. The card responds to context without being told directly.
 
 ## Design system tokens as query values
+
+This is where the approach gets interesting for design systems. Density tokens, spacing modes, theme variants — all of them can drive component appearance through the same mechanism:
 
 ```css
 /* Token-driven variant system */
@@ -117,10 +119,10 @@ One token on the ancestor. Every descendant card adapts. No prop, no class, no c
 
 ## The caveats
 
-**Performance**: Style queries cause style recalculation on any descendant when the queried property changes. Keep the query scope narrow and avoid changing style query values in high-frequency events (scroll, mouse move).
+**Performance.** Style queries cause style recalculation on descendants when the queried property changes. Keep the query scope narrow and avoid changing style query values in high-frequency events (scroll, mouse move).
 
-**No boolean logic**: You can query for a specific value, but there's no `@container style(--variant != default)` or `@container style(--variant: featured or promoted)`. One condition per query block.
+**No boolean logic.** You can query for a specific value, but there's no `@container style(--variant != default)` or `@container style(--variant: featured or promoted)`. One condition per query block.
 
-**Computed vs. inherited values**: The query reads the computed value of the property on the container. If the property isn't set at all, it reads as its initial value (or empty). Make sure your defaults are explicit.
+**Computed vs. inherited values.** The query reads the computed value of the property on the container. If the property isn't set, it reads as its initial value (or empty). Make defaults explicit.
 
-This isn't a replacement for component APIs — it's an alternative to one specific kind of them. The kind that exists purely to communicate visual context through the JavaScript layer when CSS always had the ability to communicate context through inheritance. That particular kind of prop can retire.
+This isn't a replacement for component APIs. It's a replacement for one specific kind of them — the kind that exists purely to communicate visual context through the JavaScript layer when CSS always had the ability to communicate context through inheritance. That particular kind of prop can retire.
