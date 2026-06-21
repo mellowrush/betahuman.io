@@ -1,0 +1,76 @@
+---
+interface Props { label: string; }
+const { label } = Astro.props;
+---
+
+<div class="divider">
+  <div class="divider-line"></div>
+  <h2 class="divider-mark">{label}</h2>
+  <div class="divider-line"></div>
+</div>
+
+<style>
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: var(--bh-space-4);
+    margin: var(--bh-space-9) 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: var(--bh-border-strong);
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 500ms var(--bh-ease-out);
+  }
+
+  .divider-line:last-child {
+    transform-origin: right;
+  }
+
+  .divider.did-animate .divider-line {
+    transform: scaleX(1);
+  }
+
+  .divider-mark {
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    font-weight: 400;
+    letter-spacing: var(--bh-tracking-mono);
+    text-transform: uppercase;
+    color: var(--bh-text-faint);
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .divider-line {
+      transform: scaleX(1) !important;
+      transition: none !important;
+    }
+  }
+</style>
+
+<script>
+  function setupDividers() {
+    const dividers = document.querySelectorAll('.divider');
+    if (!dividers.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('did-animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    dividers.forEach((d) => observer.observe(d));
+  }
+
+  document.addEventListener('astro:page-load', setupDividers);
+</script>

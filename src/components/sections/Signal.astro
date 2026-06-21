@@ -1,0 +1,49 @@
+---
+---
+
+<section>
+  <p class="signal-intro">
+    A place for things worth keeping - tools, questions, field notes.
+    Mostly for me. You're welcome to look.
+  </p>
+  <ul class="signal-list">
+    <li>Experiments with CSS and browser APIs, taken past the demo stage</li>
+    <li>Field notes from the interesting middle of not knowing yet</li>
+    <li>Builds where the process is at least as visible as the output</li>
+    <li>Wrong turns documented, not quietly deleted</li>
+    <li>The gap between spec and practice, taken seriously</li>
+  </ul>
+</section>
+
+<style>
+  .signal-intro {
+    font-size: var(--bh-text-base);
+    line-height: var(--bh-leading-normal);
+    color: var(--bh-text-muted);
+    margin-bottom: var(--bh-space-6);
+    text-wrap: pretty;
+  }
+
+  .signal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--bh-space-3);
+  }
+
+  .signal-list li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--bh-space-3);
+    font-size: var(--bh-text-sm);
+    color: var(--bh-text);
+  }
+
+  .signal-list li::before {
+    content: '→';
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    color: var(--bh-text-faint);
+    flex-shrink: 0;
+  }
+</style>

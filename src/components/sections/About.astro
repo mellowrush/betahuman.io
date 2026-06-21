@@ -1,0 +1,76 @@
+---
+---
+
+<section id="about">
+  <p class="about-intro">
+    Self-taught. Background in advertising, then six years in product teams.
+    Based in Bucharest. I got good at the React thing and then got bored
+    of being good at the React thing — which is when the interesting problems started.
+    Now I build tools, read specs and document the confusion honestly.
+  </p>
+  <div class="about-grid">
+    <div class="about-block">
+      <h3>What I do</h3>
+      <p>Build web interfaces. Lately more interested in what the browser
+      can do natively than what frameworks paper over. The distance between
+      "technically works" and "makes someone feel something" is smaller than
+      people assume, but you just have to care about both ends.</p>
+    </div>
+    <div class="about-block">
+      <h3>How I think</h3>
+      <p>Find something that shouldn't work and try it until it does. Read
+      the spec, not just the tutorial. When something feels like magic,
+      figure out what's underneath. Usually it's just something nobody
+      bothered to check.</p>
+    </div>
+    <div class="about-block">
+      <h3>What I reject</h3>
+      <p>Generic advice. Frameworks that exist to justify their own
+      complexity. Thought leadership with nothing to actually think about.
+      Appearing certain as a career strategy.</p>
+    </div>
+    <div class="about-block">
+      <h3>What this version is</h3>
+      <p>v0.1. A working title. The beta is real, not ironic.
+      This site will change as I do. That's the point.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-intro {
+    font-size: var(--bh-text-base);
+    line-height: var(--bh-leading-normal);
+    color: var(--bh-text-muted);
+    margin-bottom: var(--bh-space-6);
+    text-wrap: pretty;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--bh-space-6) var(--bh-space-8);
+    margin-top: var(--bh-space-6);
+  }
+
+  .about-block h3 {
+    font-family: var(--bh-font-sans);
+    font-size: var(--bh-text-md);
+    font-weight: 700;
+    color: var(--bh-text);
+    margin-top: 0;
+    margin-bottom: var(--bh-space-2);
+    letter-spacing: -0.01em;
+  }
+
+  .about-block p {
+    font-size: var(--bh-text-sm);
+    line-height: var(--bh-leading-normal);
+    color: var(--bh-text-muted);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 600px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+</style>

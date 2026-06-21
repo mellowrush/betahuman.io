@@ -1,0 +1,270 @@
+---
+import { getCollection } from 'astro:content';
+
+const INITIAL = 8;
+const BATCH = 8;
+
+const notes = (await getCollection('notes')).sort((a, b) =>
+  b.data.date.localeCompare(a.data.date)
+);
+---
+
+<section id="notes">
+  <nav class="notes-list" aria-label="Field notes">
+    {notes.map((note, i) => {
+      const readTime = Math.max(1, Math.ceil(note.body.split(/\s+/).length / 200));
+      const isExtra = i >= INITIAL;
+      return (
+        <a
+          class={`note-entry${isExtra ? ' note-entry--extra' : ''}`}
+          href={`/notes/${note.slug}`}
+          style={`--note-index: ${i}`}
+        >
+          <div class="note-meta">
+            <span class="note-date">{note.data.date}</span>
+            <span class="note-sep" aria-hidden="true">·</span>
+            <span class="note-tag">{note.data.category}</span>
+            <span class="note-sep" aria-hidden="true">·</span>
+            <span class="note-read-time">{readTime}&thinsp;min</span>
+          </div>
+          <span class="note-title">{note.data.title}</span>
+        </a>
+      );
+    })}
+  </nav>
+  {notes.length > INITIAL && (
+    <div class="notes-footer" aria-live="polite">
+      <button
+        class="notes-load-more"
+        type="button"
+        data-total={notes.length}
+        data-batch={BATCH}
+      >
+        {notes.length - INITIAL} more notes
+      </button>
+    </div>
+  )}
+</section>
+
+<style>
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .note-entry {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bh-space-2);
+    padding: var(--bh-space-5) 0;
+    border-bottom: 1px solid var(--bh-border);
+    color: var(--bh-text);
+    position: relative;
+  }
+
+  .note-entry:first-child { border-top: 1px solid var(--bh-border); }
+
+  /* display:flex would override [hidden]; use an explicit class instead */
+  .note-entry--hidden { display: none !important; }
+
+  .note-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--bh-space-2);
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    color: var(--bh-text-faint);
+    letter-spacing: 0.08em;
+  }
+
+  .note-sep { opacity: 0.4; }
+
+  .note-date { white-space: nowrap; }
+
+  .note-tag {
+    text-transform: uppercase;
+    letter-spacing: var(--bh-tracking-mono);
+    white-space: nowrap;
+  }
+
+  .note-read-time { white-space: nowrap; }
+
+  .note-title {
+    font-size: var(--bh-text-base);
+    font-weight: 500;
+    color: var(--bh-text);
+    line-height: var(--bh-leading-snug);
+    display: inline-block;
+    text-wrap: pretty;
+    transition: transform 200ms var(--bh-ease), color 200ms var(--bh-ease);
+  }
+
+  .note-entry:hover .note-title {
+    transform: translateX(4px);
+    color: var(--bh-rust);
+  }
+
+  .note-entry:focus-visible {
+    outline: none;
+    border-radius: var(--bh-radius-sm);
+    box-shadow: inset 0 0 0 2px var(--bh-rust);
+    padding-inline: var(--bh-space-3);
+    margin-inline: calc(-1 * var(--bh-space-3));
+  }
+
+  /* LOAD MORE */
+  .notes-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--bh-space-4);
+    margin-top: var(--bh-space-6);
+  }
+
+  .notes-footer::before,
+  .notes-footer::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--bh-border);
+  }
+
+  .notes-load-more {
+    background: none;
+    border: 1px solid var(--bh-border-strong);
+    border-radius: var(--bh-radius-sm);
+    font-family: var(--bh-font-mono);
+    font-size: var(--bh-text-xs);
+    letter-spacing: var(--bh-tracking-mono);
+    text-transform: uppercase;
+    color: var(--bh-text-faint);
+    padding: var(--bh-space-2) var(--bh-space-4);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color var(--bh-duration-fast) var(--bh-ease),
+                color var(--bh-duration-fast) var(--bh-ease);
+  }
+
+  .notes-load-more:hover {
+    border-color: var(--bh-rust);
+    color: var(--bh-rust);
+  }
+
+  .notes-load-more:focus-visible {
+    outline: none;
+    box-shadow: var(--bh-shadow-focus);
+  }
+
+  /* STAGGER — only fires on initial (non-extra) entries */
+  .notes-list.will-animate .note-entry:not(.note-entry--extra) {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .notes-list.did-animate .note-entry:not(.note-entry--extra) {
+    animation: note-rise 380ms var(--bh-ease) backwards;
+    animation-delay: calc(var(--note-index, 0) * 55ms);
+  }
+
+  @keyframes note-rise {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* REVEAL — fires on load-more batches */
+  @keyframes note-reveal {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .note-entry--revealing {
+    animation: note-reveal 320ms var(--bh-ease-out) backwards;
+    animation-delay: calc(var(--reveal-index, 0) * 50ms);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .note-entry .note-title { transition: none !important; }
+    .notes-list.will-animate .note-entry { opacity: 1 !important; transform: none !important; }
+    .notes-list.did-animate .note-entry { animation: none !important; }
+    .note-entry--revealing { animation: none !important; }
+    .notes-load-more { transition: none !important; }
+  }
+
+  @media (max-width: 600px) {
+    .note-meta { flex-wrap: wrap; gap: var(--bh-space-1) var(--bh-space-2); }
+    .note-read-time { display: none; }
+  }
+</style>
+
+<script>
+  function setupNotes() {
+    const section = document.getElementById('notes');
+    if (!section) return;
+
+    const extras = Array.from(
+      section.querySelectorAll<HTMLElement>('.note-entry--extra')
+    );
+    const footer = section.querySelector<HTMLElement>('.notes-footer');
+    const btn = section.querySelector<HTMLButtonElement>('.notes-load-more');
+
+    if (extras.length && btn && footer) {
+      // Use a class, not the hidden attribute — display:flex would override [hidden]
+      extras.forEach(el => el.classList.add('note-entry--hidden'));
+
+      const BATCH_SIZE = parseInt(btn.dataset.batch ?? '8', 10);
+      const TOTAL = parseInt(btn.dataset.total ?? '0', 10);
+      let shown = TOTAL - extras.length;
+
+      btn.addEventListener('click', () => {
+        const stillHidden = extras.filter(el => el.classList.contains('note-entry--hidden'));
+        const toReveal = stillHidden.slice(0, BATCH_SIZE);
+
+        toReveal.forEach((el, i) => {
+          el.classList.remove('note-entry--hidden');
+          el.style.setProperty('--reveal-index', String(i));
+          el.classList.add('note-entry--revealing');
+          el.addEventListener(
+            'animationend',
+            () => el.classList.remove('note-entry--revealing'),
+            { once: true }
+          );
+        });
+
+        shown += toReveal.length;
+        const remaining = TOTAL - shown;
+
+        if (remaining <= 0) {
+          footer.remove();
+        } else {
+          btn.textContent = `${remaining} more notes`;
+        }
+      });
+    }
+
+    // Stagger initial entries when list scrolls into view
+    const list = section.querySelector<HTMLElement>('.notes-list');
+    if (!list) return;
+
+    list.classList.remove('will-animate', 'did-animate');
+
+    const { top, bottom } = list.getBoundingClientRect();
+    if (top < window.innerHeight && bottom > 0) return;
+
+    list.classList.add('will-animate');
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).classList.replace('will-animate', 'did-animate');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -20px 0px' }
+    );
+
+    observer.observe(list);
+  }
+
+  document.addEventListener('astro:page-load', setupNotes);
+</script>
