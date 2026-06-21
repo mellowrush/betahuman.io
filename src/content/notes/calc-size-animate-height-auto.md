@@ -11,9 +11,9 @@ tags:
 draft: false
 ---
 
-Let me paint you a picture. It's 2016. You're building an accordion component. Product wants "smooth expand and collapse." You go to write `transition: height 300ms ease`, set `height: auto` on the expanded state, and then the universe breaks down and informs you that CSS cannot interpolate between a number and a keyword.
+It's 2016. You're building an accordion. Product wants "smooth expand and collapse." You write `transition: height 300ms ease`, set `height: auto` on the expanded state, and the universe informs you that CSS cannot interpolate between a number and a keyword.
 
-So you do what we all did. You do the measurement dance:
+So you do what we all did. The measurement dance:
 
 ```javascript
 // The accordion hack, preserved in amber
@@ -36,9 +36,9 @@ function collapse(panel) {
 }
 ```
 
-This is the canonical implementation. I have written it, roughly, forty times. I've copy-pasted it into projects. I've seen it in design system codebases. I've watched junior developers discover it and have the specific expression of someone learning that the thing they thought was native was actually a workaround the whole time.
+I have written this, roughly, forty times. Copy-pasted into projects. Found it in design system codebases. Watched junior developers discover it and get the specific expression of someone learning that what looked native was actually a workaround the whole time.
 
-Chrome 129, shipped in August 2024. `calc-size()`:
+Chrome 129, August 2024. `calc-size()`:
 
 ```css
 .accordion-panel {
@@ -52,11 +52,13 @@ Chrome 129, shipped in August 2024. `calc-size()`:
 }
 ```
 
-`calc-size(auto, size)` resolves to the element's natural `auto` height, made available as a value the transition engine can interpolate *to*. The browser handles the measurement. No JavaScript. No `scrollHeight`. No rAF ceremony.
+`calc-size(auto, size)` resolves to the element's natural `auto` height as an interpolatable value. The browser handles the measurement. No JavaScript. No `scrollHeight`. No rAF ceremony.
+
+> **Browser support:** Chrome 129+ (August 2024). Firefox and Safari: check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/calc-size) — neither has shipped this as of late 2024. Use `@supports (height: calc-size(auto, size))` for progressive enhancement.
 
 ## What `size` means
 
-Inside `calc-size()`, `size` is a keyword that represents the resolved value of the keyword you passed as the first argument. So:
+Inside `calc-size()`, `size` represents the resolved value of the keyword passed as the first argument:
 
 ```css
 /* Equivalent to the element's min-content height */
@@ -118,11 +120,11 @@ document.querySelectorAll('.accordion-trigger').forEach(trigger => {
 });
 ```
 
-The JavaScript is twelve lines, and every line of it is business logic — managing ARIA state and toggling a class. There's no measurement, no geometry, no frame timing. The CSS does the interpolation.
+Twelve lines. Every line is business logic: ARIA state, class toggle. No measurement, no geometry, no frame timing. The CSS does the interpolation.
 
 ## The companion: `interpolate-size`
 
-Chrome 129 also shipped `interpolate-size: allow-keywords`, which is a different mechanism for the same problem:
+Chrome 129 also shipped `interpolate-size: allow-keywords`:
 
 ```css
 :root {
@@ -139,16 +141,18 @@ Chrome 129 also shipped `interpolate-size: allow-keywords`, which is a different
 }
 ```
 
-With `interpolate-size: allow-keywords` set on an ancestor (or `:root`), keyword values like `auto`, `min-content`, and `fit-content` become interpolatable directly. No `calc-size()` wrapper needed.
+With `interpolate-size: allow-keywords` on an ancestor, `auto`, `min-content`, and `fit-content` become interpolatable directly. No `calc-size()` wrapper.
 
-The difference: `calc-size()` is explicit — you opt in per property. `interpolate-size` is implicit — it enables keyword interpolation for all properties in scope. Both work. `calc-size()` is more surgical; `interpolate-size` is more convenient.
+`calc-size()` is explicit: you opt in per property. `interpolate-size` is implicit: it enables keyword interpolation for everything in scope. Both work. `calc-size()` is surgical; `interpolate-size` is convenient.
+
+> See also: the dedicated note on [`interpolate-size`](/notes/interpolate-size-keyword-animation) for a deeper treatment of the keyword interpolation approach.
 
 ## The decade we spent on this
 
-I want to be clear about something. The accordion problem is a good problem. It affects nearly every web developer who has ever built a UI component. The hack — `scrollHeight` measurement in a rAF — is correct and reliable. It's not broken. It just shouldn't have existed.
+The accordion problem is legitimate. It affects nearly every developer who has ever built a UI component. The `scrollHeight` hack is correct and reliable. It's not broken. It just shouldn't have existed.
 
-The platform had the information (the element's natural height) and the mechanism (CSS transitions) and the intent (animate to auto). What it lacked for ten years was a bridge between them.
+The platform had the natural height, the transition mechanism, and the intent. `calc-size()` is the bridge that finally connects them — and it's worth understanding why it works, because the `size` keyword is more flexible than the accordion demo suggests.
 
-`calc-size()` is that bridge. Late, useful, and — if you let yourself think about it for a moment — mildly absurd that it took this long.
+Play with the arithmetic forms. `calc-size(auto, size * 0.8)` for partial reveals. `calc-size(auto, size + 2rem)` for breathing room. The keyword is a variable, not a fixed value.
 
-Now delete the measurement code. You earned it.
+Now delete the measurement code.
