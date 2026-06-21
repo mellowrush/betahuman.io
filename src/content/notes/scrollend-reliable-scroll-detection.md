@@ -27,7 +27,9 @@ window.addEventListener('scroll', () => {
 
 One hundred and fifty milliseconds. Completely arbitrary. Too short and you fire during a slow scroll. Too long and the UI feels sluggish. Some developers use 100ms. Some use 200ms. Some use 250ms. Nobody agrees because there's no right answer — you're guessing at inertia scroll completion.
 
-The `scrollend` event ships in Chrome 114, Firefox 109. It fires when the scroll position has genuinely settled, including after momentum/inertia scroll on mobile and trackpad.
+The `scrollend` event ships in Chrome 114, Firefox 109, and Safari 16.4+. It fires when the scroll position has genuinely settled, including after momentum/inertia scroll on mobile and trackpad.
+
+> **Browser support:** Chrome 114+ (June 2023), Firefox 109+ (January 2023), Safari 16.4+ (March 2023). [MDN reference](https://developer.mozilla.org/en-US/docs/Web/API/Document/scrollend_event). Well-supported — use it.
 
 ```javascript
 window.addEventListener('scrollend', () => {
