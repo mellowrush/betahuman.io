@@ -12,25 +12,25 @@ tags:
 draft: false
 ---
 
-Every font pairing website operates on the same premise: show two typefaces at large display size, in neutral beige, in ideal lighting conditions, doing the most flattering thing they know how to do. 
+Every font pairing website operates on the same premise: show two typefaces at large display size, in neutral beige, doing the most flattering thing they know how to do.
 
-This is like choosing a suit based on how it looks on a mannequin in a window. The mannequin doesn't commute. It doesn't sit down. Its proportions are aspirational in a way that will not survive contact with your actual shoulders.
+This is like choosing a suit based on how it looks on a mannequin. The mannequin doesn't commute. It doesn't sit down. Its proportions won't survive your actual shoulders.
 
-Typefaces behave. They have moods at different sizes. A serif that reads beautifully at 48px becomes illegible at 13px. A geometric sans that looks clean and modern in a specimen looks cold and unfriendly in a form label. You don't discover this until the font is in production and the design review has moved on.
+Typefaces have moods at different sizes. A serif that reads beautifully at 48px becomes illegible at 13px. A geometric sans that looks clean in a specimen looks cold in a form label. You don't discover this until the font is in production and the design review has moved on.
 
-The pairing lab I've been building for the past month shows combinations in context. Not "Heading / Body" in a specimen. Actual components:
+The pairing lab I've been building shows combinations in context. Not "Heading / Body" in a specimen. Actual components:
 
 - A card with a title, metadata, and body text
-- A navigation bar with primary and secondary links  
+- A navigation bar with primary and secondary links
 - A form with labels, inputs, and helper text
 - A data table with column headers and cell content
 - A code block (mono pairing matters here)
 
-Toggle dark mode. Change the base size. Adjust the line height. See how the combination holds up when the conditions change.
+Toggle dark mode. Change the base size. Adjust line height. See how the combination holds up when conditions change.
 
 ## The technical approach
 
-Loading fonts dynamically from Google Fonts API:
+Loading fonts dynamically from the Google Fonts API:
 
 ```javascript
 async function loadFontPair(display, body) {
@@ -60,6 +60,8 @@ async function applyPairing(display, body) {
   document.documentElement.style.setProperty('--font-body', `"${body}", sans-serif`);
 }
 ```
+
+> **Note:** The Google Fonts URL requests specific weights (`wght@0,400;0,700`) and italic variants. If a font doesn't support those, the API returns what it has and ignores the rest — no error thrown. Test against your actual font selection; lighter weights may silently fall back to 400.
 
 The component kit uses CSS custom properties for font families:
 
@@ -95,15 +97,13 @@ Font swap is a style property update. No page reload. Instant feedback.
 
 ## The "bad pairing" detector
 
-This is the opinionated part that makes the tool more than a playground.
-
 The heuristics I've implemented:
 
-**1. Contrast ratio check**: Display and body fonts should be visually distinct. Two geometric sans-serifs next to each other don't create hierarchy — they create sameness. The detector computes "personality distance" between fonts by classification (serif/sans/display/mono) and weight range.
+**1. Contrast ratio check.** Display and body fonts should be visually distinct. Two geometric sans-serifs don't create hierarchy — they create sameness. The detector computes "personality distance" between fonts by classification (serif/sans/display/mono) and weight range.
 
-**2. x-height matching**: Fonts with mismatched x-heights look unbalanced at the same `font-size`. A font with a tall x-height next to one with a short x-height needs `font-size` compensation to match optical size.
+**2. x-height matching.** Fonts with mismatched x-heights look unbalanced at the same `font-size`. A tall x-height next to a short one needs `font-size` compensation to match optical size.
 
-**3. Stroke contrast**: High-stroke-contrast serifs (Didot, Bodoni) pair badly with heavy geometric sans-serifs because both are visually demanding. The eye has nowhere to rest.
+**3. Stroke contrast.** High-stroke-contrast serifs (Didot, Bodoni) pair badly with heavy geometric sans-serifs because both are visually demanding. The eye has nowhere to rest.
 
 ```javascript
 function scorePairing(displayFont, bodyFont) {
@@ -139,11 +139,11 @@ function scorePairing(displayFont, bodyFont) {
 }
 ```
 
-The font metadata (classification, x-height, stroke contrast) comes from a curated JSON file. The detector doesn't claim to be right. It claims to be a useful second opinion.
+Font metadata (classification, x-height, stroke contrast) comes from a curated JSON file. The detector doesn't claim to be right. It claims to be a useful second opinion.
 
 ## What I haven't figured out yet
 
-The Google Fonts API approach works for the 1,500+ fonts they host. Anything outside that — commercially licensed fonts, variable fonts from other sources, uploaded WOFF2 files — requires a different approach. The `FontFace` API handles this, but the UX for "upload your font" is more complex.
+The Google Fonts approach covers 1,500+ fonts. Anything outside — commercially licensed fonts, variable fonts from other sources, uploaded WOFF2 files — requires the `FontFace` API:
 
 ```javascript
 // For custom fonts: FontFace API
@@ -152,10 +152,8 @@ await font.load();
 document.fonts.add(font);
 ```
 
-The tool currently works for Google Fonts exploration. The custom-font path is stubbed.
+The custom-font path is currently stubbed.
 
-The other gap: the detector heuristics are based on type classification metadata I assembled manually for about 200 fonts. Scaling that coverage requires either crowdsourcing or pulling from a type data API that doesn't currently exist in a form I can use.
-
-Both problems are solvable. Neither is urgent. The tool is useful at its current scope.
+The detector heuristics are based on type classification metadata I assembled manually for about 200 fonts. Scaling that coverage requires either crowdsourcing or a type data API that doesn't exist yet in a form I can use. Both problems are solvable. Neither is urgent. The tool is useful at its current scope.
 
 The specimen is a lie by omission. The context is where the pairing actually happens. If you're going to choose a typeface, at least look at it in the situation it'll have to live in.
