@@ -11,7 +11,7 @@ tags:
 draft: false
 ---
 
-In the interest of full disclosure: I'm going to show you a feature that shipped in every major browser by mid-2024 and then I'm going to ask you to spend a moment thinking about how many times you installed lodash to do this.
+Native Set operations shipped in every major browser by mid-2024. Spend a moment thinking about how many times you installed lodash to do this.
 
 I'll try to be kind about it.
 
@@ -47,7 +47,7 @@ All return new Sets. The originals are not mutated. The methods accept any itera
 
 JavaScript Sets were added in ES6 (2015). The operations — the things that make Sets genuinely useful as a data structure — were conspicuously absent. The reason is boring: specification process. Someone has to write the proposal, it goes through stages, implementations follow, it reaches baseline.
 
-Chrome 122 shipped in February 2024. Firefox 127 in June 2024. Safari 17 in September 2023. Baseline: June 2024.
+Chrome 122 (February 2024). Firefox 127 (June 2024). Safari 17 (September 2023). Baseline: June 2024. [MDN reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/intersection).
 
 Nine years to add methods that were in the original mathematical definition of a set.
 
