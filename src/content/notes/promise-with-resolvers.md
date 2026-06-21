@@ -11,12 +11,9 @@ tags:
 draft: false
 ---
 
-There are patterns in JavaScript that everyone uses, nobody quite loves, and which have existed long enough that people start defending them as intentional. The deferred promise pattern is one of those.
-
-You needed to resolve a promise from outside its executor. The pattern:
+The deferred promise pattern: you need to resolve a promise from outside its executor. The old ceremony:
 
 ```javascript
-// The old ceremony
 let resolve, reject;
 
 const promise = new Promise((res, rej) => {
@@ -24,8 +21,8 @@ const promise = new Promise((res, rej) => {
   reject = rej;
 });
 
-// Now resolve/reject are accessible outside the Promise constructor.
-// This works. It's also slightly uncomfortable every time.
+// resolve/reject are accessible outside the constructor.
+// Works. Slightly uncomfortable every time.
 
 socket.on('message', (data) => {
   if (data.type === 'ready') resolve(data);
@@ -35,9 +32,9 @@ socket.on('message', (data) => {
 await promise;
 ```
 
-The discomfort: `let resolve, reject` is technically uninitialized — TypeScript will flag it. The assignment happens inside the Promise executor, which runs synchronously, so by the time you reach the outer code `resolve` and `reject` are defined. But the pattern relies on the reader knowing that the executor runs synchronously, which is a detail that new developers correctly don't know and experienced developers incorrectly assume everyone knows.
+The discomfort: `let resolve, reject` is technically uninitialized — TypeScript flags it. The assignment happens inside the executor, which runs synchronously, so by the time you reach the outer code both are defined. But the pattern relies on the reader knowing that Promise executors run synchronously — a detail new developers correctly don't know and experienced developers incorrectly assume everyone knows.
 
-`Promise.withResolvers()` became baseline in July 2024. The same pattern:
+`Promise.withResolvers()` became Baseline in July 2024:
 
 ```javascript
 const { promise, resolve, reject } = Promise.withResolvers();
@@ -50,11 +47,13 @@ socket.on('message', (data) => {
 await promise;
 ```
 
-Destructured from a single call. The types are correct without assertion. The intent is explicit. The reader doesn't need to know that Promise executors run synchronously to understand the code.
+Destructured from a single call. Types are correct without assertion. No implicit knowledge of executor timing required.
 
-## The transitionend case
+> **Browser support:** Baseline July 2024. Chrome 119+, Firefox 121+, Safari 17.4+. [MDN reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/withResolvers). Try it now in any modern browser console.
 
-Animation events are the most common real-world use for this pattern:
+## The animationend / transitionend case
+
+Animation events are the most common real-world use:
 
 ```javascript
 async function waitForAnimation(element, animationName) {
@@ -74,7 +73,7 @@ await waitForAnimation(dialog, 'dialog-exit');
 dialog.remove();
 ```
 
-Without `withResolvers`, you'd either nest a callback (losing the await ergonomics) or store the resolve function in an outer variable (the old ceremony). With it, the deferred resolve lives cleanly inside the function.
+Without `withResolvers`, you'd either nest a callback (losing the await ergonomics) or store the resolve function in an outer variable. With it, the deferred resolve lives cleanly inside the function.
 
 ## The WebSocket ready state
 
@@ -112,17 +111,15 @@ class Gate {
 
 const gate = new Gate();
 
-// Something waits at the gate
 async function worker() {
   await gate.wait();
   doTheActualWork();
 }
 
-// Something else opens it
 setTimeout(() => gate.open(), 2000);
 ```
 
-Clean, explicit, zero-ceremony. The `Gate` constructor is five lines. Before `withResolvers()`, those five lines had a less-obvious `let` declaration and a trust-based assumption about executor timing.
+Five lines. Before `withResolvers()`, those five lines had a `let` declaration and a timing assumption in the constructor.
 
 ## What it doesn't change
 
@@ -130,8 +127,8 @@ Clean, explicit, zero-ceremony. The `Gate` constructor is five lines. Before `wi
 
 - Make deferred promises more common or advisable (they're already common enough)
 - Replace `async/await` for sequential flows
-- Solve the "forgotten reject" problem (you still need to call `reject` on error paths)
+- Solve the "forgotten reject" problem — you still need to call `reject` on error paths
 
-It just removes the ceremony from a pattern that was always correct but unnecessarily awkward to write. Most great language improvements are this quiet. They don't introduce new capabilities — they reduce the distance between intent and expression.
+It removes the ceremony from a pattern that was always correct but unnecessarily awkward to write. Most great language improvements are this quiet. They don't introduce new capabilities — they reduce the distance between intent and expression.
 
-That's a worthwhile thing. The language has been doing it more often lately, which suggests someone on the committee is paying attention.
+The language has been doing this more often lately, which suggests someone on the committee is paying attention.
