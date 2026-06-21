@@ -28,7 +28,9 @@ requestAnimationFrame(() => {
 
 Two nested `requestAnimationFrame` calls. The outer one hands off to the next paint. The inner one hands off to the one after that. We've been doing this dance because CSS transitions can't animate from "doesn't exist yet" to "exists." There's no start state.
 
-`@starting-style`, which shipped in Chrome 117 and Firefox 129, fixes this at the source.
+`@starting-style`, which shipped in Chrome 117, Firefox 129, and Safari 17.5, fixes this at the source.
+
+> **Browser support:** Chrome 117+ (September 2023), Firefox 129+ (August 2024), Safari 17.5+ (June 2024). [MDN reference](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style). `transition-behavior: allow-discrete` (needed for display transitions) requires Chrome 116+ and Firefox 129+.
 
 ```css
 .toast {
