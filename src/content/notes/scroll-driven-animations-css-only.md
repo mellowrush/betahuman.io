@@ -11,15 +11,13 @@ tags:
 draft: false
 ---
 
-The browser couldn't do this, so we wrote JavaScript instead. Scroll listeners. rAF loops. IntersectionObserver callbacks. A small industry grew up around the gap.
+The browser couldn't. So we wrote JavaScript instead. Scroll listeners. rAF loops. IntersectionObserver callbacks. A small industry grew up around a gap the browser eventually decided to close.
 
-Chrome 115 arrived in July 2023. `animation-timeline: scroll()`. `animation-timeline: view()`. Firefox 115 the same month. Safari is still giving the matter its full consideration.
+Chrome 115, July 2023. `animation-timeline: scroll()`. `animation-timeline: view()`. Firefox 115 the same month. Safari caught up in September 2024. The consulting economy adjusts.
 
-The entire Intersection Observer consulting economy became, depending on your position, obsolete or newly optional.
+Tie an animation to scroll position instead of time. The browser does the math. The JavaScript file stays closed.
 
-The idea is this: instead of tying an animation to time, you tie it to scroll position. The browser does the math. You write the design. The JavaScript file stays closed.
-
-> **Browser support (August 2023):** Chrome 115+, Firefox 115+. Safari: not supported. Check before shipping to production — there's no graceful degradation unless you write it.
+> **Browser support:** Chrome 115+, Firefox 115+, Safari 18+ (September 2024). [MDN compatibility table](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline). Write graceful degradation anyway — not everyone updates.
 
 ## Reading progress. No event listeners.
 
@@ -42,9 +40,9 @@ The idea is this: instead of tying an animation to time, you tie it to scroll po
 }
 ```
 
-No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentage arithmetic. The compositor thread runs it — same reason CSS transforms feel better than their JavaScript equivalents, because they are.
+No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No arithmetic. The compositor thread runs it. Same reason CSS transforms feel better than their JavaScript equivalents. Because they are.
 
-`scroll(root)` targets the document scroller. `scroll()` without arguments targets the nearest scrollable ancestor — useful inside overflow containers, which is what the demo below uses.
+`scroll(root)` targets the document scroller. `scroll()` without arguments targets the nearest scrollable ancestor. Useful inside overflow containers, which is what the demo uses.
 
 <div class="sda-demo sda-demo--progress" role="region" aria-label="Live demo: scroll-driven progress bar">
   <style>
@@ -105,7 +103,7 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentag
   </style>
   <div class="sda-progress-bar" role="progressbar" aria-label="Reading progress"></div>
   <div class="sda-scroll-content">
-    <span class="sda-demo-label">↓ Scroll inside this box — Chrome &amp; Firefox 115+</span>
+    <span class="sda-demo-label">↓ Scroll inside this box — Chrome &amp; Firefox 115+, Safari 18+</span>
     <p class="sda-prose"><code>animation-timeline: scroll()</code> tracks the nearest scrollable ancestor. As you scroll down, the bar at the top grows. Nothing on the main thread. The compositor advances the animation directly from scroll position — no wakeup cost, no rAF loop.</p>
     <p class="sda-prose">For a real page-level bar you'd use <code>scroll(root)</code> instead, which targets the document scroller rather than the element's nearest scrollable ancestor (which in this demo is the box itself).</p>
     <p class="sda-prose"><code>transform-origin: left</code> is load-bearing here. Without it, <code>scaleX()</code> expands from center. That's the kind of thing you only forget once.</p>
@@ -115,7 +113,7 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentag
 
 ## The surgical version: `view()`
 
-`scroll()` tracks the page. `view()` tracks *an element* — whether it's inside the viewport and by exactly how much.
+`scroll()` tracks the page. `view()` tracks an element. Specifically: whether it's inside the viewport, and by exactly how much.
 
 ```css
 @keyframes fade-in-up {
@@ -133,7 +131,7 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentag
 }
 ```
 
-`animation-range: entry 0% entry 30%` means: start the animation when the element's leading edge enters the scrollport, finish it when 30% of the element has entered. No IntersectionObserver. No class toggling. No JavaScript thread wakeup cost.
+`animation-range: entry 0% entry 30%`: the animation starts when the element's leading edge enters the scrollport, ends when 30% of the element has entered. No IntersectionObserver. No class toggling. No JavaScript thread wakeup.
 
 <div class="sda-demo sda-demo--view" role="region" aria-label="Live demo: view-driven animations">
   <style>
@@ -203,7 +201,7 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentag
       }
     }
   </style>
-  <span class="sda-view-label">↓ Scroll down — Chrome &amp; Firefox 115+</span>
+  <span class="sda-view-label">↓ Scroll down — Chrome &amp; Firefox 115+, Safari 18+</span>
   <div class="sda-view-spacer">↓ keep scrolling ↓</div>
   <div class="sda-view-item">animation-timeline: view()</div>
   <div class="sda-view-item">animation-range: entry 0% entry 80%</div>
@@ -215,32 +213,31 @@ No `window.addEventListener('scroll')`. No `requestAnimationFrame`. No percentag
 
 ## The honest ledger
 
-This is a genuinely incomplete story and I'd rather say so than pretend it isn't:
+What they left out of the announcement:
 
-- **Safari doesn't support it.** As of August 2023, zero support. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline) before shipping.
-- **Firefox requires `animation-duration: 1ms`.** Scroll-driven animations are ignored without an explicit duration. Chrome is forgiving about this; Firefox isn't. Write the `1ms`.
-- **Debugging is primitive.** Chrome DevTools has rudimentary scroll timeline support. You are mostly flying without instruments, which is fine until it isn't.
-- **`scroll()` defaults to the nearest scrollable ancestor.** For the document scroller, you need `scroll(root)` explicitly. Easy to overlook.
-- **No clean "run once" primitive.** CSS animations replay every time the element re-enters range. Sometimes that's what you want. Often it isn't.
+- **Safari 18+ supports it** (September 2024). Before that, nothing. Check [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline) — the table is current and honest.
+- **Firefox requires `animation-duration: 1ms`.** Omit it and scroll-driven animations are silently ignored. Chrome forgives. Firefox doesn't. Write the `1ms`.
+- **Debugging is primitive.** Chrome DevTools has rudimentary scroll timeline support. You are flying without instruments, which is fine until it isn't.
+- **`scroll()` defaults to the nearest scrollable ancestor.** For the document scroller, you need `scroll(root)` explicitly. Easy to overlook. You will overlook it.
+- **No clean "run once" primitive.** The animation replays every time the element re-enters range. Sometimes that's the point. Often it isn't.
 
 ## Who this replaces — and who it doesn't
 
-Intersection Observer isn't dead. For "run once when element enters viewport" — the standard entrance pattern — IO is still the cleaner tool. You fire a class and walk away. That's a real advantage.
+Intersection Observer isn't dead. For "run once when the element enters viewport" — the standard entrance pattern — IO is still the cleaner tool. You fire a class and walk away. That's a real advantage.
 
-Scroll-driven animations shine where you want scroll position to *continuously drive state*: progress bars, parallax, sticky-header transitions, scrubbing effects. If the animation belongs to a moment, use IO. If it belongs to a position, use this.
+Scroll-driven animations are for continuous state: progress bars, parallax, sticky-header transitions, scrubbing effects. Animation belongs to a moment: use IO. Belongs to a position: use this.
 
-We spent five years installing libraries to do arithmetic the browser was always capable of. That's fine. That's how the industry works.
+We spent five years installing libraries to do arithmetic the browser was always capable of. That's fine. That's how it works.
 
-The point is to notice when the invoice has expired.
+Notice when the invoice has expired.
 
 ---
 
-And include this. Non-negotiable:
+Non-negotiable:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
   * {
-    animation-timeline: auto !important;
     animation: none !important;
   }
 }
