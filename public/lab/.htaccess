@@ -1,0 +1,36 @@
+# /lab/ — drop-in HTML namespace. Basic auth, no indexing, clean URLs, auto index.
+
+# --- Basic auth ---
+# AuthUserFile needs the ABSOLUTE server path to .htpasswd (see README-lab.md in repo root).
+AuthType Basic
+AuthName "lab"
+AuthUserFile /home/CHANGE_ME/domains/betahuman.io/public_html/lab/.htpasswd
+Require valid-user
+
+# Never serve the password file
+<Files ".htpasswd">
+  Require all denied
+</Files>
+
+# --- Keep out of search engines ---
+<IfModule mod_headers.c>
+  Header set X-Robots-Tag "noindex, nofollow, noarchive"
+</IfModule>
+
+# --- Auto index at /lab/ and in subfolders without index.html ---
+Options +Indexes
+IndexOptions FancyIndexing NameWidth=* SuppressDescription
+DirectoryIndex index.html
+
+# --- Clean URLs: /lab/foo -> /lab/foo.html ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /lab/
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+  # /lab/foo.html -> /lab/foo (strip extension)
+  RewriteCond %{THE_REQUEST} \s/lab/(.+)\.html[\s?] [NC]
+  RewriteRule ^ /lab/%1 [R=301,L,NE]
+</IfModule>
