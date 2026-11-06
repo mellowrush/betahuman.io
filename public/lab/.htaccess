@@ -4,7 +4,7 @@
 # AuthUserFile needs the ABSOLUTE server path to .htpasswd (see README-lab.md in repo root).
 AuthType Basic
 AuthName "lab"
-AuthUserFile /home/CHANGE_ME/domains/betahuman.io/public_html/lab/.htpasswd
+AuthUserFile /home/u728944474/domains/betahuman.io/public_html/lab/.htpasswd
 Require valid-user
 
 # Never serve the password file
