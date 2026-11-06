@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raftul saptamanii · Sesiunea 7/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style id="css">
+:root{--bg:#f6f2ea;--card:#fffdf8;--ink:#2a2620;--mute:#776f63;--line:#e4dccd;--acc:#c9822b;--acc-soft:#f6e6cf;--ok:#4f8a6b;--ok-soft:#dcebe2;--hot:#b55a3c;--chip:#efe8db}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1a17;--card:#25221e;--ink:#eee7da;--mute:#a59c8d;--line:#3a352e;--acc:#e0a050;--acc-soft:#3e3122;--ok:#7fbf9b;--ok-soft:#24352b;--hot:#e08a6a;--chip:#2f2b26}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:650;margin:0}
+h1{font-size:30px;letter-spacing:-.01em}
+h2{font-size:20px;margin:34px 0 12px}
+.sub{color:var(--mute);margin-top:4px}
+.quote{margin:18px 0 0;padding:14px 18px;border-left:3px solid var(--acc);background:var(--card);border-radius:0 10px 10px 0;font-family:Fraunces,Georgia,serif;font-size:17px}
+.quote small{display:block;font-family:Inter,sans-serif;font-size:12px;color:var(--mute);margin-top:6px}
+.prog{display:flex;align-items:center;gap:12px;margin-top:18px}
+.bar{flex:1;height:10px;background:var(--chip);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:6px;transition:width .4s}
+.focus{margin-top:22px;background:var(--acc-soft);border-radius:14px;padding:16px 18px}
+.focus .lbl{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);font-weight:600}
+.focus .t{font-family:Fraunces,Georgia,serif;font-size:20px;margin:4px 0}
+.focus .p{color:var(--mute);font-size:14px}
+.days{display:grid;grid-template-columns:repeat(7,minmax(130px,1fr));gap:8px;overflow-x:auto;padding-bottom:6px}
+.day{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:120px}
+.day.today{border-color:var(--acc);box-shadow:0 0 0 2px var(--acc-soft)}
+.day h3{font-size:15px}
+.day .ev{font-size:12px;color:var(--hot);margin:2px 0 6px;font-weight:500}
+.mini{display:block;width:100%;text-align:left;border:0;background:var(--chip);color:var(--ink);border-radius:8px;padding:6px 8px;margin-top:6px;font:13px/1.3 Inter,sans-serif;cursor:pointer}
+.mini.done{background:var(--ok-soft);text-decoration:line-through;color:var(--mute)}
+.mini b{color:var(--acc)}
+.empty{font-size:12px;color:var(--mute);margin-top:8px}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.f{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:5px 12px;font:13px Inter,sans-serif;cursor:pointer}
+.f.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;scroll-margin-top:20px}
+.card.done{border-color:var(--ok)}
+.card.flash{animation:fl 1.2s}
+@keyframes fl{0%{box-shadow:0 0 0 4px var(--acc)}100%{box-shadow:0 0 0 0 transparent}}
+.top{display:flex;gap:8px;align-items:flex-start}
+.num{font-family:Fraunces,serif;color:var(--mute);font-size:14px;min-width:26px}
+.title{font-weight:600;flex:1}
+.star{border:0;background:none;font-size:18px;cursor:pointer;color:var(--line);padding:0;line-height:1}
+.star.on{color:var(--acc)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
+.src{padding:1px 8px;border-radius:10px;background:var(--chip);color:var(--ink)}
+.ten{display:inline-flex;gap:2px;align-items:center}
+.ten s{display:inline-block;width:7px;height:7px;border-radius:2px;background:var(--line);text-decoration:none}
+.ten s.f1{background:var(--ok)}.ten s.f2{background:var(--acc)}.ten s.f3{background:var(--hot)}
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tag{font-size:11px;padding:1px 7px;border-radius:8px;border:1px solid var(--line);color:var(--mute)}
+.step{font-size:13px;background:var(--bg);border-radius:8px;padding:7px 9px}
+.step b{font-weight:600}
+.note{font-size:12px;color:var(--hot)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto}
+select,input[type=text],textarea{font:13px Inter,sans-serif;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:6px 8px}
+textarea{width:100%;resize:vertical;min-height:54px}
+.btn{border:0;border-radius:8px;padding:7px 12px;font:600 13px Inter,sans-serif;cursor:pointer;background:var(--ink);color:var(--bg)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.ok{background:var(--ok);color:#fff}
+.form{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:10px}
+.form label{font-size:12px;color:var(--mute)}
+.rng{display:flex;align-items:center;gap:8px}
+.rng input{flex:1}
+.again{display:flex;gap:6px}
+.again button{flex:1}
+.again .sel{background:var(--acc);color:#fff;border-color:var(--acc)}
+.entry{font-size:13px;background:var(--ok-soft);border-radius:8px;padding:8px 10px}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.trophy{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ok);border-radius:10px;padding:10px 12px;font-size:13px}
+.trophy .h{font-weight:600;margin-bottom:4px}
+.eng{font-family:Fraunces,serif;font-size:16px}
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14px}
+.rule h3{font-size:16px;margin-bottom:6px}
+.rule ul{margin:0;padding-left:18px}
+.rule li{margin:3px 0}
+.status{font-size:12px;color:var(--mute);margin-top:30px;text-align:center}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script id="state" type="application/json">{}</script>
+<script id="app">
+(function(){
+var TESTS=[
+{id:1,t:"Sunete cu obiecte din casa (foley)",s:"tu",x:2,d:"45'",e:["sunet","nou"],p:"Alege 3 obiecte din bucatarie si porneste microfonul."},
+{id:2,t:"Exista cerere reala pentru foley / sound design?",s:"Andreea",x:2,d:"20'",e:["util"],p:"Cauta 'foley' pe Upwork si Fiverr si noteaza 3 anunturi."},
+{id:3,t:"Clip cotidian de 15s, re-sonorizat ca sa amuze",s:"Claude",x:3,d:"60'",e:["sunet","video","amuza","nou"],p:"Alege din galeria telefonului un clip cu ceva banal."},
+{id:4,t:"Dansezi singur pe o piesa din playlistul de liceu",s:"Andreea",x:3,d:"4'",e:["muzica","corp"],p:"Usa inchisa, o piesa, volumul sus."},
+{id:5,t:"\"Ce v-ar placea mai departe?\" celor care au primit playlistul",s:"Andreea",x:3,d:"15'",e:["oameni","muzica"],p:"Acelasi mesaj scurt, trimis la 2 oameni."},
+{id:6,t:"Playlist de 5 piese pentru starea unui prieten + o propozitie de ce",s:"Claude",x:3,d:"45'",e:["muzica","oameni","emotie"],p:"Intreaba: 'cum e saptamana ta, intr-un cuvant?'",n:"Spune-i ca e experiment si cere feedback sincer. Nu cadou."},
+{id:7,t:"Vizualizator in browser care reactioneaza la sunet",s:"Claude",x:3,d:"90'",e:["cod","muzica","nou"],p:"Deschide editor.p5js.org si un exemplu cu p5.sound."},
+{id:8,t:"Un pas mic din animatia pentru Andreea",s:"tu",x:3,d:"60'",e:["video"],p:"Doar primul pas din lista facuta cu ea."},
+{id:9,t:"Set DJ pe YouTube 30', apoi o tranzitie facuta de tine",s:"tu",x:4,d:"45'",e:["muzica","challenge"],p:"Alege 2 piese cu tempo apropiat.",n:"Fara studiu in plus: faci."},
+{id:10,t:"Mini-party cu 3-5 oameni: pui o singura piesa",s:"Andreea",x:5,d:"o seara",e:["oameni","muzica"],p:"Scrie la 3 oameni de incredere."},
+{id:11,t:"30' langa un DJ live, in oras",s:"Andreea",x:5,d:"1h",e:["muzica","nou"],p:"Cauta un eveniment mic, aproape de casa."},
+{id:12,t:"3 roluri part-time non-web pe Beach Commute",s:"tu",x:2,d:"30'",e:["util","nou"],p:"Doar le salvezi, nu aplici."},
+{id:13,t:"Acelasi clip, 3 emotii: amuzant / horror / nostalgic",s:"Claude",x:3,d:"60'",e:["sunet","emotie","challenge"],p:"Pornesti de la clipul din #3."},
+{id:14,t:"Plimbare de sunet: 5 sunete din oras",s:"Claude",x:2,d:"30'",e:["sunet","nou"],p:"Telefonul in buzunar, record la primul sunet ciudat."},
+{id:15,t:"\"Ghiceste sunetul\" cu un prieten",s:"Claude",x:3,d:"15'",e:["sunet","oameni","amuza"],p:"Trimite 3 sunete din #1, fara nicio explicatie."},
+{id:16,t:"30s dintr-un film mut (public domain), sonorizat de tine",s:"Claude",x:4,d:"90'",e:["sunet","video","challenge"],p:"Cauta Buster Keaton pe archive.org."},
+{id:17,t:"Soundscape de 1 minut pentru o stare",s:"Claude",x:3,d:"60'",e:["sunet","emotie"],p:"Alege starea, de ex. 'duminica dimineata'."},
+{id:18,t:"30' de joaca in Fairlight (DaVinci Resolve)",s:"Claude",x:2,d:"30'",e:["sunet","nou"],p:"Un singur clip, un singur efect."},
+{id:19,t:"Nostalgie in 60s: poze vechi + o piesa de pe iPod",s:"Claude",x:3,d:"60'",e:["video","muzica","emotie"],p:"Alege 8 poze, nu mai multe.",n:"Pentru tine, nu cadou."},
+{id:20,t:"10' cu cineva care lucreaza in audio / video / post",s:"Claude",x:5,d:"15'",e:["oameni","util"],p:"O singura intrebare: 'ce-ti place cel mai mult?'"},
+{id:21,t:"Sunetul casei: un sunet ales de tine pentru o automatizare",s:"Claude",x:3,d:"60'",e:["cod","sunet","ordine"],p:"Alege un eveniment: usa, masina de spalat, apus."},
+{id:22,t:"Reproduci din ureche 3 sunete dintr-o scena de film",s:"Claude",x:3,d:"30'",e:["sunet","challenge"],p:"Pasi, o usa, ceva care cade."}
+];
+var DAYS=[
+{k:"2026-11-07",l:"Sam 7"},{k:"2026-11-08",l:"Dum 8"},{k:"2026-11-09",l:"Lun 9",ev:"10:00 sesiune personala"},
+{k:"2026-11-10",l:"Mar 10"},{k:"2026-11-11",l:"Mie 11"},{k:"2026-11-12",l:"Joi 12"},
+{k:"2026-11-13",l:"Vin 13",ev:"15:00 program · reciteste raftul 15'"}
+];
+var DEF={3:"2026-11-07",4:"2026-11-08",14:"2026-11-08",5:"2026-11-09",13:"2026-11-10",6:"2026-11-11",10:"2026-11-12"};
+var TARGET=7, LS="raftul-s7";
+var state={};
+try{state=JSON.parse(document.getElementById("state").textContent)||{}}catch(e){state={}}
+if(!state.tests){state.tests={};TESTS.forEach(function(t){state.tests[t.id]={day:DEF[t.id]||"",done:false,fav:t.id===3,entry:null}});state.updated=0}
+TESTS.forEach(function(t){if(!state.tests[t.id])state.tests[t.id]={day:"",done:false,fav:false,entry:null}});
+try{var l=JSON.parse(localStorage.getItem(LS)||"null");if(l&&l.updated>(state.updated||0))state=l}catch(e){}
+var filter="all", open={}, art=null, pending=null, msg="";
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]})}
+function todayKey(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function ten(x){var h="";for(var i=1;i<=10;i++){var c=i<=x?(x<=2?"f1":x<=4?"f2":"f3"):"";h+="<s class='"+c+"'></s>"}return "<span class='ten'>"+h+"</span> "+x+"/10"}
+function byId(id){for(var i=0;i<TESTS.length;i++)if(TESTS[i].id==id)return TESTS[i]}
+function save(){
+  state.updated=Date.now();
+  try{localStorage.setItem(LS,JSON.stringify(state))}catch(e){}
+  if(!art)return;
+  clearTimeout(pending);
+  pending=setTimeout(function(){
+    var html="<!DOCTYPE html>\n<html lang=\"ro\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>Raftul saptamanii · Sesiunea 7/10</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link href=\"https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap\" rel=\"stylesheet\">\n<style id=\"css\">"+document.getElementById("css").textContent+"</style>\n</head>\n<body>\n<div id=\"root\"></div>\n<script id=\"state\" type=\"application/json\">"+JSON.stringify(state).replace(/</g,"\\u003c")+"<\/script>\n<script id=\"app\">"+document.getElementById("app").textContent+"<\/script>\n</body>\n</html>";
+    art.publish(html).catch(function(e){msg="Salvat doar in acest browser.";render()});
+  },1200);
+}
+function focusBox(){
+  var tk=todayKey(), idx=-1;
+  for(var i=0;i<DAYS.length;i++){if(DAYS[i].k>=tk){idx=i;break}}
+  if(idx<0)return "<div class='focus'><div class='lbl'>Saptamana s-a incheiat</div><div class='t'>Uita-te la raft inainte de sesiune.</div></div>";
+  var d=DAYS[idx], when=d.k===tk?"Azi":(idx===0&&tk<d.k?"Maine":d.l);
+  var list=TESTS.filter(function(t){return state.tests[t.id].day===d.k&&!state.tests[t.id].done});
+  var body=list.length?list.map(function(t){return "#"+t.id+" "+esc(t.t)}).join("<br>"):"Nimic programat. Varianta minima: #4 (4 minute) sau un singur sunet din #1.";
+  var first=list.length?"Primul pas: "+esc(list[0].p):"";
+  return "<div class='focus'><div class='lbl'>Focus · "+when+" ("+d.l+")"+(d.ev?" · "+esc(d.ev):"")+"</div><div class='t'>"+body+"</div><div class='p'>"+first+"</div></div>";
+}
+function dayCol(d){
+  var tk=todayKey();
+  var list=TESTS.filter(function(t){return state.tests[t.id].day===d.k});
+  var items=list.map(function(t){var s=state.tests[t.id];return "<button class='mini"+(s.done?" done":"")+"' data-go='"+t.id+"'><b>#"+t.id+"</b> "+esc(t.t)+"</button>"}).join("");
+  return "<div class='day"+(d.k===tk?" today":"")+"'><h3>"+d.l+"</h3>"+(d.ev?"<div class='ev'>"+esc(d.ev)+"</div>":"")+(items||"<div class='empty'>liber · ia ceva din rezerva</div>")+"</div>";
+}
+function card(t){
+  var s=state.tests[t.id];
+  var opts="<option value=''>rezerva</option>"+DAYS.map(function(d){return "<option value='"+d.k+"'"+(s.day===d.k?" selected":"")+">"+d.l+"</option>"}).join("");
+  var h="<div class='card"+(s.done?" done":"")+"' id='c"+t.id+"'>";
+  h+="<div class='top'><span class='num'>#"+t.id+"</span><span class='title'>"+esc(t.t)+"</span><button class='star"+(s.fav?" on":"")+"' data-fav='"+t.id+"' title='hm, ok'>★</button></div>";
+  h+="<div class='meta'><span class='src'>"+esc(t.s)+"</span>"+ten(t.x)+" · "+esc(t.d)+"</div>";
+  h+="<div class='tags'>"+t.e.map(function(e){return "<span class='tag'>"+esc(e)+"</span>"}).join("")+"</div>";
+  if(!s.done)h+="<div class='step'><b>Primul pas:</b> "+esc(t.p)+"</div>";
+  if(t.n)h+="<div class='note'>"+esc(t.n)+"</div>";
+  if(s.done&&s.entry&&!open[t.id]){var en=s.entry;h+="<div class='entry'>"+(en.did?esc(en.did)+"<br>":"")+"Energie "+en.eb+" → "+en.ea+" · As mai gusta: <b>"+esc(en.again||"-")+"</b></div>"}
+  if(open[t.id]){
+    var en2=s.entry||{did:"",eb:5,ea:5,again:""};
+    h+="<div class='form' data-form='"+t.id+"'><label>Ce am facut (un rand)</label><textarea data-did>"+esc(en2.did)+"</textarea>";
+    h+="<label>Energie inainte</label><div class='rng'><input type='range' min='1' max='10' value='"+en2.eb+"' data-eb><span class='eng'>"+en2.eb+"</span></div>";
+    h+="<label>Energie dupa</label><div class='rng'><input type='range' min='1' max='10' value='"+en2.ea+"' data-ea><span class='eng'>"+en2.ea+"</span></div>";
+    h+="<label>As mai gusta?</label><div class='again'>"+["da","poate","nu"].map(function(a){return "<button class='btn ghost"+(en2.again===a?" sel":"")+"' data-again='"+a+"'>"+a+"</button>"}).join("")+"</div>";
+    h+="<div class='row'><button class='btn ok' data-save='"+t.id+"'>Pune pe raft</button><button class='btn ghost' data-cancel='"+t.id+"'>Renunta</button></div></div>";
+  } else {
+    h+="<div class='row'><select data-day='"+t.id+"'>"+opts+"</select>"+(s.done?"<button class='btn ghost' data-open='"+t.id+"'>Editeaza</button><button class='btn ghost' data-undo='"+t.id+"'>Scoate de pe raft</button>":"<button class='btn' data-open='"+t.id+"'>L-am gustat</button>")+"</div>";
+  }
+  return h+"</div>";
+}
+function render(){
+  var done=TESTS.filter(function(t){return state.tests[t.id].done});
+  var list=TESTS.filter(function(t){var s=state.tests[t.id];
+    if(filter==="todo")return !s.done; if(filter==="done")return s.done; if(filter==="low")return t.x<=3;
+    if(filter==="fav")return s.fav; if(filter==="new")return t.id>=13; return true});
+  var F=[["all","Toate"],["fav","★ hm, ok"],["todo","De gustat"],["done","Pe raft"],["low","Tensiune ≤ 3"],["new","Noi (13-22)"]];
+  var h="<div class='wrap'>";
+  h+="<h1>Raftul saptamanii</h1><div class='sub'>Sesiunea 7/10 · 7-13 noiembrie · testezi, pui pe raft, nu decizi</div>";
+  h+="<div class='quote'>\"Devin cineva care testeaza inainte de a decide, intr-un mod care protejeaza varianta de a nu sti inca.\"<small>Tu, saptamana 1 · las deoparte: \"ar trebui sa am deja un raspuns\"</small></div>";
+  h+="<div class='prog'><div class='bar'><i style='width:"+Math.min(100,done.length/TARGET*100)+"%'></i></div><span><b>"+done.length+"</b> / "+TARGET+" gustate</span></div>";
+  h+=focusBox();
+  h+="<h2>Urmatoarele zile</h2><div class='days'>"+DAYS.map(dayCol).join("")+"</div>";
+  h+="<h2>Meniul de teste</h2><div class='filters'>"+F.map(function(f){return "<button class='f"+(filter===f[0]?" on":"")+"' data-filter='"+f[0]+"'>"+f[1]+"</button>"}).join("")+"</div>";
+  h+="<div class='grid'>"+list.map(card).join("")+"</div>";
+  h+="<h2>Pe raft</h2>";
+  h+=done.length?"<div class='shelf'>"+done.map(function(t){var en=state.tests[t.id].entry||{};return "<div class='trophy'><div class='h'>#"+t.id+" "+esc(t.t)+"</div>"+(en.did?esc(en.did)+"<br>":"")+"<span class='eng'>"+(en.eb||"-")+" → "+(en.ea||"-")+"</span> · "+esc(en.again||"-")+"</div>"}).join("")+"</div>":"<div class='empty'>Raftul se umple pe parcurs. Primul trofeu vine de la #3.</div>";
+  h+="<h2>Reguli de buzunar</h2><div class='rules'>";
+  h+="<div class='rule'><h3>Criteriile unui test</h3><ul><li>Tensiune 2-5 din 10; peste 5 il micsorezi</li><li>Cu ce ai azi: laptop, telefon, microfon</li><li>Maxim 60-90'; te opresti cat esti inca curios</li><li>Cel putin 2 elemente: sunet/video/muzica, nou, challenge, util/emotie, putini oameni</li><li>Initiativa ta</li><li>Fara decizie si fara intrebarea banilor</li></ul></div>";
+  h+="<div class='rule'><h3>Frica sau argument?</h3><ul><li>E despre <b>rezultat</b> (bani, varsta, \"sunt multi\")? Il pui deoparte. Testul nu are rezultat.</li><li>E despre <b>test</b> (timp, unelte)? E real, deci micsorezi testul.</li><li>Corpul se strange? E frica. Neutru si plictisit? Poate e chiar dezinteres.</li><li>\"Intai trebuie sa invat...\" = evitare. Faci cu ce stii azi.</li></ul></div>";
+  h+="<div class='rule'><h3>Cand un test cade</h3><ul><li>Un test cazut nu inseamna ca ai cazut tu</li><li>3 randuri pe raft, apoi next</li><li>Zi proasta: #4 sau un singur sunet. Si asta conteaza.</li><li>Ancora: plugul care curata zapada de pe sosea</li></ul></div>";
+  h+="</div><div class='status'>"+(art?"Salvat automat in artifact":"Salvat in acest browser")+(msg?" · "+esc(msg):"")+"</div></div>";
+  document.getElementById("root").innerHTML=h;
+}
+document.addEventListener("click",function(ev){
+  var b=ev.target.closest("button");if(!b)return;var d=b.dataset;
+  if(d.filter){filter=d.filter;render();return}
+  if(d.go){filter="all";render();var c=document.getElementById("c"+d.go);if(c){c.scrollIntoView({behavior:"smooth",block:"center"});c.classList.add("flash")}return}
+  if(d.fav){var s=state.tests[d.fav];s.fav=!s.fav;save();render();return}
+  if(d.open){open[d.open]=true;render();return}
+  if(d.cancel){delete open[d.cancel];render();return}
+  if(d.undo){var s2=state.tests[d.undo];s2.done=false;save();render();return}
+  if(d.again){var f=b.closest("[data-form]");f.querySelectorAll("[data-again]").forEach(function(x){x.classList.remove("sel")});b.classList.add("sel");return}
+  if(d.save){var f2=b.closest("[data-form]"),sel=f2.querySelector("[data-again].sel");
+    state.tests[d.save].entry={did:f2.querySelector("[data-did]").value.trim(),eb:+f2.querySelector("[data-eb]").value,ea:+f2.querySelector("[data-ea]").value,again:sel?sel.dataset.again:""};
+    state.tests[d.save].done=true;delete open[d.save];save();render();return}
+});
+document.addEventListener("input",function(ev){var t=ev.target;if(t.type==="range")t.nextElementSibling.textContent=t.value});
+document.addEventListener("change",function(ev){var t=ev.target;if(t.dataset.day){state.tests[t.dataset.day].day=t.value;save();render()}});
+render();
+try{if(window.claude&&window.claude.use){window.claude.use("artifact").then(function(a){if(a){art=a;render()}}).catch(function(){})}}catch(e){}
+})();
+</script>
+</body>
+</html>

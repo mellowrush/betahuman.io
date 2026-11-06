@@ -37,3 +37,5 @@ pnpm-debug.log*
 
 # JetBrains files
 .idea
+# lab basic-auth secrets
+public/lab/.htpasswd
