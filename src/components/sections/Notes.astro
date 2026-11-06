@@ -17,7 +17,7 @@ const notes = (await getCollection('notes')).sort((a, b) =>
       return (
         <a
           class={`note-entry${isExtra ? ' note-entry--extra' : ''}`}
-          href={`/notes/${note.slug}`}
+          href={`/notes/${note.id}`}
           style={`--note-index: ${i}`}
         >
           <div class="note-meta">
